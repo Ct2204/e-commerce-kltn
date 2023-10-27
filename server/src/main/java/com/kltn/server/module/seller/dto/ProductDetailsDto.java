@@ -1,0 +1,22 @@
+package com.kltn.server.module.seller.dto;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProductDetailsDto {
+
+    @NotNull(message = "Product id shouldn't be null")
+    private Long productId;
+    @NotNull(message = "Seller id shouldn't be null")
+    private Long sellerId;
+    private List<ProductDetailDto> productDetails;
+}
