@@ -1,0 +1,43 @@
+.text-cart{
+    font-size: 20px;
+}
+
+.cart-title{
+    border-bottom: 1px solid #eae4e8;
+}
+
+.collectionCart-title{
+    font-size: 20px;
+}
+
+.txt-time{
+    margin-bottom: 5px;
+}
+
+.summary-total{
+    border-bottom: 1px solid #eae4e8;
+}
+
+.summary-action{
+    font-size: 13px;
+}
+
+.summary-button{
+    box-sizing: border-box;
+    background-color: #b7bcc7;
+    padding: 10px;
+    text-align: center;
+}
+
+.order-summary-block{
+    border: 1px solid #eae4e8;
+    padding: 30px;
+}
+
+.summary-warning{
+    background-color: #ADD8E6;
+    border: 1px solid #eae4e8;
+    margin-top: 20px;
+    border-radius: 5px;
+    padding: 10px;
+}
