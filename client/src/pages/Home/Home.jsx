@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import "./Home.css"
 import Carousel from 'react-bootstrap/Carousel';
 import ProductCart from '../../components/ProductCart';
 import GuideCart from '../../components/GuideCart';
+import { useState } from 'react';
+import productService from '../../services/ProductService';
 
 
 
-class Home extends React.Component {
-  render() {
+const Home = (props) => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(()=>{
+    loadData();
+  }, []);
+
+  const loadData = () => {
+    productService.list().then((res) => {
+      setProducts(res.data)
+    });
+  };
+  console.log(products);
+
     return (
       <>
         <div>
@@ -169,15 +183,20 @@ class Home extends React.Component {
           <h3 className="text-center my-5">
             <a>Trang sức</a>
           </h3>
+          
+            
           <div className="row mx-5">
-            <div className="col">
+            {products.map((aProduct,idx)=>
+          <div key={aProduct.id} className="col">
               <ProductCart
-                title="Bông Tai Ngọc Trai Cao Cấp B2344 Cỡ Hạt 7x8 Ly"
+                title={aProduct.name}
                 imageSrc="https://product.hstatic.net/200000593853/product/t-19_478c7b4f81fd49cab1b9e898677daddd_571f8fec8d064c8383a551ebf8c0a1ea_f44701f2ac0e49c1af970498306ca644_master.jpg"
                 imageSrc1="https://product.hstatic.net/200000593853/product/t-20_0a7bbcacb79041c397392e138c7ac2fe_385e2dd3585148c49700e83bc68ddbdb_454863bb852540ac917605a07f4c4a0f_master.jpg"
-                price="Liên hệ báo giá"
-              />
+                price=""
+              />       
             </div>
+             )}
+     
             <div className="col">
               <ProductCart
                 title=" Nhẫn nữ S925 thời trang cao cấp"
@@ -649,6 +668,6 @@ class Home extends React.Component {
       </>
     );
   }
-}
+
 
 export default Home;
