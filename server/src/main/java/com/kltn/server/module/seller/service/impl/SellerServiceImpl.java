@@ -413,9 +413,9 @@ public class SellerServiceImpl implements SellerService {
 
         // If size of list ProductItem from database has ID is matched with size of list
         // ProductItem from DTO
-        if (productItemDtoWithId != null && productItemDtoWithId.size() != totalProductItemWithId) {
-            throw new ResourceNotFoundException("Some items don't exist!");
-        }
+//        if (productItemDtoWithId != null && productItemDtoWithId.size() != totalProductItemWithId) {
+//            throw new ResourceNotFoundException("Some items don't exist!");
+//        }
         // Update status of all product item not in DTO into 0 (delete product item
         // which not in used)
         if (!productItemDtoWithId.isEmpty()) {
