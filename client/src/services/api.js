@@ -2,8 +2,10 @@ import axios from "axios";
 
 
 const url = {
-    baseUrl: "https://restfulapi.dnd-group.net/api",
-    products: "/majors",
+    baseUrl: "http://localhost:8080/api/v1",
+    products: "/product/list-product",
+    login:"/users/login",
+    productdetail:"/product/product-information"
 };
 
 const instance = axios.create({

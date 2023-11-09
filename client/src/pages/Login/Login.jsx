@@ -1,10 +1,14 @@
 import React from "react";
 import "./Login.css";
 import { FaFacebookF, FaGooglePlusG,FaLinkedinIn } from "react-icons/fa";
+import UserService from "../../services/UserService";
+import Input from "../../components/Input";
+import {useNavigate} from "react-router-dom";
 
 
-const Login = () => {
-  
+const Login = (props) => {
+  const [message, setMessage]= React.useState("");
+  const navigate = useNavigate();
 
   const signUp =() => {
     const container = document.getElementById("container");
@@ -14,6 +18,27 @@ const Login = () => {
     const container = document.getElementById("container");
     container.classList.remove('right-panel-active');
   }
+  
+ 
+  const emailRef = React.useRef();
+  const passwordRef = React.useRef();
+
+  const formSubmitHandler = (e) => {
+    e.preventDefault();
+    const email = emailRef.current.value;
+    const password= passwordRef.current.value;
+    UserService.login(email, password).then((res) => {
+      if(res.status === 200){
+        setMessage("");
+        navigate("/home")
+      }else{
+        setMessage("Sai mk hoặc tk");
+      }
+    console.log(res)
+    })
+
+  }
+
   
 
  
@@ -46,7 +71,7 @@ const Login = () => {
         </form>
       </div>
       <div className="form-container1 sign-in-container1">
-        <form action="#" className="wrapper-form form-login">
+        <form onSubmit={formSubmitHandler} action="#" className="wrapper-form form-login">
           <h1 className="h1-login">Sign in</h1>
           <div className="social-container1">
             <a href="#" className="social a-login">
@@ -59,11 +84,11 @@ const Login = () => {
               <FaLinkedinIn/>
             </a>
           </div>
-          <span className="span-login">or use your account</span>
-          <input className="input-login" type="email" placeHolder="Email" />
-          <input className="input-login" type="password" placeHolder="Password" />
+          <span className="span-login">{message}</span>
+          <Input inputRef={emailRef} id="txtEmail"  type="email" maxLength="50" placeholder="Email" />
+          <Input inputRef={passwordRef} id="txtPassword" type="password" maxLength="100" placeholder="Password" />
           <a href="#" className="a-login">Forgot your password?</a>
-          <button className="button-login">Sign In</button>
+          <button type= "submit" className="button-login">Sign In</button>
         </form>
       </div>
       <div className="overlay-container1">

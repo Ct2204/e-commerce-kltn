@@ -2,8 +2,8 @@ import api from "./api";
 
 const list = () => api.get(api.url.products).then((res) => res.data);
 
-const productService ={
-    list,
+const ProductService ={
+    list
 };
 
-export default productService;
+export default ProductService;

@@ -387,7 +387,7 @@ const Header = () => {
               <li className="list-inline-item mx-3">Live stream</li>
             </ul>
           </div>
-          <div className="col-3 py-3 ">
+          <div className="col-2 py-3">
             <div className="row">
               <div className="col-8">
                 <FiMapPin className="icon" />
