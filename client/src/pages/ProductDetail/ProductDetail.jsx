@@ -21,7 +21,6 @@ const ProductDetail = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const [productDescription, setProductDescription] = useState([]);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const productId = searchParams.get("productId");
   useEffect(() => {
@@ -42,26 +41,6 @@ const ProductDetail = (props) => {
     setIsLoading(false);
     setProductDescription(responseData);
   };
-  console.log(productDetail.listMediaProduct);
-
-  const handleThumbnailClick = (index) => {
-    setSelectedImageIndex(index);
-  };
-
-  const handlePrevImage = () => {
-    setSelectedImageIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : productDetail?.listMediaProduct.length - 1
-    );
-  };
-
-  const handleNextImage = () => {
-    setSelectedImageIndex((prevIndex) =>
-      prevIndex < productDetail?.listMediaProduct.length - 1 ? prevIndex + 1 : 0
-    );
-  };
-
-  const selectedImage =
-    productDetail?.listMediaProduct?.[selectedImageIndex]?.url;
 
   return (
     <>
@@ -90,29 +69,40 @@ const ProductDetail = (props) => {
               <img
                 className="img-feature"
                 style={{ width: "100%", height: "100%" }}
-                src={selectedImage}
+                src={productDetail?.listMediaProduct?.[0]?.url}
                 atl=""
               />
 
               <div className="control prev">
-                <MdKeyboardArrowLeft onClick={handlePrevImage} />
+                <MdKeyboardArrowLeft />
               </div>
               <div className="control next">
-                <MdKeyboardArrowRight onClick={handleNextImage} />
+                <MdKeyboardArrowRight />
               </div>
             </div>
-            {productDetail.listMediaProduct.map((media, index) => (
-              <div className="list-image d-inline ">
-                <img
-                  onClick={() => handleThumbnailClick(index)}
-                  key={media.id}
-                  className="mx-2 active"
-                  style={{ width: "15%", height: "15%", cursor: "pointer" }}
-                  src={media.url}
-                  atl=""
-                />
-              </div>
-            ))}
+
+            <div className="list-image ">
+              <img
+                className="mx-2 active"
+                style={{ width: "15%", height: "15%" }}
+                src={productDetail?.listMediaProduct?.[0]?.url}
+                atl=""
+              />
+
+              <img
+                className="mx-2 active"
+                style={{ width: "15%", height: "15%" }}
+                src={productDetail?.listMediaProduct?.[1]?.url}
+                atl=""
+              />
+
+              <img
+                className="mx-2 active"
+                style={{ width: "15%", height: "15%" }}
+                src={productDetail?.listMediaProduct?.[2]?.url}
+                atl=""
+              />
+            </div>
           </div>
           <div className="col-8">
             <div className="row">
