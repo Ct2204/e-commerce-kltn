@@ -5,9 +5,12 @@ import com.kltn.server.common.exception.ResourceNotFoundException;
 import com.kltn.server.common.vo.ProductStatusType;
 import com.kltn.server.module.product.converter.ProductConverter;
 import com.kltn.server.module.product.dto.*;
+import com.kltn.server.module.product.repository.ProductCategoryRepository;
 import com.kltn.server.module.product.repository.ProductRatingRepository;
 import com.kltn.server.module.product.repository.ProductRepository;
 import com.kltn.server.module.product.service.ProductService;
+import com.kltn.server.module.seller.converter.ProductDtoConverter;
+import com.kltn.server.module.seller.dto.PageProductResDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +28,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductConverter productConverter;
+
+    @Autowired
+    private ProductDtoConverter productDtoConverter;
+
+    @Autowired
+    private ProductCategoryRepository productCategoryRepository;
 
     @Autowired
     private ProductRatingRepository productRatingRepository;
@@ -83,6 +92,7 @@ public class ProductServiceImpl implements ProductService {
                                 .collect(Collectors.toList()))
                 : null;
     }
+
 
     /**
      * Handle get a list of option and product item.
@@ -161,6 +171,29 @@ public class ProductServiceImpl implements ProductService {
         }
         productDto.setProductItems(listItemDto);
         return productDto;
+    }
+
+    @Override
+    public PageProductResDto getAllProductByCategory(Short categoryId, int perPage, int currentPage) {
+        Pageable paging = PageRequest.of(currentPage, perPage);
+
+        ProductCategory productCategory = productCategoryRepository
+                .findById(categoryId)
+                .orElseThrow(()-> new ResourceNotFoundException("CategoryID not found"));
+
+        Page<Product> pageListEntity = productRepository.findAllByCategory(productCategory,paging);
+
+        return pageListEntity.getTotalElements() > 0 ? new PageProductResDto(
+                pageListEntity.getTotalPages(),
+                pageListEntity.getTotalElements(),
+                pageListEntity.getSize(),
+                pageListEntity.getNumberOfElements(),
+                pageListEntity.getNumber() + 1,
+                pageListEntity.isLast(),
+                pageListEntity.isFirst(),
+                pageListEntity.getContent().stream()
+                        .map(item-> productDtoConverter.mapToProduct(item)).collect(Collectors.toList()))
+                : null;
     }
 
     public ProductOptionDetailImageDto toDto(ProductVisual entity) {

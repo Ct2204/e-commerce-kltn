@@ -4,6 +4,7 @@ package com.kltn.server.module.product.controller;
 
 import com.kltn.server.module.product.dto.*;
 import com.kltn.server.module.product.service.*;
+import com.kltn.server.module.seller.dto.PageProductResDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -817,5 +818,23 @@ public class ProductController {
         responseDataDto.setMessage(descriptions == null ? "Not exist Product Description" : "Get Product Description Successful!");
         responseDataDto.setData(descriptions);
         return ResponseEntity.status(HttpStatus.OK).body(responseDataDto);
+    }
+
+    @GetMapping(path="list-product/{categoryId}")
+    @ResponseBody
+    public ResponseDataDto getListProductForSeller(
+            @PathVariable short categoryId,
+            @RequestParam(value = "perPage", defaultValue = "5") int perPage,
+            @RequestParam(value = "currentPage", defaultValue = "1") int currentPage){
+        PageProductResDto pageProductRes = this.productService.getAllProductByCategory(categoryId,perPage, currentPage-1);
+
+        ResponseDataDto responseDataDto = new ResponseDataDto();
+        responseDataDto.setStatus("Success");
+        responseDataDto.setCode(200);
+        responseDataDto.setMessage("Get list product successfully");
+        responseDataDto.setData(pageProductRes);
+        return responseDataDto;
+
+
     }
 }
