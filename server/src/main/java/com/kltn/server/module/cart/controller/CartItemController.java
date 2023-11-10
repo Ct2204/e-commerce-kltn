@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin({"*"})
 @RequestMapping(path = "/api/v1/cart-items")
 @Tag(name = "carts")
 public class CartItemController {

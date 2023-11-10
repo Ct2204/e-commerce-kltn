@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin({"*"})
 @Tag(name = "Products")
 @RequestMapping("/api/v1")
 public class ProductRatingController {

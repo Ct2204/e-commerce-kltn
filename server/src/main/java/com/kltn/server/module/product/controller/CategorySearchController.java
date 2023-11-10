@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin({"*"})
 @RequestMapping("/api/v1/product")
 @Tag(name = "Products")
 public class CategorySearchController {
