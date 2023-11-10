@@ -9,19 +9,60 @@ import {
 } from "react-icons/ai";
 import { BsFacebook, BsMessenger } from "react-icons/bs";
 import ProductCart from "../../components/ProductCart";
-import Accordion from 'react-bootstrap/Accordion';
+import Accordion from "react-bootstrap/Accordion";
+import { useSearchParams } from "react-router-dom";
+import {
+  getProductDescription,
+  getProductDetail,
+} from "../../services/product";
 
 const ProductDetail = (props) => {
-  const [productid, setProductid] = useState([]);
+  const [productDetail, setProductDetail] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const [productDescription, setProductDescription] = useState([]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
+  const productId = searchParams.get("productId");
   useEffect(() => {
-    const storedProductid = JSON.parse(localStorage.getItem('productid'));
-    if (storedProductid) {
-      setProductid(storedProductid);
-    }
-  }, []);
-  console.log(productid)
-  
+    loadData(productId);
+    handleProductDescription(productId);
+  }, [productId]);
+
+  const loadData = async (productId) => {
+    setIsLoading(true);
+    const responseData = await getProductDetail(productId);
+    setIsLoading(false);
+    setProductDetail(responseData);
+  };
+
+  const handleProductDescription = async (productId) => {
+    setIsLoading(true);
+    const responseData = await getProductDescription(productId);
+    setIsLoading(false);
+    setProductDescription(responseData);
+  };
+  console.log(productDetail.listMediaProduct);
+
+  const handleThumbnailClick = (index) => {
+    setSelectedImageIndex(index);
+  };
+
+  const handlePrevImage = () => {
+    setSelectedImageIndex((prevIndex) =>
+      prevIndex > 0 ? prevIndex - 1 : productDetail?.listMediaProduct.length - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setSelectedImageIndex((prevIndex) =>
+      prevIndex < productDetail?.listMediaProduct.length - 1 ? prevIndex + 1 : 0
+    );
+  };
+
+  const selectedImage =
+    productDetail?.listMediaProduct?.[selectedImageIndex]?.url;
+
   return (
     <>
       <div className="container-fuild px-2 pt-3 nav-border">
@@ -37,71 +78,53 @@ const ProductDetail = (props) => {
                 Trang sức
               </a>
             </li>
-            <li class="breadcrumb-item" aria-current="page">
-              
-            </li>
+            <li class="breadcrumb-item" aria-current="page"></li>
           </ol>
         </nav>
       </div>
-      
+
       <div class="container text-center">
-     
         <div class="row">
           <div class="col-4">
             <div className="main mt-5">
-            {productid.listMediaProduct && productid.listMediaProduct.length > 0 && (
               <img
                 className="img-feature"
                 style={{ width: "100%", height: "100%" }}
-                src={productid.listMediaProduct[0].url}
+                src={selectedImage}
                 atl=""
               />
-            )}
+
               <div className="control prev">
-                <MdKeyboardArrowLeft />
+                <MdKeyboardArrowLeft onClick={handlePrevImage} />
               </div>
               <div className="control next">
-                <MdKeyboardArrowRight />
+                <MdKeyboardArrowRight onClick={handleNextImage} />
               </div>
             </div>
-            <div className="list-image ">
-            {productid.listMediaProduct && productid.listMediaProduct.length > 0 && (
-              <img
-                className="mx-2 active"
-                style={{ width: "15%", height: "15%" }}
-                src={productid.listMediaProduct[0].url}
-                atl=""
-              />
-            )}
-              {productid.listMediaProduct && productid.listMediaProduct.length > 0 && (
-              <img
-                className="mx-2 active"
-                style={{ width: "15%", height: "15%" }}
-                src={productid.listMediaProduct[1].url}
-                atl=""
-              />
-            )}
-              {productid.listMediaProduct && productid.listMediaProduct.length > 0 && (
-              <img
-                className="mx-2 active"
-                style={{ width: "15%", height: "15%" }}
-                src={productid.listMediaProduct[2].url}
-                atl=""
-              />
-            )}
-            </div>
+            {productDetail.listMediaProduct.map((media, index) => (
+              <div className="list-image d-inline ">
+                <img
+                  onClick={() => handleThumbnailClick(index)}
+                  key={media.id}
+                  className="mx-2 active"
+                  style={{ width: "15%", height: "15%", cursor: "pointer" }}
+                  src={media.url}
+                  atl=""
+                />
+              </div>
+            ))}
           </div>
           <div className="col-8">
             <div className="row">
               <div className="col-8 product-wrapper mt-5">
                 <div className="product-heading">
-                  <h1 className="product-title">{productid.title}</h1>
+                  <h1 className="product-title">{productDetail.title}</h1>
                   <span id="pro_sku" className="mr-3">
                     Mã sản phẩm: <strong>DH-1001</strong>
                   </span>
                   <span className="pro-soldold">
                     |&ensp;Tình trạng:
-                    <strong>{productid.status}</strong>
+                    <strong>{productDetail.status}</strong>
                   </span>
                   <span className="pro-vendor">
                     |&ensp; Thương hiệu:
@@ -118,9 +141,11 @@ const ProductDetail = (props) => {
                 </div>
                 <div className="product-price my-4" id="price-preview">
                   <span className="pro-title">Giá: </span>
-                  <span className="pro-price">{productid.priceSales}</span>
-                  <del>{productid.price}</del>
-                  <span className="pro-percent">{productid.percentDiscount}%</span>
+                  <span className="pro-price">{productDetail?.priceSales}</span>
+                  <del>{productDetail?.price}</del>
+                  <span className="pro-percent">
+                    {productDetail?.percentDiscount}%
+                  </span>
                 </div>
                 <div className="color">
                   <div className="text-start ">
@@ -321,23 +346,7 @@ const ProductDetail = (props) => {
               <div className="description-content expandable-toggle opened">
                 <div className="description-productdetail">
                   <p>
-                    <span>
-                      Trang sức luôn được sử dụng để tôn lên vẻ đẹp rạng ngời.
-                      Với chị em phụ nữ, nhẫn vàng trở thành biểu tượng của sự
-                      vĩnh cửu và tồn tại nhiều năm trong tủ đồ. Bên cạnh đó,
-                      loại trang sức đính đá đều được các quý bà, quý cô hết sức
-                      nâng niu.
-                    </span>
-                  </p>
-                  <p>
-                    <span>
-                      Điểm nhấn chính của nhẫn được lấy cảm hứng chủ đạo từ họa
-                      tiết lá ô liu được cách điệu hoàn hảo với sự nữ tính ẩn
-                      hiện trong vẻ huyền bí, nét thanh lịch, sang trọng toát ra
-                      từ những thiết kế tinh tế, khơi nguồn để phái đẹp tỏa
-                      sáng, chinh phục thành công cùng nguyện ước chân thành cho
-                      những điều tốt đẹp nhất trong cuộc sống.
-                    </span>
+                    <span>{productDescription?.[0]?.description}</span>
                   </p>
                 </div>
                 <div className="description-btn">
@@ -585,7 +594,7 @@ const ProductDetail = (props) => {
                   price="Liên hệ báo giá"
                 />
               </div>
-               <div className="col-3">
+              <div className="col-3">
                 <ProductCart
                   title="Camden-Golden Brown"
                   brand="Seiko"
