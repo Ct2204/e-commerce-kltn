@@ -116,9 +116,7 @@ const Cart = (props) => {
                   <div className="summary-time__row d-flex justify-content-between">
                     <div className="boxtime-title">
                       <p className="txt-title">Thời gian giao hàng</p>
-                      <p className="txt-time ">
-                        Chọn thời gian
-                      </p>
+                      <p className="txt-time ">Chọn thời gian</p>
                     </div>
                     <div
                       class="boxtime-radio"
@@ -152,12 +150,9 @@ const Cart = (props) => {
                       </div>
                     </div>
                   </div>
-                 
                 </div>
                 <div className="summary-total d-flex justify-content-between">
-                  <p>
-                    Tổng tiền:
-                  </p>
+                  <p>Tổng tiền:</p>
                   <p>0đ</p>
                 </div>
                 <div className="summary-action">
@@ -167,7 +162,7 @@ const Cart = (props) => {
                   </p>{" "}
                   <div
                     class="summary-alert alert alert-danger "
-                    style={{display:"block"}}
+                    style={{ display: "block" }}
                   >
                     Giỏ hàng của bạn hiện chưa đạt mức tối thiểu để thanh toán.
                   </div>
@@ -184,10 +179,15 @@ const Cart = (props) => {
                   </a>
                 </div>
               </div>
-              <div className="summary-warning alert-order">						
-									<p class="textmr"><strong>Chính sách mua hàng</strong>:</p>
-									<p>Hiện chúng tôi chỉ áp dụng thanh toán với đơn hàng có giá trị tối thiểu <strong>400.000₫ </strong> trở lên.</p>
-								</div>
+              <div className="summary-warning alert-order">
+                <p class="textmr">
+                  <strong>Chính sách mua hàng</strong>:
+                </p>
+                <p>
+                  Hiện chúng tôi chỉ áp dụng thanh toán với đơn hàng có giá trị
+                  tối thiểu <strong>400.000₫ </strong> trở lên.
+                </p>
+              </div>
             </div>
           </div>
         </div>
