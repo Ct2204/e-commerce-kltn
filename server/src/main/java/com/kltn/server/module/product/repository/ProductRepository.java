@@ -1,6 +1,7 @@
 package com.kltn.server.module.product.repository;
 
 import com.kltn.server.common.entity.Product;
+import com.kltn.server.common.entity.ProductCategory;
 import com.kltn.server.common.entity.Seller;
 import com.kltn.server.common.vo.ProductStatusType;
 import com.kltn.server.module.product.dto.ProductSearchResDto;
@@ -23,6 +24,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT * FROM products where status not in(3,4) order by id", nativeQuery = true)
     Page<Product> findListProduct(Pageable pageable);
+
+
 
     Optional<Product> findOneById(Long id);
 
@@ -54,7 +57,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findProductsByCategoryId(@Param("categoryId") short categoryId, Pageable pageable);
 
 
+
+
     List<Product> findBySeller(Seller seller);
+
+    Page<Product> findAllByCategory(ProductCategory productCategory, Pageable pageable);
 
     Page<Product> findAllBySeller(Seller seller, Pageable pageable);
 }
