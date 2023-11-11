@@ -1,7 +1,7 @@
 import React from "react";
 import "./Login.css";
 import { FaFacebookF, FaGooglePlusG, FaLinkedinIn } from "react-icons/fa";
-import { login } from "../../services/UserService";
+import { login, register } from "../../services/UserService";
 import Input from "../../components/Input";
 import { useNavigate } from "react-router-dom";
 
@@ -18,23 +18,48 @@ const Login = (props) => {
     container.classList.remove("right-panel-active");
   };
 
+  //Login
   const emailRef = React.useRef();
   const passwordRef = React.useRef();
+ 
+  //Register
+  const fullNameRef = React.useRef();
+  const emailRegisterRef = React.useRef();
+  const passwordRegisterRef = React.useRef();
+  const confirmPasswordRef = React.useRef();
 
   const formSubmitHandler = async (e) => {
     e.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     const responseData = await login(email, password);
-    if (responseData.access_token != null) {
-      setMessage("");
+  
+    if (responseData.code === 200) {
+      setMessage(responseData.message);
       navigate("/home");
-    }
-    if (responseData === null) {
-      setMessage("Worng email or password");
-      navigate("/login");
+    } else {
+      setMessage(responseData.message)
+    } 
+  };
+
+
+  const formRegisterSubmitHandler = async (e) => {
+    e.preventDefault();
+    const fullName = fullNameRef.current.value;
+    const email = emailRegisterRef.current.value;
+    const password = passwordRegisterRef.current.value;
+    const confirmPassword = confirmPasswordRef.current.value;
+    
+    const responseData = await register(fullName, email, password, confirmPassword);
+    console.log(responseData);
+    if (responseData.code === 200) {
+      setMessage(responseData.message);
+      navigate("/home");
+    } else {
+      setMessage(responseData.message);
     }
   };
+
 
   return (
     <>
@@ -42,7 +67,10 @@ const Login = (props) => {
       <div className="wrapper-container">
         <div className="container1 wrapper-body" id="container">
           <div className="form-container1 sign-up-container1">
-            <form action="#" className="form-login">
+            <form
+              onSubmit={formRegisterSubmitHandler}
+              action="#"
+              className="form-login">
               <h1 className="h1-login">Create Account</h1>
               <div className="social-container1">
                 <a href="#" className="social a-login">
@@ -55,18 +83,39 @@ const Login = (props) => {
                   <FaLinkedinIn />
                 </a>
               </div>
-              <span className="span-login">
-                or use your email htmlFor registration
-              </span>
-              <input className="input-login" type="text" placeHolder="Name" />
-              <input className="input-login" type="text" placeHolder="Name" />
-              <input className="input-login" type="email" placeHolder="Email" />
-              <input
+            
+              <span className="span-login">{message}</span>
+              <Input
+                inputRef={fullNameRef}
+                className="input-login"
+                type="text"
+                maxLength="50"
+                placeholder="Full name"
+              />
+              <Input
+                inputRef={emailRegisterRef}
+                classhame="input-login"
+                type="email"
+                maxLength="50"
+                placeholder="Email" 
+              />
+              
+              <Input
+                inputRef={passwordRegisterRef}
                 className="input-login"
                 type="password"
-                placeHolder="Password"
+                maxLength="50"
+                placeholder="Password"
               />
-              <button className="button-login">Sign Up</button>
+              <Input
+                className="input-login"
+                maxLength="50"
+                type="password"
+                inputRef={confirmPasswordRef}
+                placeholder="Confirm Password"
+              />
+            
+              <button type="submit" className="button-login">Sign Up</button>
             </form>
           </div>
           <div className="form-container1 sign-in-container1">
