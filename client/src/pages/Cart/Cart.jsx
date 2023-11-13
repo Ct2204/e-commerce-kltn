@@ -1,9 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Cart.css";
 import { BsSearch } from "react-icons/bs";
 import ProductCart from "../../components/ProductCart";
+import { useNavigate } from "react-router-dom";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import ProgressBar from "react-bootstrap/ProgressBar";
+import { Form, Collapse } from "react-bootstrap";
 
 const Cart = (props) => {
+  const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleRadioChange = (option) => {
+    setSelectedOption(option);
+  };
+
+  useEffect(() => {
+    // Lấy thông tin giỏ hàng từ Local Storage
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    setCart(storedCart);
+  }, []);
+  const result = {};
+  cart.forEach((item) => {
+    if (!result[item.id]) {
+      result[item.id] = { ...item };
+    } else {
+      result[item.id].quantity += item.quantity;
+      result[item.id].price += item.price;
+    }
+  });
+  const mergedCart = Object.values(result);
+
+  const removeCart = (idx) => {
+    var indexToRemove = idx;
+    if (indexToRemove >= 0 && indexToRemove < cart.length) {
+      // Xoá phần tử khỏi mảng
+      cart.splice(indexToRemove, 1);
+      // Lưu lại mảng đã cập nhật vào localStorage
+      localStorage.setItem("cart", JSON.stringify(cart));
+      navigate("/cart");
+    }
+  };
+
+  const handleAddCart = (idx) => {
+    // Tạo đối tượng mới
+    const newObject = {
+      id: cart[idx].id,
+      title: cart[idx].title,
+      image: cart[idx].image,
+      price: cart[idx].price,
+      quantity: 1,
+    };
+
+    // Thêm đối tượng mới vào mảng
+    setCart((prevCart) => [...prevCart, newObject]);
+    // Lưu mảng mới vào localStorage
+    localStorage.setItem("cart", JSON.stringify([...cart, newObject]));
+  };
+
   return (
     <>
       <div className="container-fuild px-2 pt-3 nav-border">
@@ -32,23 +87,85 @@ const Cart = (props) => {
                   <h1 className="text-cart">Giỏ hàng của bạn</h1>
                 </div>
                 <p className="my-2 d-flex align-items-center justify-content-center">
-                  Bạn cần mua thêm <span className="price">3,000,000₫</span> để
-                  được <span className="free-ship">miễn phí vận chuyển</span>
+                  Bạn đang có <span className="price"> 7 sản phẩm</span> trong
+                  giỏ hàng
                 </p>
+              </div>
+              <div>
+                <ProgressBar variant="success" now={40} />
               </div>
               <div className="info-image">
-                <img
-                  style={{ width: "100%", height: "70%" }}
-                  data-src="//theme.hstatic.net/200000593853/1001115480/14/cart_banner_image.jpg?v=45"
-                  src="//theme.hstatic.net/200000593853/1001115480/14/cart_banner_image.jpg?v=45"
-                  className=""
-                  alt="Giỏ hàng của bạn đang trống"
-                />
+                {/* <ul>
+                  
+                    <li key={product.id}>
+                      <img src={product.image} alt={product.title} />
+                      <p></p>
+                      <p></p>
+                      {/* Thêm các thông tin khác của sản phẩm nếu cần */}
+                {/* </li> */}
+                {/* ))} */}
+                {/* </ul> */}
+                <div className="border-cart">
+                  {mergedCart.map((product, idx) => (
+                    <div key={idx} className="item-img d-flex m-4">
+                      <a>
+                        <img
+                          style={{ width: "80px", height: "80px" }}
+                          src={product.image}
+                          alt="Nhẫn cưới vàng 18K đính đá ECZ SWAROVSKI"
+                        />
+                        <div className="item-remove">
+                          <a className="cart text-body text-decoration-none">
+                            Xóa
+                          </a>
+                        </div>
+                      </a>
+                      <div className="item-info">
+                        <h3 className="item--title">
+                          <a className="text-decoration-none color-cart mx-5">
+                            {product.title}
+                          </a>
+                        </h3>
+                        <p className="mx-5">{product.price}</p>
+                      </div>
+                      <div className="item-total-price text-end">
+                        <div className="price">
+                          <span className="line-item-total">
+                            {product.price}
+                          </span>
+                        </div>
+                        <div className="d-flex color my-4">
+                          <div
+                            style={{ width: "20px", height: "20px" }}
+                            className="color-component"
+                          >
+                            <AiOutlineMinus
+                              onClick={() => removeCart(idx)}
+                              style={{ width: "10px", height: "10px" }}
+                            />
+                          </div>
+                          <div
+                            className=" text1 d-grid align-items-center text-center"
+                            style={{ width: "20px", height: "20px" }}
+                          >
+                            <div>{product.quantity}</div>
+                          </div>
+                          <div
+                            className="plus"
+                            style={{ width: "20px", height: "20px" }}
+                          >
+                            <AiOutlinePlus
+                              onClick={() => handleAddCart(idx)}
+                              style={{ width: "10px", height: "10px" }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="info-text">
-                <p className="text-center">
-                  Chưa có sản phẩm trong giỏ hàng...
-                </p>
                 <p className="text-center">
                   Bạn có thể quay về{" "}
                   <a href="https://the-swan.myharavan.com">trang chủ</a> hoặc
@@ -124,32 +241,45 @@ const Cart = (props) => {
                       data-time-start=""
                       data-time-end=""
                     >
-                      <div className="radio-item">
-                        <input
-                          class="input-radio"
-                          type="radio"
-                          name="timeRadios"
-                          id="timeRadios-1"
-                          value="timeNow"
-                        />
-                        <label class="label-radio" htmlFor="timeRadios-1">
-                          Giao khi có hàng
-                        </label>
-                      </div>
-                      <div className="radio-item mt-3">
-                        <input
-                          class="input-radio"
-                          type="radio"
-                          name="timeRadios"
-                          id="timeRadios-2"
-                          value="timeDate"
-                        />
-                        <label class="label-radio" htmlFor="timeRadios-2">
-                          Chọn thời gian
-                        </label>
+                      <div>
+                        <Form>
+                          <Form.Check
+                            type="radio"
+                            label="Option 1"
+                            id="radio1"
+                            checked={selectedOption === "radio1"}
+                            onChange={() => handleRadioChange("radio1")}
+                          />
+                          <Form.Check
+                            type="radio"
+                            label="Option 2"
+                            id="radio2"
+                            checked={selectedOption === "radio2"}
+                            onChange={() => handleRadioChange("radio2")}
+                          />
+                        </Form>
                       </div>
                     </div>
                   </div>
+                </div>
+                <div>
+                  <Collapse in={selectedOption === "radio2"}>
+                    <div>
+                      <div>
+                        <div>
+                          <label>Ngày giao</label>
+                        </div>
+                        <div>
+                          <Form>
+                            <Form.Label>Select a date:</Form.Label>
+                            <Form.Control as="select">
+                              <option value="13/11/2023">Hôm nay</option>
+                            </Form.Control>
+                          </Form>
+                        </div>
+                      </div>
+                    </div>
+                  </Collapse>
                 </div>
                 <div className="summary-total d-flex justify-content-between">
                   <p>Tổng tiền:</p>
