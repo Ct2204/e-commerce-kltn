@@ -63,3 +63,23 @@ export const getProductDescription = async (id) => {
     return null;
   }
 };
+
+export const getProductsByCategory = async (id) => {
+  try {
+    let url = `${api.url.productsbycategory}/${id}`;
+
+    const response = await httpRequest({
+      url: url,
+      method: "GET",
+    });
+    if (response.code === 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (err) {
+    const errMessage = "Error in getting productdetail: ";
+    console.error(errMessage, err);
+    return null;
+  }
+};

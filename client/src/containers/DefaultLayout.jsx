@@ -7,19 +7,20 @@ import Footer from './Footer';
 import Product from '../pages/Product/Product';
 import Login from '../pages/Login/Login';
 import Cart from '../pages/Cart/Cart';
+import VerificationCodeForm from '../pages/VerificationCode/VerificationCodeForm.jsx';
 
 const DefaultLayout = () => {
     return (
         <>
             <Header/>
             <Routes>
-                <Route path="" element={<Home/>}/>
-                <Route path="/home" element={<Home/>}/>
+                <Route path="/" element={<Home/>}/>
+                {/* <Route path="/" element={<Home/>}/> */}
                 <Route path="/productdetail" element={<ProductDetail />}/>
                 <Route path="/product" element={<Product />}/>
                 <Route path="/login" element={<Login />}/>
                 <Route path="/cart" element={<Cart />}/>
-
+                <Route path='/verificationcode' element={<VerificationCodeForm/>}/>
             </Routes>
             <Footer/>
         </>

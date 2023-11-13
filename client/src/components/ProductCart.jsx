@@ -1,17 +1,19 @@
 import React from "react";
+import "./ProductCart.css"
 
 class ProductCart extends React.Component {
 
   render() {
-    const { title, brand, imageSrc, imageSrc1, price, ...others } = this.props;
+    const { title, brand, imageSrc, imageSrc1, price,priceSale,percentDiscount, ...others } = this.props;
     return (
       <>
         <div
-          className="card box-hover"
+          className="card box-hover product-card"
           style={{ width: "100%", height: "100%" }}
         >
-          <img src={imageSrc} alt="" />
-          <img src={imageSrc1} alt="" className="img-change"></img>
+          <span class="discount-percentage">{percentDiscount}%</span>
+          <img src={imageSrc} alt="product" />
+          <img src={imageSrc1} alt="product" className="img-change"></img>
           <div className="card-body">
             <p className="proloop--vender">
               <a
@@ -36,12 +38,12 @@ class ProductCart extends React.Component {
                 className="border mx-2"
               ></li>
             </ul>
+         
+            <div class="wrapper-action-loop price-container">
             <p className="card-title text-center">{title}</p>
-            <div class="wrapper-action-loop ">
               <p class="proloop--price on-sale  ">
-                <span class="price">1,020,000₫</span>
-                <span class="price-del">1,440,000₫</span>
-                <span class="pro-percent">-29%</span>
+                <span class="price ">{price} VND</span>
+                <span class="price-del">{priceSale} VND</span>
               </p>
             </div>
           </div>

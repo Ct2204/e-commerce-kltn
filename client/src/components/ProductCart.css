@@ -1,0 +1,74 @@
+.product-card {
+    position: relative;
+    cursor: pointer;
+  
+  }
+
+
+.discount-percentage {
+position: absolute;
+z-index: 10;
+height: 40px;
+width: 45px;
+text-align: center;
+font-size: 15px;
+font-weight: 600;
+top:    0px;
+  left: 5px;
+  background-color: #ff0000; /* Màu nền của phần trăm giảm giá */
+  color: #ffffff; /* Màu chữ của phần trăm giảm giá */
+  padding: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+ 
+}
+
+.price {
+    font-size: 15px;
+    font-weight: bold;
+    /* margin-right: 25px; */
+    padding: 8px;
+}
+
+
+
+.card-title {
+    font-weight: 600;
+    font-style: italic;
+    font-size: 20px;
+    height: 70px;
+    margin-bottom: 10px;
+}
+
+.price-container {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.price-del {
+    position: relative;
+    font-weight: bold;
+    text-decoration: none; /* Loại bỏ đường gạch ngang mặc định */
+    opacity: 0.5;
+    font-size: 15px;
+
+  }
+
+.price-del::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    top: 50%;
+    border-bottom: 1px solid #000; /* Màu và độ dày của đường gạch ngang */
+    transform: translateY(-78%);
+    z-index: -1;
+  }
+
+
+  
+  
+ 
+  
+

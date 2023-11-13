@@ -820,13 +820,13 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDataDto);
     }
 
-    @GetMapping(path="list-product/{categoryId}")
+    @GetMapping(path="products-category/{categoryId}")
     @ResponseBody
     public ResponseDataDto getListProductForSeller(
             @PathVariable short categoryId,
-            @RequestParam(value = "perPage", defaultValue = "5") int perPage,
+            @RequestParam(value = "perPage", defaultValue = "8") int perPage,
             @RequestParam(value = "currentPage", defaultValue = "1") int currentPage){
-        PageProductResDto pageProductRes = this.productService.getAllProductByCategory(categoryId,perPage, currentPage-1);
+        ProductListDto pageProductRes = this.productService.getAllProductByCategory(categoryId,perPage, currentPage-1);
 
         ResponseDataDto responseDataDto = new ResponseDataDto();
         responseDataDto.setStatus("Success");

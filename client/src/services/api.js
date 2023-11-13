@@ -4,8 +4,9 @@ const url = {
   baseUrl: "http://localhost:8080/api/v1",
   products: "/product/list-product",
   login: "/users/login",
-  register:"/users/register",
+  register: "/users/register",
   productdetail: "/product/product-information",
+  productsbycategory:"/product/products-category",
   productdescription: "/product/description",
 };
 

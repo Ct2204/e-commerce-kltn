@@ -5,19 +5,45 @@ import Carousel from "react-bootstrap/Carousel";
 import ProductCart from "../../components/ProductCart";
 import GuideCart from "../../components/GuideCart";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getProductDetail, getProductList } from "../../services/product";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { getProductDetail, getProductList, getProductsByCategory } from "../../services/product";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [productDetail, setProductDetail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [productByCategoryNhan, setProductByCategoryNhan] = useState([]);
+  const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
 
+
+  const handleProductsByCategoryNhan = async () => {
+    setIsLoading(true)
+    const responseData = await getProductsByCategory(2);
+    setProductByCategoryNhan(responseData.listProducts)
+    setIsLoading(false)
+  }
+  const handleProductsByCategoryDongHo = async () => {
+    setIsLoading(true)
+    const responseData = await getProductsByCategory(1);
+    setProductByCategoryDongHo(responseData.listProducts)
+    setIsLoading(false)
+  }
+ 
   const navigate = useNavigate();
 
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    handleProductsByCategoryDongHo();
+  }, [])
+
+  useEffect(() => {
+    handleProductsByCategoryNhan();
+   
+  }, [])
+ 
 
   const loadData = async () => {
     setIsLoading(true);
@@ -27,11 +53,13 @@ const Home = () => {
   };
 
   const changePageHandler = async (e, id) => {
-    // const responseData = await getProductDetail(id);
-    // setProductDetail(responseData);
-    // localStorage.setItem("productDetail", JSON.stringify(responseData));
     navigate(`productdetail?productId=${id}`);
   };
+
+  const numberWithCommas = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+  
 
   return (
     <>
@@ -194,21 +222,25 @@ const Home = () => {
       ) : (
         <div classname="container-fuild">
           <h3 className="text-center my-5">
-            <a>Trang sức</a>
+            <a>Đồng hồ</a>
           </h3>
-          <div className="row mx-5">
-            {products.map((aProducts, idx) => (
+            <div className="row mx-5 ">
+            {productByCategoryDongHo.map((aProducts, idx) => (
               <div
                 key={idx}
-                className="col-3"
+                className="col-3 product-card"
                 onClick={(e) => changePageHandler(e, aProducts.id)}
               >
                 <ProductCart
                   title={aProducts.title}
                   imageSrc={aProducts.listMediaProduct[0].url}
                   imageSrc1={aProducts.listMediaProduct[1].url}
-                  price={aProducts.price}
+                  price={numberWithCommas(aProducts.priceSales)}
+                  priceSale={numberWithCommas(aProducts.price)}
+                  percentDiscount={aProducts.percentDiscount}
+              
                 />
+            
               </div>
             ))}
           </div>
@@ -317,107 +349,35 @@ const Home = () => {
             </div>
           </div>
         </div>
+        {isLoading ? (
+        <h1>Đang load dữ liệu</h1>
+      ) : (
         <div classname="container-fuild">
           <h3 className="text-center my-5">
-            <a>Đồng hồ</a>
+            <a>Trang sức</a>
           </h3>
-          <div className="row mx-5">
-            <div className="col-3">
-              <ProductCart
-                title="Camden-Golden Brown"
-                brand="Seiko"
-                imageSrc="https://product.hstatic.net/200000593853/product/watches-2_18f627d16ec74bd3ac0366e14e223425_9113b9fd1ed74e58a777a0c1f8d26ae5_master.jpg"
-                imageSrc1="https://product.hstatic.net/200000593853/product/watches-2hover_a91ec9bcf1214ce6a13f57ecc8feb087_11da29ca7cda4a14b2c814783d4b657a_master.jpg"
-                price="Liên hệ báo giá"
-              />
-            </div>
-            <div className="col-3">
-              <ProductCart
-                title="Camden-Golden Brown"
-                brand="Seiko"
-                imageSrc="https://product.hstatic.net/200000593853/product/watches-2_18f627d16ec74bd3ac0366e14e223425_9113b9fd1ed74e58a777a0c1f8d26ae5_master.jpg"
-                imageSrc1="https://product.hstatic.net/200000593853/product/watches-2hover_a91ec9bcf1214ce6a13f57ecc8feb087_11da29ca7cda4a14b2c814783d4b657a_master.jpg"
-                price="Liên hệ báo giá"
-              />
-            </div>
-            <div className="col-3">
-              <ProductCart
-                title="Camden-Golden Brown"
-                brand="Seiko"
-                imageSrc="https://product.hstatic.net/200000593853/product/watches-2_18f627d16ec74bd3ac0366e14e223425_9113b9fd1ed74e58a777a0c1f8d26ae5_master.jpg"
-                imageSrc1="https://product.hstatic.net/200000593853/product/watches-2hover_a91ec9bcf1214ce6a13f57ecc8feb087_11da29ca7cda4a14b2c814783d4b657a_master.jpg"
-                price="Liên hệ báo giá"
-              />
-            </div>
-            <div className="col">
-              <ProductCart
-                title="Camden-Golden Brown"
-                brand="Seiko"
-                imageSrc="https://product.hstatic.net/200000593853/product/watches-2_18f627d16ec74bd3ac0366e14e223425_9113b9fd1ed74e58a777a0c1f8d26ae5_master.jpg"
-                imageSrc1="https://product.hstatic.net/200000593853/product/watches-2hover_a91ec9bcf1214ce6a13f57ecc8feb087_11da29ca7cda4a14b2c814783d4b657a_master.jpg"
-                price="Liên hệ báo giá"
-              />
-            </div>
-            <div className="col-3">
-              <ProductCart
-                title="Camden-Golden Brown"
-                brand="Seiko"
-                imageSrc="https://product.hstatic.net/200000593853/product/watches-2_18f627d16ec74bd3ac0366e14e223425_9113b9fd1ed74e58a777a0c1f8d26ae5_master.jpg"
-                imageSrc1="https://product.hstatic.net/200000593853/product/watches-2hover_a91ec9bcf1214ce6a13f57ecc8feb087_11da29ca7cda4a14b2c814783d4b657a_master.jpg"
-                price="Liên hệ báo giá"
-              />
-            </div>
+            <div className="row mx-5">
+            {productByCategoryNhan.map((aProducts, idx) => (
+              <div
+                key={idx}
+                className="col-3 product-card"
+                onClick={(e) => changePageHandler(e, aProducts.id)}
+              >
+                <ProductCart
+                  title={aProducts.title}
+                  imageSrc={aProducts.listMediaProduct[0].url}
+                  imageSrc1={aProducts.listMediaProduct[1].url}
+                  price={numberWithCommas(aProducts.priceSales)}
+                  priceSale={numberWithCommas(aProducts.price)}
+                  percentDiscount={aProducts.percentDiscount}
+              
+                />
+                {console.log(aProducts.price)}
+              </div>
+            ))}
           </div>
         </div>
-        <div classname="container-fuild">
-          <div className="row mx-5 my-3">
-            <div className="col-3">
-              <ProductCart
-                title="Camden-Golden Brown"
-                brand="Seiko"
-                imageSrc="https://product.hstatic.net/200000593853/product/watches-2_18f627d16ec74bd3ac0366e14e223425_9113b9fd1ed74e58a777a0c1f8d26ae5_master.jpg"
-                imageSrc1="https://product.hstatic.net/200000593853/product/watches-2hover_a91ec9bcf1214ce6a13f57ecc8feb087_11da29ca7cda4a14b2c814783d4b657a_master.jpg"
-                price="Liên hệ báo giá"
-              />
-            </div>
-            <div className="col-3">
-              <ProductCart
-                title="Camden-Golden Brown"
-                brand="Seiko"
-                imageSrc="https://product.hstatic.net/200000593853/product/watches-2_18f627d16ec74bd3ac0366e14e223425_9113b9fd1ed74e58a777a0c1f8d26ae5_master.jpg"
-                imageSrc1="https://product.hstatic.net/200000593853/product/watches-2hover_a91ec9bcf1214ce6a13f57ecc8feb087_11da29ca7cda4a14b2c814783d4b657a_master.jpg"
-                price="Liên hệ báo giá"
-              />
-            </div>
-            <div className="col-3">
-              <ProductCart
-                title="Camden-Golden Brown"
-                brand="Seiko"
-                imageSrc="https://product.hstatic.net/200000593853/product/watches-2_18f627d16ec74bd3ac0366e14e223425_9113b9fd1ed74e58a777a0c1f8d26ae5_master.jpg"
-                imageSrc1="https://product.hstatic.net/200000593853/product/watches-2hover_a91ec9bcf1214ce6a13f57ecc8feb087_11da29ca7cda4a14b2c814783d4b657a_master.jpg"
-                price="Liên hệ báo giá"
-              />
-            </div>
-            <div className="col-3">
-              <ProductCart
-                title="Camden-Golden Brown"
-                brand="Seiko"
-                imageSrc="https://product.hstatic.net/200000593853/product/watches-2_18f627d16ec74bd3ac0366e14e223425_9113b9fd1ed74e58a777a0c1f8d26ae5_master.jpg"
-                imageSrc1="https://product.hstatic.net/200000593853/product/watches-2hover_a91ec9bcf1214ce6a13f57ecc8feb087_11da29ca7cda4a14b2c814783d4b657a_master.jpg"
-                price="Liên hệ báo giá"
-              />
-            </div>
-            <div className="col-3">
-              <ProductCart
-                title="Camden-Golden Brown"
-                brand="Seiko"
-                imageSrc="https://product.hstatic.net/200000593853/product/watches-2_18f627d16ec74bd3ac0366e14e223425_9113b9fd1ed74e58a777a0c1f8d26ae5_master.jpg"
-                imageSrc1="https://product.hstatic.net/200000593853/product/watches-2hover_a91ec9bcf1214ce6a13f57ecc8feb087_11da29ca7cda4a14b2c814783d4b657a_master.jpg"
-                price="Liên hệ báo giá"
-              />
-            </div>
-          </div>
-        </div>
+      )}
         <div className="wraplist-ctas text-center">
           <a
             href="/collections/trang-suc"

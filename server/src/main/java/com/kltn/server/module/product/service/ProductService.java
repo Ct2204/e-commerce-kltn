@@ -15,7 +15,7 @@ public interface ProductService {
     ProductItemsResDto getProduct(Long id);
 
 
-    PageProductResDto getAllProductByCategory(Short categoryId, int perPage, int currentPage);
+    ProductListDto getAllProductByCategory(Short categoryId, int perPage, int currentPage);
 
 
 

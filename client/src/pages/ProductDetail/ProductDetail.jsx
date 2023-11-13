@@ -31,6 +31,7 @@ const ProductDetail = (props) => {
   const loadData = async (productId) => {
     setIsLoading(true);
     const responseData = await getProductDetail(productId);
+    console.log(responseData);
     setIsLoading(false);
     setProductDetail(responseData);
   };

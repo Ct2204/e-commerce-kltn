@@ -174,7 +174,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PageProductResDto getAllProductByCategory(Short categoryId, int perPage, int currentPage) {
+    public ProductListDto getAllProductByCategory(Short categoryId, int perPage, int currentPage) {
         Pageable paging = PageRequest.of(currentPage, perPage);
 
         ProductCategory productCategory = productCategoryRepository
@@ -183,16 +183,21 @@ public class ProductServiceImpl implements ProductService {
 
         Page<Product> pageListEntity = productRepository.findAllByCategory(productCategory,paging);
 
-        return pageListEntity.getTotalElements() > 0 ? new PageProductResDto(
+        return pageListEntity.getTotalElements() > 0
+                ? new ProductListDto(
                 pageListEntity.getTotalPages(),
                 pageListEntity.getTotalElements(),
                 pageListEntity.getSize(),
                 pageListEntity.getNumberOfElements(),
                 pageListEntity.getNumber() + 1,
-                pageListEntity.isLast(),
                 pageListEntity.isFirst(),
+                pageListEntity.isLast(),
                 pageListEntity.getContent().stream()
-                        .map(item-> productDtoConverter.mapToProduct(item)).collect(Collectors.toList()))
+                        .map((item) -> {
+                            ProductDto dto = this.productConverter.toDto(item);
+                            return dto;
+                        })
+                        .collect(Collectors.toList()))
                 : null;
     }
 

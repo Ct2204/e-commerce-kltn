@@ -1,3 +1,5 @@
+import "./Header.css"
+
 import React from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { BiSearch } from "react-icons/bi";
@@ -57,52 +59,13 @@ const Header = () => {
               <li className="list-inline-item icon-hover">
                 <Link
                   className="text-decoration-none text-body parent-menu"
-                  to="/home"
+                  to="/"
                 >
                   Trang chủ
                 </Link>{" "}
-                <svg
-                  className=""
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  x="0"
-                  y="0"
-                  viewBox="0 0 128 128"
-                >
-                  <g>
-                    <path d="m64 88c-1.023 0-2.047-.391-2.828-1.172l-40-40c-1.563-1.563-1.563-4.094 0-5.656s4.094-1.563 5.656 0l37.172 37.172 37.172-37.172c1.563-1.563 4.094-1.563 5.656 0s1.563 4.094 0 5.656l-40 40c-.781.781-1.805 1.172-2.828 1.172z"></path>
-                  </g>
-                </svg>
-                <ul className="list-unstyled sub-menu bg-white p-3">
-                  <li className="my-2 sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-01"
-                      title="Kiểu hiển thị header 1"
-                    >
-                      Kiểu hiển thị header 1
-                    </a>
-                  </li>
-                  <li className="sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-02"
-                      title="Kiểu hiển thị header 2"
-                    >
-                      Kiểu hiển thị header 2
-                    </a>
-                  </li>
-                  <li className="my-2 sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-03"
-                      title="Kiểu hiển thị header 3"
-                    >
-                      Kiểu hiển thị header 3
-                    </a>
-                  </li>
-                </ul>
+                
+              
+                
               </li>
               <li className="list-inline-item mx-3 product-hover">
                 <Link
@@ -241,150 +204,22 @@ const Header = () => {
                   </div>
                 </div>
               </li>
-              <li className="list-inline-item mx-3">
+              <li className="cursor list-inline-item mx-3">
                 Trang sản phẩm{" "}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  x="0"
-                  y="0"
-                  viewBox="0 0 128 128"
-                >
-                  <g>
-                    <path d="m64 88c-1.023 0-2.047-.391-2.828-1.172l-40-40c-1.563-1.563-1.563-4.094 0-5.656s4.094-1.563 5.656 0l37.172 37.172 37.172-37.172c1.563-1.563 4.094-1.563 5.656 0s1.563 4.094 0 5.656l-40 40c-.781.781-1.805 1.172-2.828 1.172z"></path>
-                  </g>
-                </svg>
-                <ul className="list-unstyled sub-menu bg-white p-3">
-                  <li className="my-2 sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-01"
-                      title="Kiểu hiển thị header 1"
-                    >
-                      Kiểu hiển thị header 1
-                    </a>
-                  </li>
-                  <li className="sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-02"
-                      title="Kiểu hiển thị header 2"
-                    >
-                      Kiểu hiển thị header 2
-                    </a>
-                  </li>
-                  <li className="my-2 sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-03"
-                      title="Kiểu hiển thị header 3"
-                    >
-                      Kiểu hiển thị header 3
-                    </a>
-                  </li>
-                  <li className="my-2 sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-03"
-                      title="Kiểu hiển thị header 3"
-                    >
-                      Kiểu hiển thị header 4
-                    </a>
-                  </li>
-                </ul>
               </li>
-              <li className="list-inline-item mx-3">
+              <li className="cursor list-inline-item mx-3">
                 Giới thiệu{" "}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  x="0"
-                  y="0"
-                  viewBox="0 0 128 128"
-                >
-                  <g>
-                    <path d="m64 88c-1.023 0-2.047-.391-2.828-1.172l-40-40c-1.563-1.563-1.563-4.094 0-5.656s4.094-1.563 5.656 0l37.172 37.172 37.172-37.172c1.563-1.563 4.094-1.563 5.656 0s1.563 4.094 0 5.656l-40 40c-.781.781-1.805 1.172-2.828 1.172z"></path>
-                  </g>
-                </svg>
-                <ul className="list-unstyled sub-menu bg-white p-3">
-                  <li className="my-2 sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-01"
-                      title="Kiểu hiển thị header 1"
-                    >
-                      Kiểu hiển thị header 1
-                    </a>
-                  </li>
-                  <li className="sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-02"
-                      title="Kiểu hiển thị header 2"
-                    >
-                      Kiểu hiển thị header 2
-                    </a>
-                  </li>
-                  <li className="my-2 sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-03"
-                      title="Kiểu hiển thị header 3"
-                    >
-                      Kiểu hiển thị header 3
-                    </a>
-                  </li>
-                  </ul>
+                
+               
               </li>
-              <li className="list-inline-item mx-3">Tin tức </li>
-              <li className="list-inline-item mx-3">
+              <li className="cursor list-inline-item mx-3">Tin tức </li>
+              <li className="cursor list-inline-item mx-3">
                 Trang nội dung{" "}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  x="0"
-                  y="0"
-                  viewBox="0 0 128 128"
-                >
-                  <g>
-                    <path d="m64 88c-1.023 0-2.047-.391-2.828-1.172l-40-40c-1.563-1.563-1.563-4.094 0-5.656s4.094-1.563 5.656 0l37.172 37.172 37.172-37.172c1.563-1.563 4.094-1.563 5.656 0s1.563 4.094 0 5.656l-40 40c-.781.781-1.805 1.172-2.828 1.172z"></path>
-                  </g>
-                </svg>
-                <ul className="list-unstyled sub-menu bg-white p-3 text-start">
-                  <li className="my-2 sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-01"
-                      title="Hệ thống cửa hàng"
-                    >
-                      Hệ thống cửa hàng
-                    </a>
-                  </li>
-                  <li className="sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-02"
-                      title="Liên hệ"
-                    >
-                      Liên hệ
-                    </a>
-                  </li>
-                  <li className="my-2 sub-menu1">
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/?view=header-style-03"
-                      title="FAQ"
-                    >
-                      FAQ
-                    </a>
-                  </li>
-                  </ul>
+              
+              
               </li>
-              <li className="list-inline-item mx-3">Landing page</li>
-              <li className="list-inline-item mx-3">Live stream</li>
+              <li className="cursor list-inline-item mx-3">Landing page</li>
+              <li className="cursor list-inline-item mx-3">Live stream</li>
             </ul>
           </div>
           <div className="col-2 py-3">
