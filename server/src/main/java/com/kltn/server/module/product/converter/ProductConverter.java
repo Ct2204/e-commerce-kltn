@@ -43,7 +43,7 @@ public class ProductConverter {
         ProductDto dto = new ProductDto();
         dto.setId(entity.getId());
         dto.setSlug(entity.getSlug());
-        dto.setSku(entity.getSlug());
+        dto.setSku(entity.getSku());
         dto.setCategoryId(entity.getCategory().getId());
         dto.setTitle(entity.getTitle());
         dto.setQuantityInStock(entity.getQuantityInStock());

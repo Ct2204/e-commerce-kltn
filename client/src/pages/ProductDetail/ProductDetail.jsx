@@ -10,9 +10,8 @@ import {
 import { BsFacebook, BsMessenger } from "react-icons/bs";
 import ProductCart from "../../components/ProductCart";
 import Accordion from "react-bootstrap/Accordion";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import {
-  getProductColorOption,
   getProductDescription,
   getProductDetail,
 } from "../../services/product";
@@ -43,8 +42,11 @@ const ProductDetail = (props) => {
     setProductDescription(responseData);
   };
 
-  const navigate = useNavigate();
+  const numberWithCommas =  (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
 
+  const navigate = useNavigate();
   const handleAddToCart = () => {
     // Lấy thông tin sản phẩm từ props.data
     const product = {
@@ -54,15 +56,12 @@ const ProductDetail = (props) => {
       quantity: 1, // bạn có thể sửa đổi số lượng theo nhu cầu
       image: productDetail.listMediaProduct[0].url, // lấy ảnh đầu tiên làm ảnh đại diện
     };
-
     // Lưu thông tin sản phẩm vào Local Storage hoặc Redux store, tùy thuộc vào cách bạn quản lý trạng thái
     // Ví dụ sử dụng Local Storage
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
     const updatedCart = [...existingCart, product];
     localStorage.setItem("cart", JSON.stringify(updatedCart));
 
-    // Chuyển hướng đến trang giỏ hàng
-  };
 
   return (
     <>
@@ -84,10 +83,13 @@ const ProductDetail = (props) => {
         </nav>
       </div>
 
-      <div class="container text-center">
+      {isLoading ? (
+        <h1>Đang load dữ liệu</h1>
+      ) : (
+        <div class="container text-center">
         <div class="row">
           <div class="col-4">
-            <div className="main mt-5">
+            <div className="mt-5">
               <img
                 className="img-feature"
                 style={{ width: "100%", height: "100%" }}
@@ -130,13 +132,13 @@ const ProductDetail = (props) => {
             <div className="row">
               <div className="col-8 product-wrapper mt-5">
                 <div className="product-heading">
-                  <h1 className="product-title">{productDetail?.title}</h1>
+                  <h1 className="product-title">{productDetail.title}</h1>
                   <span id="pro_sku" className="mr-3">
-                    Mã sản phẩm: <strong>DH-1001</strong>
+                    Mã sản phẩm: <strong>{productDetail.sku}</strong>
                   </span>
                   <span className="pro-soldold">
                     |&ensp;Tình trạng:
-                    <strong>{productDetail?.status}</strong>
+                    <strong>{productDetail.status}</strong>
                   </span>
                   <span className="pro-vendor">
                     |&ensp; Thương hiệu:
@@ -150,17 +152,18 @@ const ProductDetail = (props) => {
                       </a>
                     </strong>
                   </span>
-                </div>
-                <div
-                  className="product-price text-start my-4"
-                  id="price-preview"
-                >
-                  <span className="">Giá: </span>
-                  <span className="price-sale">
-                    {productDetail?.priceSales}
-                  </span>
-                  <del className="price-root">{productDetail?.price}</del>
-                  <span className="percent-price">
+                    </div>
+                
+                <div className="product-price my-4" id="price-preview">
+                      <span className="pro-title">Giá: </span>
+                      {
+                        (productDetail?.priceSales === undefined) ? (null) : (<span className="pro-price">{numberWithCommas(productDetail?.priceSales)}</span>)
+                      }
+                  {
+                        (productDetail?.priceSales === undefined) ? (null) : ( <del>{numberWithCommas(productDetail?.price)}</del>)
+                      }
+                 
+                  <span className="pro-percent">
                     {productDetail?.percentDiscount}%
                   </span>
                 </div>
@@ -210,20 +213,15 @@ const ProductDetail = (props) => {
                     style={{ height: "45px" }}
                     className="col-6 d-grid justify-content-center align-items-center "
                   >
-                    <div className="border border-danger px-5  text-danger rounded">
-                      <p className="white-button m-2" onClick={handleAddToCart}>
-                        Thêm vào giỏ
-                      </p>
+                    <div className="border border-danger px-5 py-2 text-danger rounded">
+                      <strong>THÊM VÀO GIỎ</strong>
                     </div>
                   </div>
                   <div
                     style={{ height: "45px" }}
                     className="col-6 d-grid justify-content-center align-items-center"
                   >
-                    <div
-                      onClick={() => navigate("/cart")}
-                      className="border border-danger px-5 py-2 bg-danger text-white rounded"
-                    >
+                    <div className="border border-danger px-5 py-2 bg-danger text-white rounded">
                       <strong>MUA NGAY</strong>
                     </div>
                   </div>
@@ -638,6 +636,7 @@ const ProductDetail = (props) => {
           </div>
         </div>
       </div>
+      ) }
     </>
   );
 };
