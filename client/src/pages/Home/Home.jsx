@@ -54,12 +54,13 @@ const Home = () => {
 
   const changePageHandler = async (e, id) => {
     navigate(`productdetail?productId=${id}`);
+    window.scrollTo(0, 0);
   };
 
   const numberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
-  console.log(1);
+  
   
 
   return (
