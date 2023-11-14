@@ -6,7 +6,11 @@ import ProductCart from "../../components/ProductCart";
 import GuideCart from "../../components/GuideCart";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getProductDetail, getProductList, getProductsByCategory } from "../../services/product";
+import {
+  getProductDetail,
+  getProductList,
+  getProductsByCategory,
+} from "../../services/product";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -15,20 +19,19 @@ const Home = () => {
   const [productByCategoryNhan, setProductByCategoryNhan] = useState([]);
   const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
 
-
   const handleProductsByCategoryNhan = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const responseData = await getProductsByCategory(2);
-    setProductByCategoryNhan(responseData.listProducts)
-    setIsLoading(false)
-  }
+    setProductByCategoryNhan(responseData.listProducts);
+    setIsLoading(false);
+  };
   const handleProductsByCategoryDongHo = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const responseData = await getProductsByCategory(1);
-    setProductByCategoryDongHo(responseData.listProducts)
-    setIsLoading(false)
-  }
- 
+    setProductByCategoryDongHo(responseData.listProducts);
+    setIsLoading(false);
+  };
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,13 +40,11 @@ const Home = () => {
 
   useEffect(() => {
     handleProductsByCategoryDongHo();
-  }, [])
+  }, []);
 
   useEffect(() => {
     handleProductsByCategoryNhan();
-   
-  }, [])
- 
+  }, []);
 
   const loadData = async () => {
     setIsLoading(true);
@@ -57,10 +58,9 @@ const Home = () => {
   };
 
   const numberWithCommas = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
   console.log(1);
-  
 
   return (
     <>
@@ -225,7 +225,7 @@ const Home = () => {
           <h3 className="text-center my-5">
             <a>Đồng hồ</a>
           </h3>
-            <div className="row mx-5 ">
+          <div className="row mx-5 ">
             {productByCategoryDongHo.map((aProducts, idx) => (
               <div
                 key={idx}
@@ -239,9 +239,7 @@ const Home = () => {
                   price={numberWithCommas(aProducts.priceSales)}
                   priceSale={numberWithCommas(aProducts.price)}
                   percentDiscount={aProducts.percentDiscount}
-              
                 />
-            
               </div>
             ))}
           </div>
@@ -351,34 +349,33 @@ const Home = () => {
           </div>
         </div>
         {isLoading ? (
-        <h1>Đang load dữ liệu</h1>
-      ) : (
-        <div classname="container-fuild">
-          <h3 className="text-center my-5">
-            <a>Trang sức</a>
-          </h3>
+          <h1>Đang load dữ liệu</h1>
+        ) : (
+          <div classname="container-fuild">
+            <h3 className="text-center my-5">
+              <a>Trang sức</a>
+            </h3>
             <div className="row mx-5">
-            {productByCategoryNhan.map((aProducts, idx) => (
-              <div
-                key={idx}
-                className="col-3 product-card"
-                onClick={(e) => changePageHandler(e, aProducts.id)}
-              >
-                <ProductCart
-                  title={aProducts.title}
-                  imageSrc={aProducts.listMediaProduct[0].url}
-                  imageSrc1={aProducts.listMediaProduct[1].url}
-                  price={numberWithCommas(aProducts.priceSales)}
-                  priceSale={numberWithCommas(aProducts.price)}
-                  percentDiscount={aProducts.percentDiscount}
-              
-                />
-                {console.log(aProducts.price)}
-              </div>
-            ))}
+              {productByCategoryNhan.map((aProducts, idx) => (
+                <div
+                  key={idx}
+                  className="col-3 product-card"
+                  onClick={(e) => changePageHandler(e, aProducts.id)}
+                >
+                  <ProductCart
+                    title={aProducts.title}
+                    imageSrc={aProducts.listMediaProduct[0].url}
+                    imageSrc1={aProducts.listMediaProduct[1].url}
+                    price={numberWithCommas(aProducts.priceSales)}
+                    priceSale={numberWithCommas(aProducts.price)}
+                    percentDiscount={aProducts.percentDiscount}
+                  />
+                  {console.log(aProducts.price)}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
         <div className="wraplist-ctas text-center">
           <a
             href="/collections/trang-suc"

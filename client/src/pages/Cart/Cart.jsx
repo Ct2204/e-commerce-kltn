@@ -21,6 +21,7 @@ const Cart = (props) => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(storedCart);
   }, []);
+
   const result = {};
   cart.forEach((item) => {
     if (!result[item.id]) {
@@ -59,6 +60,9 @@ const Cart = (props) => {
     localStorage.setItem("cart", JSON.stringify([...cart, newObject]));
   };
 
+  const totalPrice = mergedCart.reduce((acc, product) => {
+    return acc + product.price;
+  }, 0);
   return (
     <>
       <div className="container-fuild px-2 pt-3 nav-border">
@@ -283,7 +287,7 @@ const Cart = (props) => {
                 </div>
                 <div className="summary-total d-flex justify-content-between">
                   <p>Tổng tiền:</p>
-                  <p>0đ</p>
+                  <p>{totalPrice}</p>
                 </div>
                 <div className="summary-action">
                   <p>Phí vận chuyển sẽ được tính ở trang thanh toán.</p>
@@ -299,6 +303,7 @@ const Cart = (props) => {
                 </div>
                 <div className="summary-button ">
                   <a
+                    onClick={() => navigate("/payment")}
                     id="btnCart-checkout"
                     className="checkout-btn btnred disabled text-decoration-none text-white "
                     data-price-min="400000"
