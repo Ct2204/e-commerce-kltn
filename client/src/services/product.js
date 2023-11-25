@@ -1,5 +1,7 @@
+import { useSelector } from "react-redux";
 import api from "./api";
 import httpRequest from "./httpRequest";
+import store from "../store";
 
 
 //get product detail

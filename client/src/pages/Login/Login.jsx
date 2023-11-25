@@ -4,10 +4,13 @@ import { FaFacebookF, FaGooglePlusG, FaLinkedinIn } from "react-icons/fa";
 import { login, register } from "../../services/UserService";
 import Input from "../../components/Input";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { log } from "../../store/reducers/auth";
 
 const Login = (props) => {
   const [message, setMessage] = React.useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const signUp = () => {
     const container = document.getElementById("container");
@@ -21,7 +24,7 @@ const Login = (props) => {
   //Login
   const emailRef = React.useRef();
   const passwordRef = React.useRef();
- 
+
   //Register
   const fullNameRef = React.useRef();
   const emailRegisterRef = React.useRef();
@@ -33,15 +36,21 @@ const Login = (props) => {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     const responseData = await login(email, password);
-  
+
     if (responseData.code === 200) {
       setMessage(responseData.message);
-      navigate("/home");
+      dispatch(
+        log({
+          token: responseData.data.access_token,
+          userInfo: responseData.data,
+        })
+      );
+      navigate("/dashboard");
     } else {
-      setMessage(responseData.message)
-    } 
+      setMessage(responseData.message);
+    }
+    console.log(responseData);
   };
-
 
   const formRegisterSubmitHandler = async (e) => {
     e.preventDefault();
@@ -49,9 +58,14 @@ const Login = (props) => {
     const email = emailRegisterRef.current.value;
     const password = passwordRegisterRef.current.value;
     const confirmPassword = confirmPasswordRef.current.value;
-    
-    const responseData = await register(fullName, email, password, confirmPassword);
-    console.log(responseData);
+
+    const responseData = await register(
+      fullName,
+      email,
+      password,
+      confirmPassword
+    );
+
     if (responseData.code === 200) {
       setMessage(responseData.message);
       navigate("/home");
@@ -59,7 +73,6 @@ const Login = (props) => {
       setMessage(responseData.message);
     }
   };
-
 
   return (
     <>
@@ -70,7 +83,8 @@ const Login = (props) => {
             <form
               onSubmit={formRegisterSubmitHandler}
               action="#"
-              className="form-login">
+              className="form-login"
+            >
               <h1 className="h1-login">Create Account</h1>
               <div className="social-container1">
                 <a href="#" className="social a-login">
@@ -83,7 +97,7 @@ const Login = (props) => {
                   <FaLinkedinIn />
                 </a>
               </div>
-            
+
               <span className="span-login">{message}</span>
               <Input
                 inputRef={fullNameRef}
@@ -97,9 +111,9 @@ const Login = (props) => {
                 classhame="input-login"
                 type="email"
                 maxLength="50"
-                placeholder="Email" 
+                placeholder="Email"
               />
-              
+
               <Input
                 inputRef={passwordRegisterRef}
                 className="input-login"
@@ -114,8 +128,10 @@ const Login = (props) => {
                 inputRef={confirmPasswordRef}
                 placeholder="Confirm Password"
               />
-            
-              <button type="submit" className="button-login">Sign Up</button>
+
+              <button type="submit" className="button-login">
+                Sign Up
+              </button>
             </form>
           </div>
           <div className="form-container1 sign-in-container1">

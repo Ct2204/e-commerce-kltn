@@ -6,13 +6,15 @@ const url = {
   login: "/users/login",
   register: "/users/register",
   productdetail: "/product/product-information",
-  productsbycategory:"/product/products-category",
+  productsbycategory: "/product/products-category",
   productdescription: "/product/description",
   productoption: "product/product-option",
   productoptiondetail: "product/product-option-detail",
   productitem: "product/product-item",
   productitems: "product/product-items",
   createCart: "cart-items"
+  postProductSeller: "/seller/product/add",
+  getProductSellerById: "/seller/product",
 };
 
 const instance = axios.create({
