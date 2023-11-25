@@ -8,6 +8,11 @@ const url = {
   productdetail: "/product/product-information",
   productsbycategory:"/product/products-category",
   productdescription: "/product/description",
+  productoption: "product/product-option",
+  productoptiondetail: "product/product-option-detail",
+  productitem: "product/product-item",
+  productitems: "product/product-items",
+  createCart: "cart-items"
 };
 
 const instance = axios.create({

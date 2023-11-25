@@ -25,8 +25,9 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/seller")
-@CrossOrigin({"*"})
+
 @Tag(name = "seller")
+@CrossOrigin({"*"})
 public class SellerController {
 
     @Autowired

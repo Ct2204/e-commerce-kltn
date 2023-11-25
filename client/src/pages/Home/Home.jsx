@@ -372,7 +372,7 @@ const Home = () => {
                     priceSale={numberWithCommas(aProducts.price)}
                     percentDiscount={aProducts.percentDiscount}
                   />
-                  {console.log(aProducts.price)}
+                
                 </div>
               ))}
             </div>
