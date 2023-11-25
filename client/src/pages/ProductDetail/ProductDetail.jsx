@@ -42,7 +42,6 @@ const ProductDetail = (props) => {
   let userId = 33;
   // const productOptionDetailId = searchParams.get("productOptionDetailId")
 
-  
 
   useEffect(() => {
     loadData(productId);
@@ -85,8 +84,6 @@ const ProductDetail = (props) => {
   useEffect(() => {
     handleProductItemId(id)
   },[id])
-  
-
   
 
 
@@ -139,8 +136,6 @@ const ProductDetail = (props) => {
 
 
  
-
- 
   //convert integer to float
   const numberWithCommas =  (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -177,11 +172,7 @@ const ProductDetail = (props) => {
   
 
   const handleAddToCart = async (productItemId,userId,quantity) => {
-    // Lấy thông tin sản phẩm từ props.data
     
-    // e.preventDefault();
-    // const email = emailRef.current.value;
-    // const password = passwordRef.current.value;
     const responseData = await createCart(userId,1,productItemId);
   
     if (responseData.code === 200) {
@@ -192,7 +183,7 @@ const ProductDetail = (props) => {
     } 
   };
 
-  console.log("11111111", selectedOptions)
+  console.log("select option", selectedOptions)
   console.log("productItemId",productItemId);
 
   return (

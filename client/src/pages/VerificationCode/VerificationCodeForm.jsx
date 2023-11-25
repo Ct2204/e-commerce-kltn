@@ -33,6 +33,9 @@ const VerificationCodeForm = () => {
       </label>
       <button type="submit">Submit</button>
     </form>
+
+
+    
   );
 };
 
