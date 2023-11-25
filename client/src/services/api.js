@@ -12,7 +12,7 @@ const url = {
   productoptiondetail: "product/product-option-detail",
   productitem: "product/product-item",
   productitems: "product/product-items",
-  createCart: "cart-items"
+  createCart: "cart-items",
   postProductSeller: "/seller/product/add",
   getProductSellerById: "/seller/product",
 };
