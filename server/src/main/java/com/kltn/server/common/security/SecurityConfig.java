@@ -87,6 +87,9 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedMethod("GET");
         configuration.addAllowedMethod("POST");
+        configuration.addAllowedMethod("PUT");
+        configuration.addAllowedMethod("DELETE");
+        configuration.addAllowedMethod("PATCH");
         configuration.addAllowedHeader("Origin");
         configuration.addAllowedHeader("Content-Type");
         configuration.addAllowedHeader("Accept");

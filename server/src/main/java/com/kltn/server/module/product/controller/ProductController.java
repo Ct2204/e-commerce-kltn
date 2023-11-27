@@ -822,7 +822,7 @@ public class ProductController {
 
     @GetMapping(path="products-category/{categoryId}")
     @ResponseBody
-    public ResponseDataDto getListProductForSeller(
+    public ResponseDataDto getListProductByCategory(
             @PathVariable short categoryId,
             @RequestParam(value = "perPage", defaultValue = "8") int perPage,
             @RequestParam(value = "currentPage", defaultValue = "1") int currentPage){

@@ -1004,7 +1004,10 @@ public class SellerServiceImpl implements SellerService {
                 .findById(sellerId)
                 .orElseThrow(()->new ResourceNotFoundException("Not found ID seller"));
 
+
+
         List<Product> productEntityList = productRepository.findBySeller(seller);
+
 
         Page<Product> pageListEntity = productRepository.findAllBySeller(seller,paging);
 
@@ -1020,6 +1023,15 @@ public class SellerServiceImpl implements SellerService {
                         .map(item-> productDtoConverter.mapToProduct(item)).collect(Collectors.toList()))
                 : null;
 
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        Product product = this.productRepository
+                .findByProduct(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found!"));
+            product.setStatus(ProductStatusType.DELETED);
+            this.productRepository.save(product);
     }
 
 }

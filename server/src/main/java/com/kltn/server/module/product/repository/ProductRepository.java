@@ -27,6 +27,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
 
+
     Optional<Product> findOneById(Long id);
 
     @Query("select new com.kltn.server.module.product.dto.ProductSearchResDto(p.id, MIN(i.url),p.title,  avg(r.starRating) ,p.price,p.priceSales ) "
@@ -61,7 +62,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findBySeller(Seller seller);
 
-    Page<Product> findAllByCategory(ProductCategory productCategory, Pageable pageable);
+//    @Query(value = "SELECT * FROM products where status not in(3,4)", nativeQuery = true)
+//    Page<Product> findAllByCategory(ProductCategory productCategory, Pageable pageable);
 
+    @Query(value = "SELECT * FROM products WHERE category_id = :categoryId AND status NOT IN (3, 4)", nativeQuery = true)
+    Page<Product> findAllByCategory(@Param("categoryId") Short categoryId, Pageable pageable);
+
+
+    @Query(value = "SELECT * FROM products where status not in(3,4) ", nativeQuery = true)
     Page<Product> findAllBySeller(Seller seller, Pageable pageable);
 }

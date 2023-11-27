@@ -177,11 +177,11 @@ public class ProductServiceImpl implements ProductService {
     public ProductListDto getAllProductByCategory(Short categoryId, int perPage, int currentPage) {
         Pageable paging = PageRequest.of(currentPage, perPage);
 
-        ProductCategory productCategory = productCategoryRepository
-                .findById(categoryId)
-                .orElseThrow(()-> new ResourceNotFoundException("CategoryID not found"));
+//        ProductCategory productCategory = productCategoryRepository
+//                .findById(categoryId)
+//                .orElseThrow(()-> new ResourceNotFoundException("CategoryID not found"));
 
-        Page<Product> pageListEntity = productRepository.findAllByCategory(productCategory,paging);
+        Page<Product> pageListEntity = productRepository.findAllByCategory(categoryId,paging);
 
         return pageListEntity.getTotalElements() > 0
                 ? new ProductListDto(

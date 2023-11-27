@@ -34,4 +34,6 @@ public interface SellerService {
     List<ProductCategoryDto> getAllProductCategory();
 
     PageProductResDto getAllProductForSeller(Long sellerId,int perPage, int currentPage);
+
+    void deleteProduct(Long id);
 }

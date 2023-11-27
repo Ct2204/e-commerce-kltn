@@ -1,6 +1,8 @@
 package com.kltn.server.module.product.converter;
 
 import com.kltn.server.common.entity.Product;
+import com.kltn.server.common.exception.ResourceNotFoundException;
+import com.kltn.server.common.vo.ProductStatusType;
 import com.kltn.server.module.product.dto.ProductDto;
 import com.kltn.server.module.product.dto.ProductVisualDto;
 import com.kltn.server.module.product.repository.ProductRatingRepository;
@@ -77,5 +79,13 @@ public class ProductConverter {
                 .collect(Collectors.toList());
         dto.setListMediaProduct(listMediaProduct);
         return dto;
+    }
+    public boolean isAvailable(Product product) {
+        if ((product.getStatus() == ProductStatusType.DRAFT) ||
+                (product.getStatus() == ProductStatusType.RECYCLE) ||
+                (product.getStatus() == ProductStatusType.DELETED)) {
+            return false;
+        }
+        return true;
     }
 }

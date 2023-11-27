@@ -1312,4 +1312,16 @@ public class SellerController {
 
     }
 
+
+    @DeleteMapping("/product/delete/{id}")
+    public ResponseEntity<ResponseDto> deleteProduct(@PathVariable("id") Long id) {
+        this.sellerService.deleteProduct(id);
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setStatus(HttpStatus.OK.series().name());
+        responseDto.setCode(HttpStatus.OK.value());
+        responseDto.setMessage("Delete successfully!");
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
+
 }
