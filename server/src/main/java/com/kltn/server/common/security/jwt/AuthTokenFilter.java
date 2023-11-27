@@ -5,6 +5,7 @@ import com.kltn.server.common.exception.AuthorizeException;
 import com.kltn.server.common.security.service.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Arrays;
 
 @Component
+@WebFilter("/*")
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     public static final String[] AUTH_WHITELIST = {
@@ -34,7 +37,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             "/api/v1/users/confirm-verification-code",
             "/api/v1/users/activate-user",
             "/api/v1/product",
-            "/api/v1/seller/login"
+            "/api/v1/seller/login",
     };
 
     @Autowired

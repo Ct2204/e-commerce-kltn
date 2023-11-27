@@ -11,6 +11,8 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import jakarta.servlet.annotation.WebFilter;
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +28,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@WebFilter("/*")
 public class SecurityConfig {
 
     public static final String[] AUTH_WHITELIST = {
@@ -44,7 +51,8 @@ public class SecurityConfig {
             "/api/v1/users/confirm-verification-code",
             "/api/v1/users/activate-user",
             "/api/v1/product/**",
-            "/api/v1/seller/login"
+            "/api/v1/seller/login",
+
     };
 
     @Autowired
@@ -69,7 +77,27 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
                 .and()
+                .cors().and()
                 .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedMethod("GET");
+        configuration.addAllowedMethod("POST");
+        configuration.addAllowedHeader("Origin");
+        configuration.addAllowedHeader("Content-Type");
+        configuration.addAllowedHeader("Accept");
+        configuration.addAllowedHeader("Authorization");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/v1/cart-items/**", configuration);
+        source.registerCorsConfiguration("/api/v1/seller/**", configuration);
+
+        return source;
     }
 
     @Bean
