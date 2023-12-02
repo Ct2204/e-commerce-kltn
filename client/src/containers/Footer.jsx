@@ -18,13 +18,26 @@ import {BiLogoGmail} from 'react-icons/bi'
 
 const Footer = () => {
   return (
-    <div className="mainFooter  has-toolbar bg-dark text-light">
-      <div className="footer-newsletter">
+    <div className="mainFooter  has-toolbar bg-dark text-light"
+      style={{backgroundColor:"#2a2a2a"} }>
+      
+      
+      <div className="footer-newsletter"
+        style={{borderBottom:"0.5px solid silver"}}>
         <div className="container-fluid">
           <div className="row my-5 pt-4">
+            
+            
             <div className="col text-start">
               <div className="newsletter-title d-inline-block mx-3">
-                <h3 className="">Đăng ký nhận tin</h3>
+                <h3
+                  style={{padding: "0",
+                    margin: "0",
+                    position: "relative",
+                    fontSize: "30px",
+                    fontWeight: "700",
+                    color: "#fffffff"}}
+                  className="">Đăng ký nhận tin</h3>
               </div>
               <div className="newsletter-content newsletter-form d-inline-block rounded">
                 <form
@@ -34,10 +47,11 @@ const Footer = () => {
                   method="post"
                 >
                   <div className="form-group input-group">
-                    <div className="bg-light d-flex justify-contents-between align-items-center" >
-                      <CiMail className="bg-dark"/>
+                    <div className="bg-light d-flex justify-contents-between align-items-center"
+                      style={{borderRadius:"10px"} }>
+                     
                         <input
-                        style={{width:"290px", height: "20px"}}
+                        style={{width:"350px", height: "50px"}}
                         required=""
                         type="email"
                         name="contact[email]"
@@ -51,6 +65,7 @@ const Footer = () => {
                     <div className="input-group-btn mx-3">
                       <button
                         type="submit"
+                        style={{height:'50px',width:"150px",paddingTop:"10px",borderRadius:'5px'}}
                         className="button dark cta-submitform newsletter-btn mt-1"
                       >
                         Đăng ký
@@ -60,11 +75,21 @@ const Footer = () => {
                 </form>
               </div>
             </div>
-            <div className="col text-end">
-              <div className="newsletter-title d-inline-block">
-                <h3>Kết nối với chúng tôi</h3>
-              </div>
-              <div className="newsletter-content d-inline-block m-1">
+
+
+            <div className="col"
+              style={{paddingLeft:"50px"}}>
+              <div className="newsletter-title d-inline-block"
+                  
+              >
+                <h3 style={{padding: "0",
+                    margin: "0",
+                    position: "relative",
+                    fontSize: "30px",
+                    fontWeight: "700",
+                  color: "#fffffff"
+                }}>Kết nối với chúng tôi</h3>
+                <div className="newsletter-content d-inline-block m-1">
                 <ul className="footerNav-social list-unstyled list-inline">
                   <li className="list-inline-item">
                     <a
@@ -74,7 +99,8 @@ const Footer = () => {
                       title="Facebook"
                       aria-label="Facebook"
                     >
-                    <FaFacebook className="mb-2" style={{ color: "white", width: '20px' }} />
+                        <FaFacebook className="mb-2"
+                          style={{ color: "white", width: '40px', height: "40px", margin: "4px" }} />
                     </a>
                   </li>
                   <li className="list-inline-item">
@@ -85,7 +111,8 @@ const Footer = () => {
                       title="Twitter"
                       aria-label="Twitter"
                     >
-                      <AiFillTwitterCircle className="mb-2" style={{ color: "white", width: '20px' }}  />
+                        <AiFillTwitterCircle className="mb-2"
+                          style={{ color: "white", width: '40px', height: "40px", margin: "4px" }} />
                     </a>
                   </li>
                   <li className="list-inline-item">
@@ -96,7 +123,8 @@ const Footer = () => {
                       title="Instagram"
                       aria-label="Instagram"
                     >
-                      <AiOutlineInstagram className="mb-2" style={{ color: "white", width: '20px' }}  />
+                        <AiOutlineInstagram className="mb-2"
+                          style={{ color: "white", width: '40px', height: "40px", margin: "4px" }} />
                     </a>
                   </li>
                   <li className="list-inline-item">
@@ -107,7 +135,8 @@ const Footer = () => {
                       title="Google Plus"
                       aria-label="Google Plus"
                     >
-                    <AiFillGooglePlusSquare className="mb-2" style={{ color: "white", width: '20px' }}  />
+                        <AiFillGooglePlusSquare className="mb-2"
+                          style={{ color: "white", width: '40px', height: "40px", margin: "4px" }} />
                     </a>
                   </li>
                   <li className="list-inline-item">
@@ -118,42 +147,90 @@ const Footer = () => {
                       title="Youtube"
                       aria-label="Youtube"
                     >
-                    <AiOutlineYoutube className="mb-2" style={{ color: "white", width: '20px' }}  />
+                        <AiOutlineYoutube className="mb-2"
+                          style={{ color: "white", width: '40px', height: "40px", margin: "4px" }} />
                     </a>
                   </li>
                 </ul>
               </div>
+              </div>
+              
             </div>
           </div>
         </div>
       </div>
-      <div className="footer-container">
+
+
+
+      <div className="footer-container"
+        style={{marginTop:"50px",marginLeft:"20px"}}
+        >
         <div className="footer-expand-collapsed ">
           <div className="container-fluid">
             <div className="row">
               <div className="col-lg-3 col-md-12 col-12 widget-footer">
-                <h4 className="title-footer">Về The Swan</h4>
+                <h4 className="title-footer"
+                  style={{padding: "0",
+                  margin: "0",
+                  position: "relative",
+                  fontSize: "30px",
+                  fontWeight: "700",
+                color: "#fffffff"
+              }}
+                >Về The Swan</h4>
                 <div className="content-footer block-collapse row">
                   <div className="col-lg-12 col-md-12 col-12">
-                    <p>
+                    <p style={{
+                      color: "#aaaaaa",
+                      lineHeight: '1.45',
+                      fontSize: '18px',
+                      fontFamily: "Tinos, sans-serif",
+                      margin:"30px 10px"
+                    
+                    }}> 
                       Với các giải pháp công nghệ tốt nhất, Haravan là tất cả
                       những gì bạn cần để xây dựng thương hiệu online, thành
                       công trong bán lẻ và marketing đột phá.
                     </p>
                     <div className="address-footer">
                       <ul className="list-unstyled ">
-                        <li className="contact-1">
-                        <FaMapMarkerAlt className="mb-2" style={{ color: "white", width: '40px' }}  />
+                        <li className="contact-1"
+                          style={{
+                            color: "#aaaaaa",
+                            lineHeight: '1.45',
+                            fontSize: '18px',
+                            fontFamily: "Tinos, sans-serif",
+                          
+                          }}>
+                        <FaMapMarkerAlt className="mb-2" style={{width:"40px",height:"30px"}}  />
                           Tầng 4, tòa nhà Flemington, số 182, đường Lê Đại Hành,
                           phường 15, quận 11, Tp. Hồ Chí Minh.
                         </li>
-                        <li className="contact-2">
-                    <BsFillTelephoneFill className="mb-2" style={{ color: "white", width: '40px' }}  />
+                        <li className="contact-2"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                          margin:"10px 10px"
+                        
+                        }}
+                        >
+                    <BsFillTelephoneFill className="mb-2" style={{  width: '40px',height:'30px' }}  />
                           
                           1900.000.XXX
                         </li>
-                        <li className="contact-4">
-                    <BiLogoGmail className="mb-2" style={{ color: "white", width: '40px' }}  />
+                        <li className="contact-4"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                          margin:"10px 10px"
+                        
+                        }}>
+                          
+                    <BiLogoGmail className="mb-2" style={{  width: '40px',height:'30px' }}  />
                           hi@theswan.abc
                         </li>
                       </ul>
@@ -216,9 +293,21 @@ const Footer = () => {
                         </a>
                       </li>
                     </ul>
-                    <div className="footer-payment">
-                      <div className="payment-title">Phương thức thanh toán</div>
-                      <ul className="payment-icon list-unstyled list-inline ">
+                    <div className="footer-payment"
+                      style={{}}>
+                      <div className="payment-title"
+                        style={{padding: "0",
+                        margin: "0",
+                        position: "relative",
+                        fontSize: "30px",
+                        fontWeight: "700",
+                      color: "#fffffff"
+                    }}
+                      >Phương thức thanh toán</div>
+                      <ul
+                        className="payment-icon list-unstyled list-inline "
+                        style={{margin:"10px 10px"}}
+                      >
                         <li className="list-inline-item">
                           <img
                             className=" ls-is-cached lazyloaded"
@@ -262,34 +351,100 @@ const Footer = () => {
               </div>
 
               <div className="col-lg-3 col-md-12 col-12 widget-footer">
-                <h4 className="title-footer">Hỗ trợ khách hàng</h4>
-                <div className="content-footer block-collapse">
-                  <ul className="footerNav-link text-secondary">
-                    <li className="item  ">
-                      <a className="text-decoration-none text-secondary" href="/collections/onsale" title="Sản phẩm khuyến mãi">
+                <h4 className="title-footer"
+                style={{padding: "0",
+                margin: "0",
+                position: "relative",
+                fontSize: "30px",
+                fontWeight: "700",
+              color: "#fffffff"
+            }}
+                >Hỗ trợ khách hàng</h4>
+                <div className="content-footer block-collapse"
+                  style={{margin:"30px 10px"}}
+                >
+                  <ul
+                    className="footerNav-link"
+                    
+                  >
+
+                    <li className="item  "
+                      style={{             
+                        margin: "20px 10px",                  
+                      }}
+                    
+                    >
+                      <a className="text-decoration-none "
+                        href="/collections/onsale"
+                        title="Sản phẩm khuyến mãi"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",        
+                        }}
+  
+                      >
                         Sản phẩm khuyến mãi
                       </a>
                     </li>
 
-                    <li className="item">
+                    <li className="item"
+                        style={{             
+                          margin: "20px 10px",                  
+                        }}    
+                    >
                       <a
-                      className="text-decoration-none text-secondary"
+                      className="text-decoration-none "
                         href="/collections/hot-products"
                         title="Sản phẩm nổi bật"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                          margin:"20px 10px"
+                        
+                        }}
                       >
                         Sản phẩm nổi bật
                       </a>
                     </li>
 
-                    <li className="item">
-                      <a className="text-decoration-none text-secondary" href="/collections/all" title="Tất cả sản phẩm">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
+                      <a
+                        className="text-decoration-none "
+                        href="/collections/all"
+                        title="Tất cả sản phẩm"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                          margin:"20px 10px"
+                        
+                        }}
+                      >
                         Tất cả sản phẩm
                       </a>
                     </li>
                   </ul>
                   <div className="footer-shipment">
-                    <div className="shipment-title">Phương thức vận chuyển</div>
-                    <ul className="shipment-icon list-unstyled list-inline">
+                    <div className="shipment-title"
+                    style={{padding: "0",
+                    margin: "0",
+                    position: "relative",
+                    fontSize: "30px",
+                    fontWeight: "700",
+                  color: "#fffffff"
+                }}
+                    >Phương thức vận chuyển</div>
+                    <ul className="shipment-icon list-unstyled list-inline"
+                    style={{             
+                      margin: "30px 10px",                  
+                    }}>
                       <li className="list-inline-item">
                         <img
                           className=" ls-is-cached lazyloaded"
@@ -332,54 +487,146 @@ const Footer = () => {
               </div>
 
               <div className="col-lg-3 col-md-12 col-12 widget-footer">
-                <h4 className="title-footer">Liên kết</h4>
-                <div className="content-footer block-collapse">
-                  <ul className="footerNav-link text-secondary">
-                    <li className="item ">
-                      <a className="text-decoration-none text-secondary" href="/" title="Trang chủ">
+                <h4 className="title-footer"
+                  style={{padding: "0",
+                  margin: "0",
+                  position: "relative",
+                  fontSize: "30px",
+                  fontWeight: "700",
+                color: "#fffffff"
+              }}
+                >Liên kết</h4>
+                <div className="content-footer block-collapse" style={{             
+                        margin: "30px 10px",                  
+                      }}>
+                  <ul className="footerNav-link ">
+                    <li className="item " style={{             
+                        margin: "20px 10px",                  
+                      }}>
+                      <a
+                        className="text-decoration-none "
+                        href="/"
+                        title="Trang chủ"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
+                      >
                         Trang chủ
                       </a>
                     </li>
 
-                    <li className="item">
-                      <a className="text-decoration-none text-secondary" href="/collections/all" title="Sản phẩm">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
+                      <a
+                        className="text-decoration-none "
+                        href="/collections/all"
+                        title="Sản phẩm"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
+                      >
                         Sản phẩm
                       </a>
                     </li>
 
-                    <li className="item">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
                       <a
-                      className="text-decoration-none text-secondary"
+                      className="text-decoration-none "
                         href="/products/mayfair-rose-gold"
                         title="Trang sản phẩm"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
                       >
                         Trang sản phẩm
                       </a>
                     </li>
 
-                    <li className="item">
-                      <a className="text-decoration-none text-secondary" href="/pages/about-us" title="Giới thiệu">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
+                      <a
+                        className="text-decoration-none "
+                        href="/pages/about-us"
+                        title="Giới thiệu"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
+                      >
                         Giới thiệu
                       </a>
                     </li>
 
-                    <li className="item">
-                      <a className="text-decoration-none text-secondary" href="/blogs/news" title="Tin tức">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
+                      <a
+                        className="text-decoration-none "
+                        href="/blogs/news"
+                        title="Tin tức"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
+                      >
                         Tin tức
                       </a>
                     </li>
 
-                    <li className="item">
-                      <a className="text-decoration-none text-secondary" href="/pages/about-us" title="Trang nội dung">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
+                      <a
+                        className="text-decoration-none "
+                        href="/pages/about-us"
+                        title="Trang nội dung"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        }}
+                      >
                         Trang nội dung
                       </a>
                     </li>
 
-                    <li className="item">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
                       <a
-                      className="text-decoration-none text-secondary"
+                      className="text-decoration-none "
                         href="/pages/about-us/?view=landing-page-01"
                         title="Landing page"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
                       >
                         Landing page
                       </a>
@@ -389,62 +636,144 @@ const Footer = () => {
               </div>
 
               <div className="col-lg-3 col-md-12 col-12 widget-footer">
-                <h4 className="title-footer">Chính sách</h4>
-                <div className="content-footer block-collapse">
-                  <ul className="Nav-link text-secondary">
-                    <li className="item">
-                      <a className="text-decoration-none text-secondary" href="/search" title="Tìm kiếm">
+                <h4 className="title-footer"
+                  style={{padding: "0",
+                  margin: "0",
+                  position: "relative",
+                  fontSize: "30px",
+                  fontWeight: "700",
+                color: "#fffffff"
+              }}
+                >Chính sách</h4>
+                <div className="content-footer block-collapse" style={{             
+                        margin: "30px 10px",                  
+                      }}>
+                  <ul className="Nav-link ">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
+                      <a className="text-decoration-none "
+                        href="/search"
+                        title="Tìm kiếm"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
+                      >
                         Tìm kiếm
                       </a>
                     </li>
 
-                    <li className="item">
-                      <a className="text-decoration-none text-secondary" href="/pages/about-us" title="Giới thiệu">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
+                      <a className="text-decoration-none "
+                        href="/pages/about-us"
+                        title="Giới thiệu"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
+                      >
                         Giới thiệu
                       </a>
                     </li>
 
-                    <li className="item">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
                       <a
-                      className="text-decoration-none text-secondary"
+                      className="text-decoration-none"
                         href="/pages/chinh-sach-doi-tra"
                         title="Chính sách đổi trả"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
                       >
                         Chính sách đổi trả
                       </a>
                     </li>
 
-                    <li className="item">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
                       <a
-                      className="text-decoration-none text-secondary"
+                      className="text-decoration-none"
                         href="/pages/chinh-sach-bao-mat"
                         title="Chính sách bảo mật"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
                       >
                         Chính sách bảo mật
                       </a>
                     </li>
 
-                    <li className="item">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
                       <a
-                      className="text-decoration-none text-secondary"
+                        className="text-decoration-none"
                         href="/pages/dieu-khoan-dich-vu"
                         title="Điều khoản dịch vụ"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
                       >
                         Điều khoản dịch vụ
                       </a>
                     </li>
 
-                    <li className="item">
-                      <a className="text-decoration-none text-secondary" href="/pages/lien-he" title="Liên hệ">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
+                      <a className="text-decoration-none "
+                        href="/pages/lien-he"
+                        title="Liên hệ"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
+                      >
                         Liên hệ
                       </a>
                     </li>
 
-                    <li className="item">
+                    <li className="item" style={{             
+                        margin: "20px 10px",                  
+                      }}>
                       <a
-                      className="text-decoration-none text-secondary"
+                      className="text-decoration-none "
                         href="https://the-swan.myharavan.com/pages/cau-hoi-thuong-gap/?view=faqs"
                         title="FAQs - Câu hỏi thường gặp"
+                        style={{
+                          color: "#aaaaaa",
+                          lineHeight: '1.45',
+                          fontSize: '18px',
+                          fontFamily: "Tinos, sans-serif",
+                        
+                        }}
                       >
                         FAQs - Câu hỏi thường gặp
                       </a>

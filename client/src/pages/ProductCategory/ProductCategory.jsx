@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import "./Home.css";
+import "./ProductCategory.css";
 import Carousel from "react-bootstrap/Carousel";
 import ProductCart from "../../components/ProductCart";
 import GuideCart from "../../components/GuideCart";

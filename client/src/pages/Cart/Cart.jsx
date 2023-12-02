@@ -6,63 +6,113 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import { Form, Collapse } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { deleteCartItem, getCartItem, updateCartItem } from "../../services/CartService.js";
+import { log } from "../../store/reducers/auth.js";
+import { createOrder } from "../../services/OrderService.js";
 
-const Cart = (props) => {
-  const [cart, setCart] = useState([]);
+const Cart = () => {
+  
   const navigate = useNavigate();
-  const [selectedOption, setSelectedOption] = useState(null);
+  const userInfor = useSelector((state) => state.auth.userInfo);
 
-  const handleRadioChange = (option) => {
-    setSelectedOption(option);
+  const isLogin = useSelector((state) => state.auth.isLoggedIn)
+  console.log("có dang nhập",isLogin)
+  
+  const [carts,setCarts] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [cartItemList, setCartItemList] = useState([])
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleCheckboxChange = (cartItemId) => {
+    setSelectedItems((prevSelectedItems) => {
+      if (prevSelectedItems.includes(cartItemId)) {
+        // Nếu mục đã được chọn trước đó, bỏ khỏi mảng
+        return prevSelectedItems.filter((itemId) => itemId !== cartItemId);
+      } else {
+        // Ngược lại, thêm vào mảng
+        return [...prevSelectedItems, cartItemId];
+      }
+    });
   };
 
-  useEffect(() => {
-    // Lấy thông tin giỏ hàng từ Local Storage
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(storedCart);
-  }, []);
+  console.log("cartItem",selectedItems)
 
-  const result = {};
-  cart.forEach((item) => {
-    if (!result[item.id]) {
-      result[item.id] = { ...item };
+  //Remove cart Item
+  const handleToRemoveCartItem = async (id) => {
+    
+    const responseData = await deleteCartItem(userInfor.user_id, id)
+    
+    if (responseData.code === 200) {
+      // Lọc ra các sản phẩm khác nhau với id được chọn và cập nhật trạng thái
+      setCarts((prevCarts) => prevCarts.filter(item => item.cartItemId !== id));
     } else {
-      result[item.id].quantity += item.quantity;
-      result[item.id].price += item.price;
+      console.error("Failed to delete item:", responseData.message);
     }
-  });
-  const mergedCart = Object.values(result);
+  }
+  
+  // Increase quantity item
+  const handleToIncreaseQuantity = async (id, quantityCart) => {  
+    
+    const newQuantity = quantityCart + 1;
+    
+    // Cập nhật trạng thái hiển thị ngay lập tức
+    setCarts(prevCarts => 
+      prevCarts.map(item => 
+        item.cartItemId === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+    
+    const responseData = await updateCartItem(userInfor.user_id, [{ cartItemId: id, quantity: newQuantity }]);
+  }
 
-  const removeCart = (idx) => {
-    var indexToRemove = idx;
-    if (indexToRemove >= 0 && indexToRemove < cart.length) {
-      // Xoá phần tử khỏi mảng
-      cart.splice(indexToRemove, 1);
-      // Lưu lại mảng đã cập nhật vào localStorage
-      localStorage.setItem("cart", JSON.stringify(cart));
-      navigate("/cart");
-    }
+  // Decrease quantiry cartItem
+  const handleToDecreaseQuantity = async (id,quantityCart) => {
+    
+    const newQuantity = quantityCart - 1;
+    
+    // Cập nhật trạng thái hiển thị ngay lập tức
+    setCarts(prevCarts => 
+      prevCarts.map(item => 
+        item.cartItemId === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+    
+    const responseData = await updateCartItem(userInfor.user_id, [{ cartItemId: id, quantity: newQuantity }]);
+  }
+
+ 
+  useEffect(() => {
+    handleCartItem();
+  },[])
+
+  //Get cart item
+  const handleCartItem = async () => {
+    setIsLoading(true)
+    const responseData = await getCartItem(userInfor.user_id)
+    setCarts(responseData)
+    setIsLoading(false)
+  }
+  
+  //convert price with commas
+  const numberWithCommas = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const handleAddCart = (idx) => {
-    // Tạo đối tượng mới
-    const newObject = {
-      id: cart[idx].id,
-      title: cart[idx].title,
-      image: cart[idx].image,
-      price: cart[idx].price,
-      quantity: 1,
-    };
+  const totalPrice = carts.reduce((account, item) => {
+    return account + item.quantity*item.price
+  },0);
+  const quantityItem = carts.length;
+  // console.log(quantityItem);
 
-    // Thêm đối tượng mới vào mảng
-    setCart((prevCart) => [...prevCart, newObject]);
-    // Lưu mảng mới vào localStorage
-    localStorage.setItem("cart", JSON.stringify([...cart, newObject]));
-  };
 
-  const totalPrice = mergedCart.reduce((acc, product) => {
-    return acc + product.price;
-  }, 0);
+  //Order
+  const handleToCreateOrder = async () => {
+    const responseData = await createOrder(selectedItems, userInfor.user_id)
+    console.log(responseData.message)
+  }
+
   return (
     <>
       <div className="container-fuild px-2 pt-3 nav-border">
@@ -82,7 +132,9 @@ const Cart = (props) => {
           </ol>
         </nav>
       </div>
-      <div>
+
+  
+        <div>
         <div className="container">
           <div className="row">
             <div className="col-8">
@@ -91,7 +143,7 @@ const Cart = (props) => {
                   <h1 className="text-cart">Giỏ hàng của bạn</h1>
                 </div>
                 <p className="my-2 d-flex align-items-center justify-content-center">
-                  Bạn đang có <span className="price"> 7 sản phẩm</span> trong
+                  Bạn đang có <span className="price">{quantityItem} sản phẩm</span> trong
                   giỏ hàng
                 </p>
               </div>
@@ -99,75 +151,77 @@ const Cart = (props) => {
                 <ProgressBar variant="success" now={40} />
               </div>
               <div className="info-image">
-                {/* <ul>
-                  
-                    <li key={product.id}>
-                      <img src={product.image} alt={product.title} />
-                      <p></p>
-                      <p></p>
-                      {/* Thêm các thông tin khác của sản phẩm nếu cần */}
-                {/* </li> */}
-                {/* ))} */}
-                {/* </ul> */}
-                <div className="border-cart">
-                  {mergedCart.map((product, idx) => (
-                    <div key={idx} className="item-img d-flex m-4">
-                      <a>
-                        <img
-                          style={{ width: "80px", height: "80px" }}
-                          src={product.image}
-                          alt="Nhẫn cưới vàng 18K đính đá ECZ SWAROVSKI"
-                        />
-                        <div className="item-remove">
-                          <a className="cart text-body text-decoration-none">
-                            Xóa
-                          </a>
-                        </div>
-                      </a>
-                      <div className="item-info">
-                        <h3 className="item--title">
-                          <a className="text-decoration-none color-cart mx-5">
-                            {product.title}
-                          </a>
-                        </h3>
-                        <p className="mx-5">{product.price}</p>
-                      </div>
-                      <div className="item-total-price text-end">
-                        <div className="price">
-                          <span className="line-item-total">
-                            {product.price}
-                          </span>
-                        </div>
-                        <div className="d-flex color my-4">
-                          <div
-                            style={{ width: "20px", height: "20px" }}
-                            className="color-component"
-                          >
-                            <AiOutlineMinus
-                              onClick={() => removeCart(idx)}
-                              style={{ width: "10px", height: "10px" }}
-                            />
-                          </div>
-                          <div
-                            className=" text1 d-grid align-items-center text-center"
-                            style={{ width: "20px", height: "20px" }}
-                          >
-                            <div>{product.quantity}</div>
-                          </div>
-                          <div
-                            className="plus"
-                            style={{ width: "20px", height: "20px" }}
-                          >
-                            <AiOutlinePlus
-                              onClick={() => handleAddCart(idx)}
-                              style={{ width: "10px", height: "10px" }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    {isLoading ? (<h1>Đang load dữ liệu</h1>) : (
+                       <div className="border-cart">
+                       {carts.map((cartItem, idx) => (
+                         <div key={idx} className="item-img d-flex m-4">
+                           <a>
+                             <img
+                               style={{ width: "80px", height: "80px" }}
+                               src={cartItem.url}
+                               alt={cartItem.title}
+                             />
+                             <div
+                               className="item-remove"                                             
+                             >
+
+                               <p
+                                  onClick={()=>{handleToRemoveCartItem(cartItem.cartItemId)}} 
+                                 className="cart text-body text-decoration-none">
+                                 Xóa
+                               </p>
+                             </div>
+                           </a>
+                           <div className="item-info">
+                             <h3 className="item--title">
+                               <a className="text-decoration-none color-cart mx-5">
+                                 {cartItem.title}
+                               </a>
+                             </h3>
+                             <p className="mx-5">{cartItem.price}</p>
+                           </div>
+                           <div className="item-total-price text-end">
+                             <div className="price">
+                               <span className="line-item-total">
+                                 {cartItem.price*cartItem.quantity}
+                               </span>
+                             </div>
+                             <div className="d-flex color my-4">
+                               <div
+                                 style={{ width: "20px", height: "20px" }}
+                                 className="color-component"
+                               >
+                                 <AiOutlineMinus
+                                   onClick={() => { handleToDecreaseQuantity(cartItem.cartItemId, cartItem.quantity) }}
+                                   style={{ width: "10px", height: "10px" }}
+                                 />
+                               </div>
+                               <div
+                                 className=" text1 d-grid align-items-center text-center"
+                                 style={{ width: "20px", height: "20px" }}
+                               >
+                                 <div>{cartItem.quantity}</div>
+                               </div>
+                               <div
+                                 className="plus"
+                                 style={{ width: "20px", height: "20px" }}
+                               >
+                                 <AiOutlinePlus
+                                  onClick={()=>{handleToIncreaseQuantity(cartItem.cartItemId,cartItem.quantity)}}
+                                   style={{ width: "10px", height: "10px" }}
+                                 />
+                               </div>
+                             </div>
+                           </div>
+                           <input
+                           type="checkbox"
+                           checked={selectedItems.includes(cartItem.cartItemId)}
+                          onChange={() => handleCheckboxChange(cartItem.cartItemId)}
+            />
+                         </div>
+                       ))}
+                     </div>
+               )}
               </div>
               <div className="info-text">
                 <p className="text-center">
@@ -251,15 +305,15 @@ const Cart = (props) => {
                             type="radio"
                             label="Option 1"
                             id="radio1"
-                            checked={selectedOption === "radio1"}
-                            onChange={() => handleRadioChange("radio1")}
+                            //checked={selectedOption === "radio1"}
+                            // onChange={() => handleRadioChange("radio1")}
                           />
                           <Form.Check
                             type="radio"
                             label="Option 2"
                             id="radio2"
-                            checked={selectedOption === "radio2"}
-                            onChange={() => handleRadioChange("radio2")}
+                            // checked={selectedOption === "radio2"}
+                            // onChange={() => handleRadioChange("radio2")}
                           />
                         </Form>
                       </div>
@@ -267,7 +321,7 @@ const Cart = (props) => {
                   </div>
                 </div>
                 <div>
-                  <Collapse in={selectedOption === "radio2"}>
+                 {/* <Collapse in={selectedOption === "radio2"}> */}
                     <div>
                       <div>
                         <div>
@@ -283,11 +337,11 @@ const Cart = (props) => {
                         </div>
                       </div>
                     </div>
-                  </Collapse>
+                  {/* </Collapse> */}
                 </div>
                 <div className="summary-total d-flex justify-content-between">
                   <p>Tổng tiền:</p>
-                  <p>{totalPrice}</p>
+                  <p>{totalPrice }</p>
                 </div>
                 <div className="summary-action">
                   <p>Phí vận chuyển sẽ được tính ở trang thanh toán.</p>
@@ -303,7 +357,7 @@ const Cart = (props) => {
                 </div>
                 <div className="summary-button ">
                   <a
-                    onClick={() => navigate("/payment")}
+                    onClick={() => {handleToCreateOrder()}}
                     id="btnCart-checkout"
                     className="checkout-btn btnred disabled text-decoration-none text-white "
                     data-price-min="400000"
@@ -327,6 +381,10 @@ const Cart = (props) => {
           </div>
         </div>
       </div>
+  
+
+
+      
     </>
   );
 };

@@ -45,12 +45,15 @@ const Login = (props) => {
           userInfo: responseData.data,
         })
       );
+      
+      
       navigate("/dashboard");
     } else {
       setMessage(responseData.message);
     }
     console.log(responseData);
   };
+  
 
   const formRegisterSubmitHandler = async (e) => {
     e.preventDefault();
