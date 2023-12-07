@@ -5,7 +5,14 @@ const url = {
   //auth
   login: "/users/login",
   register: "/users/register",
-  logout:"/users/logout",
+  logout: "/users/logout",
+  //address
+
+  //profile
+  updateProfile: "",
+  uploadPicture: "",
+  getProfile: "",
+  
   //product
   products: "/product/list-product",
   productdetail: "/product/product-information",

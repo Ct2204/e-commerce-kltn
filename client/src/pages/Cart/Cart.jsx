@@ -5,7 +5,7 @@ import ProductCart from "../../components/ProductCart";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import ProgressBar from "react-bootstrap/ProgressBar";
-import { Form, Collapse } from "react-bootstrap";
+import { Form, Collapse, Offcanvas } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { deleteCartItem, getCartItem, updateCartItem } from "../../services/CartService.js";
 import { log } from "../../store/reducers/auth.js";
@@ -31,6 +31,7 @@ const Cart = () => {
         // Nếu mục đã được chọn trước đó, bỏ khỏi mảng
         return prevSelectedItems.filter((itemId) => itemId !== cartItemId);
       } else {
+
         // Ngược lại, thêm vào mảng
         return [...prevSelectedItems, cartItemId];
       }
@@ -100,16 +101,28 @@ const Cart = () => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const totalPrice = carts.reduce((account, item) => {
-    return account + item.quantity*item.price
-  },0);
-  const quantityItem = carts.length;
-  // console.log(quantityItem);
 
+  const quantityItem = carts.length;
+
+
+  const totalPrice = selectedItems.reduce((acc, selectedItem) => {
+  const selectedItemObject = carts.find((item) => item.cartItemId === selectedItem);
+  console.log("select",selectedItemObject)
+    if (selectedItemObject) {  
+    return acc + selectedItemObject.quantity * selectedItemObject.price;
+  } else {
+    return acc;
+  }
+  }, 0);
+  
+ 
+  console.log("helo",selectedItems);
 
   //Order
   const handleToCreateOrder = async () => {
     const responseData = await createOrder(selectedItems, userInfor.user_id)
+    localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+    navigate("/payment")
     console.log(responseData.message)
   }
 
@@ -136,101 +149,43 @@ const Cart = () => {
   
         <div>
         <div className="container">
-          <div className="row">
-            <div className="col-8">
+          <div className="row">          
+            {carts.length === 0 ? (
+             
+              <div className="col-8">
               <div className="d-flex justify-content-between mt-5 cart-title">
                 <div className="d-flex align-items-center justify-content-center">
-                  <h1 className="text-cart">Giỏ hàng của bạn</h1>
+                  <h1 className="text-cart" style={{fontSize:"35px"}}>Giỏ hàng của bạn</h1>
                 </div>
-                <p className="my-2 d-flex align-items-center justify-content-center">
-                  Bạn đang có <span className="price">{quantityItem} sản phẩm</span> trong
-                  giỏ hàng
-                </p>
+               
               </div>
-              <div>
-                <ProgressBar variant="success" now={40} />
-              </div>
-              <div className="info-image">
-                    {isLoading ? (<h1>Đang load dữ liệu</h1>) : (
-                       <div className="border-cart">
-                       {carts.map((cartItem, idx) => (
-                         <div key={idx} className="item-img d-flex m-4">
-                           <a>
-                             <img
-                               style={{ width: "80px", height: "80px" }}
-                               src={cartItem.url}
-                               alt={cartItem.title}
-                             />
-                             <div
-                               className="item-remove"                                             
-                             >
+              
+                <div className="info-image">
+                <img
+                           style={{ width: "100%" }}
+                           data-src="//theme.hstatic.net/200000593853/1001115480/14/cart_banner_image.jpg?v=43"
+                           src="//theme.hstatic.net/200000593853/1001115480/14/cart_banner_image.jpg?v=43"
+                           alt="Giỏ hàng của bạn đang trống"
+                         />
+                         <p className="text-center" style={{fontSize:"30px"}}>
+                           Chưa có sản phẩm trong giỏ hàng...
+                         </p>
+                         
+                </div>
+                
 
-                               <p
-                                  onClick={()=>{handleToRemoveCartItem(cartItem.cartItemId)}} 
-                                 className="cart text-body text-decoration-none">
-                                 Xóa
-                               </p>
-                             </div>
-                           </a>
-                           <div className="item-info">
-                             <h3 className="item--title">
-                               <a className="text-decoration-none color-cart mx-5">
-                                 {cartItem.title}
-                               </a>
-                             </h3>
-                             <p className="mx-5">{cartItem.price}</p>
-                           </div>
-                           <div className="item-total-price text-end">
-                             <div className="price">
-                               <span className="line-item-total">
-                                 {cartItem.price*cartItem.quantity}
-                               </span>
-                             </div>
-                             <div className="d-flex color my-4">
-                               <div
-                                 style={{ width: "20px", height: "20px" }}
-                                 className="color-component"
-                               >
-                                 <AiOutlineMinus
-                                   onClick={() => { handleToDecreaseQuantity(cartItem.cartItemId, cartItem.quantity) }}
-                                   style={{ width: "10px", height: "10px" }}
-                                 />
-                               </div>
-                               <div
-                                 className=" text1 d-grid align-items-center text-center"
-                                 style={{ width: "20px", height: "20px" }}
-                               >
-                                 <div>{cartItem.quantity}</div>
-                               </div>
-                               <div
-                                 className="plus"
-                                 style={{ width: "20px", height: "20px" }}
-                               >
-                                 <AiOutlinePlus
-                                  onClick={()=>{handleToIncreaseQuantity(cartItem.cartItemId,cartItem.quantity)}}
-                                   style={{ width: "10px", height: "10px" }}
-                                 />
-                               </div>
-                             </div>
-                           </div>
-                           <input
-                           type="checkbox"
-                           checked={selectedItems.includes(cartItem.cartItemId)}
-                          onChange={() => handleCheckboxChange(cartItem.cartItemId)}
-            />
-                         </div>
-                       ))}
-                     </div>
-               )}
-              </div>
               <div className="info-text">
-                <p className="text-center">
+                <p className="text-center" style={{fontSize:"20px",color:"#637184"}}>
                   Bạn có thể quay về{" "}
-                  <a href="https://the-swan.myharavan.com">trang chủ</a> hoặc
+                    <strong><a
+                      href="/"
+                      style={{textDecoration:"none"}}
+                    >trang chủ</a></strong> hoặc
                   nhập từ khoá sản phẩm bạn cần tìm ở đây:
                 </p>
-              </div>
-              <div className="input-group mb-3">
+                </div>
+                {/* input */}
+                <div className="input-group mb-3">
                 <input
                   type="text"
                   className="form-control"
@@ -245,7 +200,9 @@ const Cart = () => {
                 >
                   <BsSearch />
                 </button>
-              </div>
+                </div>
+                
+                {/* có thể bạn sẽ thích */}
               <div>
                 <h2 className="collectionCart-title">
                   <a
@@ -282,78 +239,214 @@ const Cart = () => {
                   />
                 </div>
               </div>
+             
+      
+
+              </div>) : (     
+              
+                
+              <div className="col-8">
+              <div className="d-flex justify-content-between mt-5 cart-title">
+                <div className="d-flex align-items-center justify-content-center">
+                  <h1 className="text-cart" style={{fontSize:"35px"}}>Giỏ hàng của bạn</h1>
+                </div>
+                    <p className="my-2 d-flex align-items-center justify-content-center"
+                    
+                    style={{fontSize:"20px"}}>
+                      Bạn đang có <span
+                        className="price"
+                        style={{fontSize:"20px"}}>
+                        {quantityItem} sản phẩm</span> trong
+                  giỏ hàng
+                </p>
+              </div>
+              <div>
+                <ProgressBar variant="success" now={40} />
+              </div>
+              <div className="info-image">
+                    {isLoading ? (<h1>Đang load dữ liệu</h1>) : (
+                       <div className="border-cart" style={{border:"1px solid #ccc",marginTop:"30px"}} >
+                       {carts.map((cartItem, idx) => (
+                         <div key={idx} className="item-img d-flex m-4" style={{borderBottom: "1px solid #ccc"}}>
+                          {/* image and remove */}
+                           <a className="cart-item">
+                             <img
+                               style={{ width: "100px", height: "100px", marginRight: "10px" }}
+                               src={cartItem.url}
+                               alt={cartItem.title}
+                             />
+                             <div
+                               className="item-remove"                                             
+                             >
+                               <p
+                                  onClick={()=>{handleToRemoveCartItem(cartItem.cartItemId)}} 
+                                 className=""
+                                 style={{
+                                   color: "#fff",
+                                   fontSize: "13px",
+                                   textAlign: "center",
+                                   display: "flex",
+                                   justifyContent: "center",
+                                   alignItems: "center",
+                                   
+            
+                                   
+                                 }}
+                               >
+                                 Xóa
+                               </p>
+                             </div>
+                           </a>
+                          {/* tittle and price */}
+                           <div className="item-info">
+                             <h3 className="item--title">
+                               <a className="text-decoration-none  mx-5" style={{color:"#000",fontSize:"25px"}}>
+                                 {cartItem.title}
+                               </a>
+                             </h3>
+                             <p className="mx-5"
+                               style={{fontSize:"18px"}}
+                             >{numberWithCommas(cartItem.price)}đ</p>
+                           </div>
+                           <div className="item-total-price text-end">
+                             <div className="price" >
+                               <span className="line-item-total"
+                                style={{fontSize:"20px"}}
+                               >
+                                 {numberWithCommas(cartItem.price*cartItem.quantity)}đ
+                               </span>
+                             </div>
+
+                             {/* price*quanti */}
+                             <div className="" style={{display:"flex",marginRight: "15px"}}>
+                               <div
+                                 style={{ width: "30px", height: "30px"}}
+                                 className="color-component"
+                               >
+                                 <AiOutlineMinus
+                                   onClick={() => { handleToDecreaseQuantity(cartItem.cartItemId, cartItem.quantity) }}
+                                   style={{ width: "20px", height: "20px" }}
+                                 />
+                               </div>
+                               <div
+                                 className=" text1 d-grid align-items-center text-center"
+                                 style={{ width: "30px", height: "30px" }}
+                               >
+                                 <div>{cartItem.quantity}</div>
+                               </div>
+                               <div
+                                 className="plus"
+                                 style={{ width: "30px", height: "30px" }}
+                               >
+                                 <AiOutlinePlus
+                                  onClick={()=>{handleToIncreaseQuantity(cartItem.cartItemId,cartItem.quantity)}}
+                                   style={{ width: "20px", height: "20px" }}
+                                 />
+                               </div>
+                             </div>
+                           </div>
+                           <div className="checkCartItem-container">
+                             
+                             {/* input */}
+                           <input
+                               type="checkbox"
+                               className="checkCartItem"
+                           checked={selectedItems.includes(cartItem.cartItemId)}
+                          onChange={() => handleCheckboxChange(cartItem.cartItemId)}
+            />
+                           </div>
+                          
+                         </div>
+                       ))}
+                     </div>
+               )}
+              </div>
+              
+              <div className="info-text" style={{paddingTop:"50px"}}>
+              <p className="text-center" style={{fontSize:"20px",color:"#637184"}}>
+                  Bạn có thể quay về{" "}
+                    <strong><a
+                      href="/"
+                      style={{textDecoration:"none"}}
+                    >trang chủ</a></strong> hoặc
+                  nhập từ khoá sản phẩm bạn cần tìm ở đây:
+                </p>
+              </div>
+              <div className="input-group mb-3" style={{paddingTop:"10px"}}>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeHolder="Tìm kiếm sản phẩm..."
+                  aria-label="Recipient's username"
+                      aria-describedby="button-addon2"
+                  style={{height:"50px"}}
+                />
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  id="button-addon2"
+                >
+                  <BsSearch />
+                </button>
+                  </div>
+                  
+              <div style={{paddingTop:"50px"}}>
+                <h2 className="collectionCart-title">
+                  <a
+                    className="text-decoration-none text-body"
+                    href="/collections/trang-suc"
+                  >
+                    Có thể bạn sẽ thích
+                  </a>
+                </h2>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <ProductCart
+                    title="Cài áo đính đá cao cấp Trâm Hoa"
+                    imageSrc="https://product.hstatic.net/200000593853/product/ct-5_0853b5cf37e140088c1091b1acac86f5_478f0a5a26ab4e54b8044c27cca29332_21e89fefcbc644b98573efe920bd2857_master.jpg"
+                    imageSrc1="https://product.hstatic.net/200000593853/product/ct-6_a200e5c1fb144c01a6189e3d22745cfd_5adfffc5d9b24f85bd404406eaa46b83_f67b64415a1b4b6cb4054646a86e1b0e_master.jpg"
+                    price="Liên hệ báo giá"
+                  />
+                </div>
+                <div className="col">
+                  <ProductCart
+                    title="Cài áo đính đá cao cấp Trâm Hoa"
+                    imageSrc="https://product.hstatic.net/200000593853/product/ct-5_0853b5cf37e140088c1091b1acac86f5_478f0a5a26ab4e54b8044c27cca29332_21e89fefcbc644b98573efe920bd2857_master.jpg"
+                    imageSrc1="https://product.hstatic.net/200000593853/product/ct-6_a200e5c1fb144c01a6189e3d22745cfd_5adfffc5d9b24f85bd404406eaa46b83_f67b64415a1b4b6cb4054646a86e1b0e_master.jpg"
+                    price="Liên hệ báo giá"
+                  />
+                </div>
+                <div className="col">
+                  <ProductCart
+                    title="Cài áo đính đá cao cấp Trâm Hoa"
+                    imageSrc="https://product.hstatic.net/200000593853/product/ct-5_0853b5cf37e140088c1091b1acac86f5_478f0a5a26ab4e54b8044c27cca29332_21e89fefcbc644b98573efe920bd2857_master.jpg"
+                    imageSrc1="https://product.hstatic.net/200000593853/product/ct-6_a200e5c1fb144c01a6189e3d22745cfd_5adfffc5d9b24f85bd404406eaa46b83_f67b64415a1b4b6cb4054646a86e1b0e_master.jpg"
+                    price="Liên hệ báo giá"
+                  />
+                </div>
+              </div>
             </div>
+            )}
+            
+           
 
             <div className="col-4">
               <div className="order-summary-block mt-5">
-                <h2 className="summary-title">Thông tin đơn hàng</h2>
-                <div className="summary-time summary-picktime">
-                  <div className="summary-time__row d-flex justify-content-between">
-                    <div className="boxtime-title">
-                      <p className="txt-title">Thời gian giao hàng</p>
-                      <p className="txt-time ">Chọn thời gian</p>
-                    </div>
-                    <div
-                      class="boxtime-radio"
-                      id="picktime_radio"
-                      data-time-start=""
-                      data-time-end=""
-                    >
-                      <div>
-                        <Form>
-                          <Form.Check
-                            type="radio"
-                            label="Option 1"
-                            id="radio1"
-                            //checked={selectedOption === "radio1"}
-                            // onChange={() => handleRadioChange("radio1")}
-                          />
-                          <Form.Check
-                            type="radio"
-                            label="Option 2"
-                            id="radio2"
-                            // checked={selectedOption === "radio2"}
-                            // onChange={() => handleRadioChange("radio2")}
-                          />
-                        </Form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                 {/* <Collapse in={selectedOption === "radio2"}> */}
-                    <div>
-                      <div>
-                        <div>
-                          <label>Ngày giao</label>
-                        </div>
-                        <div>
-                          <Form>
-                            <Form.Label>Select a date:</Form.Label>
-                            <Form.Control as="select">
-                              <option value="13/11/2023">Hôm nay</option>
-                            </Form.Control>
-                          </Form>
-                        </div>
-                      </div>
-                    </div>
-                  {/* </Collapse> */}
-                </div>
-                <div className="summary-total d-flex justify-content-between">
+                <h2 className="summary-title" style={{fontSize:"30px",fontStyle:"bold"}}>Thông tin đơn hàng</h2>
+                
+          
+                <div className="summary-total d-flex justify-content-between"
+                  style={{fontSize:"25px",padding:"20px 10px"}}>
                   <p>Tổng tiền:</p>
-                  <p>{totalPrice }</p>
+                  <p style={{color:"red"}}>{numberWithCommas(totalPrice)}</p>
                 </div>
-                <div className="summary-action">
-                  <p>Phí vận chuyển sẽ được tính ở trang thanh toán.</p>
+                <div className="summary-action" style={{fontSize:"16px"}}>
+                  <p style={{paddingTop:"10px"}}>Phí vận chuyển sẽ được tính ở trang thanh toán.</p>
                   <p>
                     Bạn cũng có thể nhập mã giảm giá ở trang thanh toán.
                   </p>{" "}
-                  <div
-                    class="summary-alert alert alert-danger "
-                    style={{ display: "block" }}
-                  >
-                    Giỏ hàng của bạn hiện chưa đạt mức tối thiểu để thanh toán.
-                  </div>
+                  
                 </div>
                 <div className="summary-button ">
                   <a
@@ -368,11 +461,11 @@ const Cart = () => {
                   </a>
                 </div>
               </div>
-              <div className="summary-warning alert-order">
+              <div className="summary-warning alert-order" style={{opacity:0.9}}>
                 <p class="textmr">
-                  <strong>Chính sách mua hàng</strong>:
+                  <strong style={{padding:"10px 5px"}}>Chính sách mua hàng</strong>:
                 </p>
-                <p>
+                <p style={{padding:"10px 5px"}}>
                   Hiện chúng tôi chỉ áp dụng thanh toán với đơn hàng có giá trị
                   tối thiểu <strong>400.000₫ </strong> trở lên.
                 </p>

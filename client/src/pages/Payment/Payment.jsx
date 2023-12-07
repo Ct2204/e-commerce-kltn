@@ -30,9 +30,25 @@ const Payment = (props) => {
     <>
       <div className="address-receive">
         <div className="vtrWey"></div>
-        <div className="payment-name">
-          <div>Địa chỉ nhận hàng</div>
-          <div>Trần Văn Thiên</div>
+        <div className="payment-address">
+          <div className="payment-title">Địa chỉ nhận hàng</div>
+          <div>
+          <div className="payment-address-content">
+              <div style={{display:'flex'}}>
+              <p className="addressName">Lê Công Thương</p>
+            <p className="addresPhone">+84 362002021</p>
+              </div>
+              <div>
+              <p className="address">
+                Tân hòa, Tân Thủy, Lệ Thủy, Quảng Bình
+              </p>
+            </div >
+            <p className="updateAddress">Thay đổi</p>
+              
+            </div>
+            
+           
+          </div>
         </div>
 
         <div className="product-cart mt-5">

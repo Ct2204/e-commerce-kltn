@@ -309,42 +309,7 @@ const Header = () => {
        )}
                      </div>
                    </Button>
-                   <Offcanvas
-                     className=""
-                     show={mount}
-                     onHide={handleClose}
-                     placement="end"
-                   >
-                     <Offcanvas.Header className="header-cart" closeButton>
-                       <Offcanvas.Title>
-                         <strong>Giỏ hàng</strong>
-                       </Offcanvas.Title>
-                     </Offcanvas.Header>
-                     <Offcanvas.Body>
-                       <div className="svgico-mini-cart">
-                         <img
-                           style={{ width: "100%" }}
-                           data-src="//theme.hstatic.net/200000593853/1001115480/14/cart_banner_image.jpg?v=43"
-                           src="//theme.hstatic.net/200000593853/1001115480/14/cart_banner_image.jpg?v=43"
-                           alt="Giỏ hàng của bạn đang trống"
-                         />
-                         <p className="text-center">
-                           Chưa có sản phẩm trong giỏ hàng...
-                         </p>
-                         <div className="action-link-empty text-center">
-                           <a
-                             href="/collections/onsale"
-                             className="link-cart mx-4"
-                           >
-                             Trở về trang sản phẩm
-                           </a>
-                           <a name="link-copuon" className="link-cart">
-                             Khuyến mãi dành cho bạn
-                           </a>
-                         </div>
-                       </div>
-                     </Offcanvas.Body>
-                   </Offcanvas>
+                   
                  </div>
                )}
               </div>
