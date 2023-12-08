@@ -6,15 +6,21 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import { Form, Collapse, Offcanvas } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteCartItem, getCartItem, updateCartItem } from "../../services/CartService.js";
-import { log } from "../../store/reducers/auth.js";
+
 import { createOrder } from "../../services/OrderService.js";
+import { getorderId } from "../../store/reducers/order.js";
+
+
+
 
 const Cart = () => {
   
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const userInfor = useSelector((state) => state.auth.userInfo);
+  console.log(userInfor.user_id,"ssssssss")
 
   const isLogin = useSelector((state) => state.auth.isLoggedIn)
   console.log("có dang nhập",isLogin)
@@ -24,6 +30,7 @@ const Cart = () => {
   const [message, setMessage] = useState("");
   const [cartItemList, setCartItemList] = useState([])
   const [selectedItems, setSelectedItems] = useState([]);
+  
 
   const handleCheckboxChange = (cartItemId) => {
     setSelectedItems((prevSelectedItems) => {
@@ -36,6 +43,7 @@ const Cart = () => {
         return [...prevSelectedItems, cartItemId];
       }
     });
+    
   };
 
   console.log("cartItem",selectedItems)
@@ -104,24 +112,45 @@ const Cart = () => {
 
   const quantityItem = carts.length;
 
+  
+  const [cartOrder, setCartOrder] = useState([]);
 
   const totalPrice = selectedItems.reduce((acc, selectedItem) => {
-  const selectedItemObject = carts.find((item) => item.cartItemId === selectedItem);
-  console.log("select",selectedItemObject)
+  const selectedItemObject = carts.find((item) => item.cartItemId === selectedItem)
     if (selectedItemObject) {  
+      
+     
     return acc + selectedItemObject.quantity * selectedItemObject.price;
-  } else {
+    } else {
+      
     return acc;
   }
   }, 0);
+
+  useEffect(() => {
+    const updatedCartOrder = selectedItems
+      .map((selectedItem) => carts.find((item) => item.cartItemId === selectedItem))
+      .filter(Boolean); // Remove falsy values (null or undefined)
+  
+    setCartOrder(updatedCartOrder);
+  
+    // Save cartOrder to localStorage
+  }, [selectedItems, carts]);
   
  
-  console.log("helo",selectedItems);
+  console.log("helo",cartOrder);
 
   //Order
   const handleToCreateOrder = async () => {
     const responseData = await createOrder(selectedItems, userInfor.user_id)
-    localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+    console.log("hello",responseData);
+    if (responseData.code === 201) {
+      dispatch(
+        getorderId({orderId:responseData.data.order_id})
+      );
+    }
+    localStorage.setItem('cartOrder', JSON.stringify(cartOrder));
+
     navigate("/payment")
     console.log(responseData.message)
   }

@@ -210,13 +210,14 @@ public class OrderController {
 
     )
     @PostMapping({"/create-order"})
-    public ResponseEntity<ResponseDto> createOrder(@RequestBody CreateOrderRequestDto createOrderRequestDto) {
+    public ResponseEntity<ResponseDataDto> createOrder(@RequestBody CreateOrderRequestDto createOrderRequestDto) {
 
-        this.orderService.saveOrder(createOrderRequestDto);
-        ResponseDto responseDto = new ResponseDto();
+
+        ResponseDataDto responseDto = new ResponseDataDto();
         responseDto.setStatus(HttpStatus.OK.series().name());
         responseDto.setCode(201);
         responseDto.setMessage(" order successfully!");
+        responseDto.setData((this.orderService.saveOrder(createOrderRequestDto)));
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 

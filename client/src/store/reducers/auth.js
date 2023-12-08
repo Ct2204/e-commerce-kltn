@@ -15,18 +15,16 @@ const authSlice = createSlice({
     isLoggedIn: false,
     token: null,
     userInfo: {},
+    orderId: null
   },
   reducers: {
     log: (state, action) => {
       state.isLoggedIn = true;
       state.token = action.payload.token;
       state.userInfo = action.payload.userInfo;
+      
     },
-    // logout: (state) => {
-    //         state.isLoggedIn = false;
-    //         state.token = null;
-    //         state.userInfo = {};
-    //       },
+    getorderId:(state,action)=>{state.orderId = action.payload.orderId}
   },
   extraReducers: (builder) => {
     // Xử lý kết quả khi logoutAsync hoàn thành
@@ -38,35 +36,8 @@ const authSlice = createSlice({
   },
 });
 
-// const authSlice = createSlice({
-//   name: "auth",
-//   initialState: {
-//     isLoggedIn: false,
-//     token: null,
-//     userInfo: {},
-//   },
-//   reducers: {
-//     log: (state, action) => {
-//       state.isLoggedIn = true;
-//       state.token = action.payload.token;
-//       state.userInfo = action.payload.userInfo;
-//     },
-//     logout: (state) => {
-//       state.isLoggedIn = false;
-//       state.token = null;
-//       state.userInfo = {};
-//     },
-//   },
-//   extraReducers: (builder) => {
-//     // Xử lý kết quả khi logoutAsync hoàn thành
-//     builder.addCase(logoutAsync.fulfilled, (state) => {
-//       state.isLoggedIn = false;
-//       state.token = null;
-//       state.userInfo = {};
-//     });
-// });
 
-export const { log } = authSlice.actions;
+export const { log,getorderId } = authSlice.actions;
 
 const authReducer = authSlice.reducer;
 

@@ -5,6 +5,7 @@ import com.kltn.server.common.vo.OrderStatusE;
 import com.kltn.server.module.order.dto.CreateOrderRequestDto;
 import com.kltn.server.module.order.dto.OrderDto;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface OrderService {
@@ -17,7 +18,7 @@ public interface OrderService {
 
     void updateStatusOrder(Long id, OrderStatusE orderStatus);
 
-    void saveOrder(CreateOrderRequestDto createOrderRequestDto);
+    HashMap<String,String> saveOrder(CreateOrderRequestDto createOrderRequestDto);
 
     public OrderDto mapperOrderEntityToDto(Order order);
 }
