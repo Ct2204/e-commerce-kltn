@@ -7,66 +7,101 @@ import {
 } from "../../services/product";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { Form } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../store/reducers/auth";
-import {
-  getProductOfSellerById,
-  postProductOfSeller,
-} from "../../services/productSeller";
+import { toast } from "react-toastify";
 
+import {
+  deleteProductOfSellerById,
+  getDescriptionBySeller,
+  getPaging,
+  getProductOfSellerById,
+  postDescriptionBySeller,
+  postFileImage,
+  postProductOfSeller,
+  updateProductOfSeller,
+} from "../../services/productSeller";
+import { Accordion, Pagination } from "react-bootstrap";
 const AdminHome = (props) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [productByCategoryNhan, setProductByCategoryNhan] = useState([]);
-  const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
   const [product, setProduct] = useState([]);
   const [products, setProducts] = useState([]);
   const [saveProducts, setSaveProducts] = useState([]);
-
-  const [productId, setProductId] = useState(1);
+  const [productId, setProductId] = useState(0);
   const [show, setShow] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [inputValue, setInputValue] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageLength, setPageLength] = useState(10);
+  const [pagingItems, setPagingItems] = useState(false);
+  const [description, setDescription] = useState("");
+  const [activeKey, setActiveKey] = useState("0");
+  const [descriptionById, setDescriptionById] = useState("");
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const handleProductsByCategoryNhan = async () => {
+  const handleGetListProduct = async () => {
     setIsLoading(true);
-    const responseData = await getProductsByCategory(2);
-    setProductByCategoryNhan(responseData.listProducts);
-    setIsLoading(false);
-  };
-  const handleProductsByCategoryDongHo = async () => {
-    setIsLoading(true);
-    const responseData = await getProductsByCategory(1);
-    setProductByCategoryDongHo(responseData.listProducts);
+    const responseData = await getPaging(page, pageLength);
+    setProducts(responseData.data.listProduct);
+    let items = [
+      <Pagination.Item key="first" onClick={() => setPage(1)}>
+        &laquo;
+      </Pagination.Item>,
+    ];
+    for (let i = 1; i < responseData.data.totalPages + 1; i++) {
+      items.push(
+        <Pagination.Item key={i} active={i === page} onClick={() => setPage(i)}>
+          {i}
+        </Pagination.Item>
+      );
+    }
+    items.push(
+      <Pagination.Item
+        key="last"
+        onClick={() => setPage(responseData.data.totalPages)}
+      >
+        &raquo;
+      </Pagination.Item>
+    );
+    setPagingItems(items);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    handleProductsByCategoryDongHo();
-  }, []);
-
-  useEffect(() => {
-    handleProductsByCategoryNhan();
-  }, []);
+    handleGetListProduct();
+  }, [page, pageLength]);
 
   const showModalHandler = async (e, id) => {
     if (e) e.preventDefault();
+    setProductId(id);
     if (id > 0) {
-      const responseData = await getProductDetail(id);
-      setProduct(responseData);
+      const responseData = await getProductOfSellerById(id);
+      setProduct(responseData.data);
       handleShow();
     } else {
-      setProduct({
+      let product = {
         sellerId: "1",
         sku: "1",
+        categoryId: "1",
         title: "",
         price: "",
         priceSales: "",
         percentDiscount: "",
-      });
+      };
+      // Kiểm tra nếu id > 0, thêm productId vào đối tượng setProduct
+      if (id > 0) {
+        product.productId = id;
+      }
+
+      // Sử dụng đối tượng setProduct
+      setProduct(product);
       handleShow();
     }
   };
@@ -78,15 +113,86 @@ const AdminHome = (props) => {
     }));
   };
 
+  const handleCategoryChange = (categoryId) => {
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      categoryId: categoryId,
+    }));
+  };
+
   const handleAddProduct = async (e) => {
     try {
       setIsLoading(true);
       const responseData = await postProductOfSeller(product);
       if (responseData) {
-        setProductId(responseData.data.productId);
+        const fileImage = {
+          productId: responseData.data.productId,
+          sellerId: 1,
+          options: [
+            {
+              name: "Color",
+              images: [
+                [
+                  {
+                    url: inputValue,
+                    type: "IMAGE",
+                  },
+                ],
+                [
+                  {
+                    url: inputValue,
+                    type: "IMAGE",
+                  },
+                ],
+              ],
+              values: ["Red", "Yellow"],
+            },
+          ],
+          productItems: [],
+        };
+        const response = await postFileImage(fileImage);
+
+        const descriptionData = {
+          productId: responseData.data.productId,
+          sellerId: 1,
+          description: description,
+          images: [
+            {
+              url: "description1.jpg",
+              type: "IMAGE",
+            },
+            {
+              url: "description2.jpg",
+              type: "IMAGE",
+            },
+            {
+              url: "description3.mp4",
+              type: "VIDEO",
+            },
+            {
+              url: "description4.mp4",
+              type: "VIDEO",
+            },
+            {
+              url: "description5.jpg",
+              type: "IMAGE",
+            },
+            {
+              url: "description6.jpg",
+              type: "IMAGE",
+            },
+          ],
+        };
+        const responseDescription = await postDescriptionBySeller(
+          descriptionData
+        );
+        console.log(responseDescription);
+        handleGetListProduct();
+        handleClose();
+        toast.success("Add sucessful.");
       } else {
         // Xử lý khi request thất bại hoặc có lỗi
-        console.error("Failed to add product.");
+        toast.error("Delete failed.");
       }
       setIsLoading(false);
     } catch (err) {
@@ -95,183 +201,206 @@ const AdminHome = (props) => {
     }
   };
 
-  const getProductSellerById = async (e) => {
+  const handleUpdateProduct = async (e) => {
     try {
       setIsLoading(true);
-      const responseData = await getProductOfSellerById(productId);
+      console.log(product);
+      const responseData = await updateProductOfSeller(product);
       if (responseData) {
-        setProducts((prevProducts) => {
-          return [
-            ...(Array.isArray(prevProducts) ? prevProducts : []),
-            responseData.data,
-          ];
-        });
+        handleGetListProduct();
+        handleClose();
+        toast.success("Update Successful.");
       } else {
-        // Xử lý khi request thất bại hoặc có lỗi
-        console.error("Failed to add product.");
+        toast.error("Update Failed.");
       }
       setIsLoading(false);
     } catch (err) {
-      console.error("Error in handleAddProduct: ", err);
+      console.error("Error in handleUpdateProduct: ", err);
       setIsLoading(false);
     }
   };
-  useEffect(() => {
-    getProductSellerById();
-  }, [productId]);
-  console.log(products);
+  const handleDeleteProduct = async (id) => {
+    try {
+      setIsLoading(true);
+      const responseData = await deleteProductOfSellerById(id);
+      if (responseData) {
+        handleGetListProduct();
+        toast.warn("Delete Successful.");
+      } else {
+        toast.error("Delete Failed.");
+      }
+      setIsLoading(false);
+    } catch (err) {
+      console.error("Error in handleUpdateProduct: ", err);
+      setIsLoading(false);
+    }
+  };
 
-  // Chuyển đổi mảng thành chuỗi JSON
-  const productsString = JSON.stringify(products);
+  const handleInputChange = (event) => {
+    // Lấy giá trị từ thẻ input khi có sự thay đổi
+    const value = event.target.value;
+    // Cập nhật state với giá trị mới
+    setInputValue(value);
+  };
 
-  // Lưu chuỗi JSON vào localStorage với một key cụ thể, ví dụ 'products'
-  localStorage.setItem("products", productsString);
+  const handleChangePageLength = (e) => {
+    setPage(1);
+    setPageLength(e.target.value);
+  };
+
+  const handleDescriptionChange = (event) => {
+    // Lấy giá trị từ textarea
+    const newDescription = event.target.value;
+
+    // Lưu giá trị vào state
+    setDescription(newDescription);
+  };
+
+  const handleAccordionClick = (eventKey) => {
+    setActiveKey(activeKey === eventKey ? null : eventKey);
+  };
+
+  const handleGetDescription = async (id) => {
+    try {
+      setIsLoading(true);
+      const responseData = await getDescriptionBySeller(id);
+      if (responseData) {
+        console.log(responseData);
+        setDescriptionById(responseData.data.description);
+      } else {
+        toast.error("Delete Failed.");
+      }
+      setIsLoading(false);
+    } catch (err) {
+      console.error("Error in handleUpdateProduct: ", err);
+      setIsLoading(false);
+    }
+  };
+
+  console.log(description);
 
   return (
     <div className="d-flex row my-override-class">
       <div className="navbar-parent col-2 p-0" style={{ height: "100vh" }}>
         <ul
-          class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+          className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
           id="accordionSidebar"
         >
           <a
-            class="sidebar-brand text-decoration-none d-flex align-items-center justify-content-center"
+            className="sidebar-brand text-decoration-none d-flex align-items-center justify-content-center"
             href="index.html"
           >
-            <div class="sidebar-brand-icon text-white rotate-n-15">
-              <i class="fas fa-laugh-wink"></i>
+            <div className="sidebar-brand-icon text-white rotate-n-15">
+              <i className="fas fa-laugh-wink"></i>
             </div>
-            <div class="sidebar-brand-text mx-3 text-white">SB Admin</div>
           </a>
 
-          <hr class="sidebar-divider my-0" />
+          <hr className="sidebar-divider my-0" />
 
-          <li class="nav-item">
+          <li className="nav-item">
             <a class="nav-link text-white" href="index.html">
-              <i class="fas fa-fw fa-tachometer-alt mx-3"></i>
-              <span>Dashboard</span>
+              <i className="fas fa-fw fa-tachometer-alt mx-3"></i>
+              <span>Trang chủ</span>
             </a>
           </li>
 
-          <hr class="sidebar-divider" />
+          <hr className="sidebar-divider" />
 
-          <div class="sidebar-heading text-white mx-3">Interface</div>
+          <div className="sidebar-heading text-white mx-3">Interface</div>
 
-          <li class="nav-item text-white">
+          <li className="nav-item text-white">
             <a
-              class="nav-link collapsed"
+              className="nav-link collapsed"
               href="#"
               data-toggle="collapse"
               data-target="#collapseTwo"
               aria-expanded="true"
               aria-controls="collapseTwo"
             >
-              <i class="fas fa-fw fa-cog mx-3"></i>
+              <i className="fas fa-fw fa-cog mx-3"></i>
               <span>Components</span>
             </a>
           </li>
 
-          <li class="nav-item text-white">
+          <li className="nav-item text-white">
             <a
-              class="nav-link collapsed"
+              className="nav-link collapsed"
               href="#"
               data-toggle="collapse"
               data-target="#collapseUtilities"
               aria-expanded="true"
               aria-controls="collapseUtilities"
             >
-              <i class="fas fa-fw fa-wrench mx-3"></i>
+              <i className="fas fa-fw fa-wrench mx-3"></i>
               <span>Utilities</span>
             </a>
           </li>
 
-          <hr class="sidebar-divider" />
+          <hr className="sidebar-divider" />
 
-          <div class="sidebar-heading text-white mx-3">Addons</div>
+          <div className="sidebar-heading text-white mx-3">Addons</div>
 
-          <li class="nav-item text-white">
+          <li className="nav-item text-white">
             <a
-              class="nav-link collapsed"
+              className="nav-link collapsed"
               href="#"
               data-toggle="collapse"
               data-target="#collapsePages"
               aria-expanded="true"
               aria-controls="collapsePages"
             >
-              <i class="fas fa-fw fa-folder mx-3"></i>
+              <i className="fas fa-fw fa-folder mx-3"></i>
               <span>Pages</span>
             </a>
           </li>
 
-          <li class="nav-item text-white">
+          <li className="nav-item text-white">
             <a class="nav-link" href="charts.html">
-              <i class="fas fa-fw fa-chart-area mx-3"></i>
+              <i className="fas fa-fw fa-chart-area mx-3"></i>
               <span>Charts</span>
             </a>
           </li>
 
-          <li class="nav-item text-white">
+          <li className="nav-item text-white">
             <a class="nav-link" href="tables.html">
-              <i class="fas fa-fw fa-table mx-3"></i>
+              <i className="fas fa-fw fa-table mx-3"></i>
               <span>Tables</span>
             </a>
           </li>
 
-          <hr class="sidebar-divider d-none d-md-block" />
-
-          <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-          </div>
-
-          <div class="sidebar-card d-none d-lg-flex">
-            <img
-              class="sidebar-card-illustration mb-2"
-              src="img/undraw_rocket.svg"
-              alt="..."
-            />
-            <p class="text-center mb-2">
-              <strong>SB Admin Pro</strong> is packed with premium features,
-              components, and more!
-            </p>
-            <a
-              class="btn btn-success btn-sm"
-              href="https://startbootstrap.com/theme/sb-admin-pro"
-            >
-              Upgrade to Pro!
-            </a>
-          </div>
+          <hr className="sidebar-divider d-none d-md-block" />
         </ul>
       </div>
       <div className="navbar-child col-10 p-0">
         <nav className="navbar navbar-padding navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
           <button
             id="sidebarToggleTop"
-            class="btn btn-link d-md-none rounded-circle mr-3"
+            className="btn btn-link d-md-none rounded-circle mr-3"
           >
-            <i class="fa fa-bars"></i>
+            <i className="fa fa-bars"></i>
           </button>
 
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <div class="input-group">
+          <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div className="input-group">
               <input
                 type="text"
-                class="form-control bg-light border-0 small"
-                placeholder="Search for..."
+                className="form-control bg-light border-0 small"
+                placeHolder="Search for..."
                 aria-label="Search"
                 aria-describedby="basic-addon2"
               />
-              <div class="input-group-append">
+              <div className="input-group-append">
                 <button class="btn btn-primary" type="button">
-                  <i class="fas fa-search fa-sm"></i>
+                  <i className="fas fa-search fa-sm"></i>
                 </button>
               </div>
             </div>
           </form>
 
-          <ul class="navbar-nav navbar-ul ml-auto">
-            <li class="nav-item dropdown no-arrow d-sm-none">
+          <ul className="navbar-nav navbar-ul ml-auto">
+            <li className="nav-item dropdown no-arrow d-sm-none">
               <a
-                class="nav-link dropdown-toggle"
+                className="nav-link dropdown-toggle"
                 href="#"
                 id="searchDropdown"
                 role="button"
@@ -279,25 +408,25 @@ const AdminHome = (props) => {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                <i class="fas fa-search fa-fw"></i>
+                <i className="fas fa-search fa-fw"></i>
               </a>
 
               <div
-                class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                className="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                 aria-labelledby="searchDropdown"
               >
-                <form class="form-inline mr-auto w-100 navbar-search">
-                  <div class="input-group">
+                <form className="form-inline mr-auto w-100 navbar-search">
+                  <div className="input-group">
                     <input
                       type="text"
-                      class="form-control bg-light border-0 small text-start"
-                      placeholder="Search for..."
+                      className="form-control bg-light border-0 small text-start"
+                      placeHolder="Search for..."
                       aria-label="Search"
                       aria-describedby="basic-addon2"
                     />
-                    <div class="input-group-append">
+                    <div className="input-group-append">
                       <button class="btn btn-primary" type="button">
-                        <i class="fas fa-search fa-sm"></i>
+                        <i className="fas fa-search fa-sm"></i>
                       </button>
                     </div>
                   </div>
@@ -305,9 +434,9 @@ const AdminHome = (props) => {
               </div>
             </li>
 
-            <li class="nav-item dropdown no-arrow mx-1">
+            <li className="nav-item dropdown no-arrow mx-1">
               <a
-                class="nav-link dropdown-toggle"
+                className="nav-link dropdown-toggle"
                 href="#"
                 id="alertsDropdown"
                 role="button"
@@ -315,54 +444,54 @@ const AdminHome = (props) => {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                <i class="fas fa-bell fa-fw"></i>
+                <i className="fas fa-bell fa-fw"></i>
 
-                <span class="badge badge-danger badge-counter">3+</span>
+                <span className="badge badge-danger badge-counter">3+</span>
               </a>
 
               <div
-                class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                className="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="alertsDropdown"
               >
-                <h6 class="dropdown-header">Alerts Center</h6>
+                <h6 className="dropdown-header">Alerts Center</h6>
                 <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-primary">
-                      <i class="fas fa-file-alt text-white"></i>
+                  <div className="mr-3">
+                    <div className="icon-circle bg-primary">
+                      <i className="fas fa-file-alt text-white"></i>
                     </div>
                   </div>
                   <div>
-                    <div class="small text-gray-500">December 12, 2019</div>
-                    <span class="font-weight-bold">
+                    <div className="small text-gray-500">December 12, 2019</div>
+                    <span className="font-weight-bold">
                       A new monthly report is ready to download!
                     </span>
                   </div>
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                      <i class="fas fa-donate text-white"></i>
+                  <div className="mr-3">
+                    <div className="icon-circle bg-success">
+                      <i className="fas fa-donate text-white"></i>
                     </div>
                   </div>
                   <div>
-                    <div class="small text-gray-500">December 7, 2019</div>
+                    <div className="small text-gray-500">December 7, 2019</div>
                     $290.29 has been deposited into your account!
                   </div>
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-warning">
-                      <i class="fas fa-exclamation-triangle text-white"></i>
+                  <div className="mr-3">
+                    <div className="icon-circle bg-warning">
+                      <i className="fas fa-exclamation-triangle text-white"></i>
                     </div>
                   </div>
                   <div>
-                    <div class="small text-gray-500">December 2, 2019</div>
-                    Spending Alert: We've noticed unusually high spending for
-                    your account.
+                    <div className="small text-gray-500">December 2, 2019</div>
+                    Spending Alert: We've noticed unusually high spending
+                    htmlFor your account.
                   </div>
                 </a>
                 <a
-                  class="dropdown-item text-center small text-gray-500"
+                  className="dropdown-item text-center small text-gray-500"
                   href="#"
                 >
                   Show All Alerts
@@ -370,9 +499,9 @@ const AdminHome = (props) => {
               </div>
             </li>
 
-            <li class="nav-item dropdown no-arrow mx-1">
+            <li className="nav-item dropdown no-arrow mx-1">
               <a
-                class="nav-link dropdown-toggle"
+                className="nav-link dropdown-toggle"
                 href="#"
                 id="messagesDropdown"
                 role="button"
@@ -380,87 +509,93 @@ const AdminHome = (props) => {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                <i class="fas fa-envelope fa-fw"></i>
+                <i className="fas fa-envelope fa-fw"></i>
 
-                <span class="badge badge-danger badge-counter">7</span>
+                <span className="badge badge-danger badge-counter">7</span>
               </a>
 
               <div
-                class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                className="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="messagesDropdown"
               >
-                <h6 class="dropdown-header">Message Center</h6>
+                <h6 className="dropdown-header">Message Center</h6>
                 <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="dropdown-list-image mr-3">
+                  <div className="dropdown-list-image mr-3">
                     <img
-                      class="rounded-circle"
+                      className="rounded-circle"
                       src="img/undraw_profile_1.svg"
                       alt="..."
                     />
-                    <div class="status-indicator bg-success"></div>
+                    <div className="status-indicator bg-success"></div>
                   </div>
-                  <div class="font-weight-bold">
-                    <div class="text-truncate">
+                  <div className="font-weight-bold">
+                    <div className="text-truncate">
                       Hi there! I am wondering if you can help me with a problem
                       I've been having.
                     </div>
-                    <div class="small text-gray-500">Emily Fowler · 58m</div>
+                    <div className="small text-gray-500">
+                      Emily Fowler · 58m
+                    </div>
                   </div>
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="dropdown-list-image mr-3">
+                  <div className="dropdown-list-image mr-3">
                     <img
-                      class="rounded-circle"
+                      className="rounded-circle"
                       src="img/undraw_profile_2.svg"
                       alt="..."
                     />
-                    <div class="status-indicator"></div>
+                    <div className="status-indicator"></div>
                   </div>
                   <div>
-                    <div class="text-truncate">
+                    <div className="text-truncate">
                       I have the photos that you ordered last month, how would
                       you like them sent to you?
                     </div>
-                    <div class="small text-gray-500">Jae Chun · 1d</div>
+                    <div className="small text-gray-500">Jae Chun · 1d</div>
                   </div>
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="dropdown-list-image mr-3">
+                  <div className="dropdown-list-image mr-3">
                     <img
-                      class="rounded-circle"
+                      className="rounded-circle"
                       src="img/undraw_profile_3.svg"
                       alt="..."
                     />
-                    <div class="status-indicator bg-warning"></div>
+                    <div className="status-indicator bg-warning"></div>
                   </div>
                   <div>
-                    <div class="text-truncate">
+                    <div className="text-truncate">
                       Last month's report looks great, I am very happy with the
                       progress so far, keep up the good work!
                     </div>
-                    <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                    <div className="small text-gray-500">
+                      Morgan Alvarez · 2d
+                    </div>
                   </div>
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="dropdown-list-image mr-3">
+                  <div className="dropdown-list-image mr-3">
                     <img
-                      class="rounded-circle"
+                      className="rounded-circle"
                       src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
                       alt="..."
                     />
-                    <div class="status-indicator bg-success"></div>
+                    <div className="status-indicator bg-success"></div>
                   </div>
                   <div>
-                    <div class="text-truncate">
+                    <div className="text-truncate">
                       Am I a good boy? The reason I ask is because someone told
                       me that people say this to all dogs, even if they aren't
                       good...
                     </div>
-                    <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                    <div className="small text-gray-500">
+                      Chicken the Dog · 2w
+                    </div>
                   </div>
                 </a>
                 <a
-                  class="dropdown-item text-center small text-gray-500"
+                  className="dropdown-item text-center small text-gray-500"
                   href="#"
                 >
                   Read More Messages
@@ -468,11 +603,11 @@ const AdminHome = (props) => {
               </div>
             </li>
 
-            <div class="topbar-divider d-none d-sm-block"></div>
+            <div className="topbar-divider d-none d-sm-block"></div>
 
-            <li class="nav-item dropdown no-arrow">
+            <li className="nav-item dropdown no-arrow">
               <a
-                class="nav-link dropdown-toggle"
+                className="nav-link dropdown-toggle"
                 href="#"
                 id="userDropdown"
                 role="button"
@@ -480,81 +615,75 @@ const AdminHome = (props) => {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                <span className="mr-2 d-none d-lg-inline text-gray-600 small">
                   Admin Account
                 </span>
                 <img
                   onClick={() => dispatch(logout())}
-                  class="img-profile rounded-circle"
+                  className="img-profile rounded-circle"
                   src="#"
                 />
               </a>
 
               <div
-                class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="userDropdown"
               >
                 <a class="dropdown-item" href="#">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profile
                 </a>
                 <a class="dropdown-item" href="#">
-                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                  <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Settings
                 </a>
                 <a class="dropdown-item" href="#">
-                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                  <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                   Activity Log
                 </a>
-                <div class="dropdown-divider"></div>
+                <div className="dropdown-divider"></div>
                 <a
-                  class="dropdown-item"
+                  className="dropdown-item"
                   href="#"
                   data-toggle="modal"
                   data-target="#logoutModal"
                 >
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
                 </a>
               </div>
             </li>
           </ul>
         </nav>
-        <div class="container-fluid">
-          <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-          <p class="mb-4">
-            DataTables is a third party plugin that is used to generate the demo
-            table below. For more information about DataTables, please visit the{" "}
-            <a target="_blank" href="https://datatables.net" rel="noreferrer">
-              official DataTables documentation
-            </a>
-            .
-          </p>
+        <div className="container-fluid">
+          <h1 className="h3 mb-2 text-gray-800">Quản lí sản phẩm</h1>
 
-          <div class="card shadow mb-4">
-            <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">
-                DataTables Example
+          <div className="card shadow mb-4">
+            <div className="card-header py-3">
+              <h6 className="m-0 font-weight-bold text-primary">
+                List Products
               </h6>
             </div>
-            <div class="card-body">
-              <div class="table-responsive">
+            <div className="card-body">
+              <div className="table-responsive">
                 <div
                   id="dataTable_wrapper"
-                  class="dataTables_wrapper dt-bootstrap4"
+                  className="dataTables_wrapper dt-bootstrap4"
                 >
-                  <div class="row">
-                    <div class="col-sm-12 col-md-6">
+                  <div className="row">
+                    <div className="col-sm-12 col-md-6">
                       <div class="dataTables_length" id="dataTable_length">
                         <label className="">
                           Show{" "}
                           <select
+                            value={pageLength}
+                            onChange={handleChangePageLength}
                             name="dataTable_length"
                             aria-controls="dataTable"
-                            class="custom-select custom-select-sm form-control form-control-sm"
+                            className="custom-select custom-select-sm form-control form-control-sm"
                           >
                             <option value="10">10</option>
-                            <option value="25">25</option>
+                            <option value="20">20</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
                           </select>{" "}
@@ -562,21 +691,26 @@ const AdminHome = (props) => {
                         </label>
                       </div>
                     </div>
-                    <div class="col-sm-12 col-md-6 d-flex ">
-                      <div id="dataTable_filter" class="dataTables_filter">
+                    <div className="col-sm-12 col-md-6 d-flex ">
+                      <div id="dataTable_filter" className="dataTables_filter">
                         <label className="d-flex">
                           Search:
                           <input
                             type="search"
-                            class="form-control form-control-sm"
-                            placeholder=""
+                            className="form-control form-control-sm"
+                            placeHolder=""
                             aria-controls="dataTable"
                           />
                         </label>
                       </div>
-                      <div className="">
+                      <div className="input-group-append">
+                        <button class="btn btn-primary" type="button">
+                          <i className="fas fa-search fa-sm"></i>
+                        </button>
+                      </div>
+                      <div className="mx-5">
                         <button onClick={(e) => showModalHandler(e, 0)}>
-                          <i class="fa-solid fa-plus"></i>
+                          <i className="fa-solid fa-plus"></i>
                           Add
                         </button>
                       </div>
@@ -588,19 +722,22 @@ const AdminHome = (props) => {
                       >
                         <Modal.Header closeButton>
                           <Modal.Title>
-                            {product.id > 0 ? "Update" : "New"} Product
+                            {productId > 0 ? "Update" : "New"} Product
                           </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <form>
-                            <div class="mb-3 row">
+                            <div
+                              className="mb-3 row"
+                              style={{ width: "340px" }}
+                            >
                               <label
-                                for="inputPassword"
-                                class="col-sm-2 col-form-label"
+                                htmlFor="inputPassword"
+                                className="col-4 col-form-label"
                               >
                                 Title
                               </label>
-                              <div className="col-sm-10">
+                              <div className="col-8">
                                 <input
                                   type="text"
                                   name="title"
@@ -610,56 +747,169 @@ const AdminHome = (props) => {
                                 />
                               </div>
                             </div>
-                            <div class="mb-3 row">
+                            <div
+                              className="mb-3 row"
+                              style={{ width: "340px" }}
+                            >
                               <label
-                                for="inputPassword"
-                                class="col-sm-2 col-form-label"
+                                htmlFor="inputPassword"
+                                className="col-4 col-form-label"
                               >
                                 Price
                               </label>
-                              <div class="col-sm-10">
+                              <div className="col-8">
                                 <input
                                   type="number"
                                   name="price"
                                   value={product.price}
                                   onChange={handleChange}
-                                  class="form-control"
+                                  className="form-control"
                                 />
                               </div>
                             </div>
-                            <div class="mb-3 row">
+                            <div
+                              className="mb-3 row"
+                              style={{ width: "340px" }}
+                            >
                               <label
-                                for="inputPassword"
-                                class="col-sm-2 col-form-label"
+                                htmlFor="inputPassword"
+                                className="col-4 col-form-label"
                               >
                                 PriceSales
                               </label>
-                              <div class="col-sm-10">
+                              <div className="col-8">
                                 <input
                                   type="number"
                                   name="priceSales"
                                   value={product.priceSales}
                                   onChange={handleChange}
-                                  class="form-control"
+                                  className="form-control"
                                 />
                               </div>
                             </div>
-                            <div class="mb-3 row">
+                            <div
+                              className="mb-3 row"
+                              style={{ width: "340px" }}
+                            >
                               <label
-                                for="inputPassword"
-                                class="col-sm-2 col-form-label"
+                                htmlFor="inputPassword"
+                                className="col-4 col-form-label"
                               >
-                                PercentPriceSale
+                                PercentSale
                               </label>
-                              <div class="col-sm-10">
+                              <div className="col-8">
                                 <input
                                   type="number"
                                   name="percentDiscount"
                                   value={product.percentDiscount}
                                   onChange={handleChange}
-                                  class="form-control"
+                                  className="form-control"
                                 />
                               </div>
+                              <div className="d-flex mt-3">
+                                <label
+                                  htmlFor="inputPassword"
+                                  className="col-4 col-form-label"
+                                >
+                                  Category
+                                </label>
+                                <div className="form-check mt-1 mx-2">
+                                  <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="categoryId"
+                                    id="radioOption1"
+                                    value="1"
+                                    checked={product.categoryId === "1"}
+                                    onChange={() => handleCategoryChange("1")}
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor="radioOption1"
+                                  >
+                                    Đồng hồ
+                                  </label>
+                                </div>
+                                <div className="form-check mt-1 mx-2">
+                                  <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="categoryId"
+                                    id="radioOption2"
+                                    value="2"
+                                    checked={product.categoryId === "2"}
+                                    onChange={() => handleCategoryChange("2")}
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor="radioOption2"
+                                  >
+                                    Nhẫn cưới
+                                  </label>
+                                </div>
+                                <div className="form-check mt-1 mx-2">
+                                  <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="categoryId"
+                                    id="radioOption2"
+                                    value="2"
+                                    checked={product.categoryId === "3"}
+                                    onChange={() => handleCategoryChange("3")}
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor="radioOption2"
+                                  >
+                                    Kính mát
+                                  </label>
+                                </div>
+                              </div>
+                              <div
+                                className="mb-3 row"
+                                style={{ width: "340px" }}
+                              >
+                                <label
+                                  htmlFor="inputPassword"
+                                  className="col-4 col-form-label"
+                                >
+                                  Description
+                                </label>
+                                <div className="col-8">
+                                  <textarea
+                                    className="form-control mx-2"
+                                    style={{
+                                      height: "100px",
+                                      width: "202.66px",
+                                    }}
+                                    onChange={handleDescriptionChange}
+                                  ></textarea>
+                                </div>
+                              </div>
+                              {productId > 0 ? (
+                                <></>
+                              ) : (
+                                <div
+                                  className="d-flex mt-3"
+                                  style={{ width: "340px" }}
+                                >
+                                  <label
+                                    htmlFor="inputPassword"
+                                    className="col-4 col-form-label"
+                                  >
+                                    Enter Url
+                                  </label>
+                                  <div className="col-8">
+                                    <input
+                                      type="text"
+                                      value={inputValue}
+                                      onChange={handleInputChange}
+                                      className="form-control mx-2"
+                                      style={{ width: "202.66px" }}
+                                    />
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           </form>
                         </Modal.Body>
@@ -667,20 +917,29 @@ const AdminHome = (props) => {
                           <Button variant="secondary" onClick={handleClose}>
                             Close
                           </Button>
-                          <Button
-                            variant="primary"
-                            onClick={(e) => handleAddProduct()}
-                          >
-                            Understood
-                          </Button>
+                          {productId > 0 ? (
+                            <Button
+                              variant="primary"
+                              onClick={(e) => handleUpdateProduct()}
+                            >
+                              Update
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="primary"
+                              onClick={(e) => handleAddProduct()}
+                            >
+                              Add
+                            </Button>
+                          )}
                         </Modal.Footer>
                       </Modal>
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col-sm-12">
+                  <div className="row">
+                    <div className="col-sm-12">
                       <table
-                        class="table table-bordered dataTable"
+                        className="table table-bordered dataTable"
                         id="dataTable"
                         width="100%"
                         cellspacing="0"
@@ -690,167 +949,133 @@ const AdminHome = (props) => {
                       >
                         <thead>
                           <tr role="row">
-                            <th>Id</th>
+                            <th style={{ width: "50px" }}>Id</th>
                             <th
-                              class="sorting sorting_asc"
-                              tabindex="0"
+                              className="sorting"
+                              tabIndex="0"
                               aria-controls="dataTable"
-                              rowspan="1"
-                              colspan="1"
-                              style={{ width: "179px" }}
-                              aria-sort="ascending"
-                              aria-label="Name: activate to sort column descending"
-                            >
-                              Name
-                            </th>
-                            <th
-                              class="sorting"
-                              tabindex="0"
-                              aria-controls="dataTable"
-                              rowspan="1"
-                              colspan="1"
-                              style={{ width: "274px" }}
-                              aria-label="Position: activate to sort column ascending"
-                            >
-                              Position
-                            </th>
-                            <th
-                              class="sorting"
-                              tabindex="0"
-                              aria-controls="dataTable"
-                              rowspan="1"
-                              colspan="1"
-                              style={{ width: "129px" }}
-                              aria-label="Office: activate to sort column ascending"
-                            >
-                              Office
-                            </th>
-                            <th
-                              class="sorting"
-                              tabindex="0"
-                              aria-controls="dataTable"
-                              rowspan="1"
-                              colspan="1"
-                              style={{ width: "129px" }}
-                              aria-label="Office: activate to sort column ascending"
-                            >
-                              Option
-                            </th>
-                            <th
-                              class="sorting"
-                              tabindex="0"
-                              aria-controls="dataTable"
-                              rowspan="1"
-                              colspan="1"
-                              style={{ width: "59px" }}
-                              aria-label="Age: activate to sort column ascending"
-                            >
-                              Age
-                            </th>
-                            <th
-                              class="sorting"
-                              tabindex="0"
-                              aria-controls="dataTable"
-                              rowspan="1"
-                              colspan="1"
-                              style={{ width: "122px" }}
-                              aria-label="Start date: activate to sort column ascending"
-                            >
-                              Start date
-                            </th>
-                            <th
-                              class="sorting"
-                              tabindex="0"
-                              aria-controls="dataTable"
-                              rowspan="1"
-                              colspan="1"
+                              rowSpan="1"
+                              colSpan="1"
                               style={{ width: "109px" }}
                               aria-label="Salary: activate to sort column ascending"
                             >
-                              Salary
+                              Category
+                            </th>
+                            <th
+                              className="sorting sorting_asc"
+                              tabIndex="0"
+                              aria-controls="dataTable"
+                              rowSpan="1"
+                              colSpan="1"
+                              style={{ width: "200px" }}
+                              aria-sort="ascending"
+                              aria-label="Name: activate to sort column descending"
+                            >
+                              Title
+                            </th>
+                            <th
+                              className="sorting"
+                              tabIndex="0"
+                              aria-controls="dataTable"
+                              rowSpan="1"
+                              colSpan="1"
+                              style={{ width: "30px" }}
+                              aria-label="Position: activate to sort column ascending"
+                            >
+                              Image
+                            </th>
+
+                            <th
+                              className="sorting"
+                              tabIndex="0"
+                              aria-controls="dataTable"
+                              rowSpan="1"
+                              colSpan="1"
+                              style={{ width: "129px" }}
+                              aria-label="Office: activate to sort column ascending"
+                            >
+                              Price
+                            </th>
+                            <th
+                              className="sorting"
+                              tabIndex="0"
+                              aria-controls="dataTable"
+                              rowSpan="1"
+                              colSpan="1"
+                              style={{ width: "129px" }}
+                              aria-label="Office: activate to sort column ascending"
+                            >
+                              Description
+                            </th>
+
+                            <th
+                              className="sorting"
+                              tabIndex="0"
+                              aria-controls="dataTable"
+                              rowSpan="1"
+                              colSpan="1"
+                              style={{ width: "109px" }}
+                              aria-label="Salary: activate to sort column ascending"
+                            >
+                              Option
                             </th>
                           </tr>
                         </thead>
-                        <tfoot>
-                          <tr>
-                            <th rowspan="1" colspan="1">
-                              Name
-                            </th>
-                            <th rowspan="1" colspan="1">
-                              Position
-                            </th>
-                            <th rowspan="1" colspan="1">
-                              Office
-                            </th>
-                            <th rowspan="1" colspan="1">
-                              Option
-                            </th>
-                            <th rowspan="1" colspan="1">
-                              Age
-                            </th>
-                            <th rowspan="1" colspan="1">
-                              Start date
-                            </th>
-                            <th rowspan="1" colspan="1">
-                              Salary
-                            </th>
-                          </tr>
-                        </tfoot>
+
                         {isLoading ? (
                           <h1>Đang load dữ liệu</h1>
                         ) : (
                           <tbody>
                             {products.map((aProducts, idx) => (
-                              <tr key={idx} class="odd">
-                                <td></td>
-                                <td class="sorting_1">{aProducts.title}</td>
+                              <tr key={idx} className="odd">
+                                <td>{idx + 1}</td>
+                                <td>{aProducts.categoryTitle}</td>
+                                <td className="sorting_1">{aProducts.title}</td>
                                 <td>
                                   <img
                                     style={{ height: "50px", width: "50px" }}
-                                    src=""
+                                    src={aProducts.url}
                                   />
                                 </td>
-                                <td>Thien</td>
+
                                 <td>{aProducts.price}</td>
-                                <td>{aProducts.percentDiscount}%</td>
-                                <td>{aProducts.priceSales}</td>
+                                <td>
+                                  <Accordion
+                                    dactiveKey={activeKey}
+                                    onSelect={handleAccordionClick}
+                                  >
+                                    <Accordion.Item eventKey="0">
+                                      <Accordion.Header>
+                                        Description Product
+                                        <button
+                                          onClick={() =>
+                                            handleGetDescription(aProducts.id)
+                                          }
+                                        >
+                                          Xem
+                                        </button>
+                                      </Accordion.Header>
+                                      <Accordion.Body>
+                                        {descriptionById}
+                                      </Accordion.Body>
+                                    </Accordion.Item>
+                                  </Accordion>
+                                </td>
+
                                 <td className="d-flex">
                                   <button
                                     onClick={(e) =>
                                       showModalHandler(e, aProducts.id)
                                     }
                                   >
-                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    <i className="fa-solid fa-pen-to-square"></i>
                                   </button>
-                                  <button>
-                                    <i class="fa-solid fa-trash-can"></i>
-                                  </button>
-                                </td>
-                              </tr>
-                            ))}
-                            {productByCategoryDongHo.map((aProducts, idx) => (
-                              <tr key={idx} class="odd">
-                                <td>{aProducts.id}</td>
-                                <td class="sorting_1">{aProducts.title}</td>
-                                <td>
-                                  <img
-                                    style={{ height: "50px", width: "50px" }}
-                                    src={aProducts.listMediaProduct[0].url}
-                                  />
-                                </td>
-                                <td>{aProducts.price}</td>
-                                <td>{aProducts.percentDiscount}%</td>
-                                <td>{aProducts.priceSales}</td>
-                                <td className="d-flex">
                                   <button
-                                    onClick={(e) =>
-                                      showModalHandler(e, aProducts.id)
+                                    onClick={() =>
+                                      handleDeleteProduct(aProducts.id)
                                     }
                                   >
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                  </button>
-                                  <button>
-                                    <i class="fa-solid fa-trash-can"></i>
+                                    <i className="fa-solid fa-trash-can"></i>
                                   </button>
                                 </td>
                               </tr>
@@ -858,121 +1083,9 @@ const AdminHome = (props) => {
                           </tbody>
                         )}
                       </table>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-12 col-md-5">
-                      <div
-                        class="dataTables_info"
-                        id="dataTable_info"
-                        role="status"
-                        aria-live="polite"
-                      >
-                        Showing 1 to 10 of 57 entries
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-7">
-                      <div
-                        class="dataTables_paginate paging_simple_numbers"
-                        id="dataTable_paginate"
-                      >
-                        <ul class="pagination">
-                          <li
-                            class="paginate_button page-item previous disabled"
-                            id="dataTable_previous"
-                          >
-                            <a
-                              href="#"
-                              aria-controls="dataTable"
-                              data-dt-idx="0"
-                              tabindex="0"
-                              class="page-link"
-                            >
-                              Previous
-                            </a>
-                          </li>
-                          <li class="paginate_button page-item active">
-                            <a
-                              href="#"
-                              aria-controls="dataTable"
-                              data-dt-idx="1"
-                              tabindex="0"
-                              class="page-link"
-                            >
-                              1
-                            </a>
-                          </li>
-                          <li class="paginate_button page-item ">
-                            <a
-                              href="#"
-                              aria-controls="dataTable"
-                              data-dt-idx="2"
-                              tabindex="0"
-                              class="page-link"
-                            >
-                              2
-                            </a>
-                          </li>
-                          <li class="paginate_button page-item ">
-                            <a
-                              href="#"
-                              aria-controls="dataTable"
-                              data-dt-idx="3"
-                              tabindex="0"
-                              class="page-link"
-                            >
-                              3
-                            </a>
-                          </li>
-                          <li class="paginate_button page-item ">
-                            <a
-                              href="#"
-                              aria-controls="dataTable"
-                              data-dt-idx="4"
-                              tabindex="0"
-                              class="page-link"
-                            >
-                              4
-                            </a>
-                          </li>
-                          <li class="paginate_button page-item ">
-                            <a
-                              href="#"
-                              aria-controls="dataTable"
-                              data-dt-idx="5"
-                              tabindex="0"
-                              class="page-link"
-                            >
-                              5
-                            </a>
-                          </li>
-                          <li class="paginate_button page-item ">
-                            <a
-                              href="#"
-                              aria-controls="dataTable"
-                              data-dt-idx="6"
-                              tabindex="0"
-                              class="page-link"
-                            >
-                              6
-                            </a>
-                          </li>
-                          <li
-                            class="paginate_button page-item next"
-                            id="dataTable_next"
-                          >
-                            <a
-                              href="#"
-                              aria-controls="dataTable"
-                              data-dt-idx="7"
-                              tabindex="0"
-                              class="page-link"
-                            >
-                              Next
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
+                      <Pagination className="mb-0 justify-content-end">
+                        {pagingItems}
+                      </Pagination>
                     </div>
                   </div>
                 </div>

@@ -1,0 +1,44 @@
+.fontSizePageUser {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.8);
+  background-color: #f5f5f5;
+}
+.edit-font {
+  margin-right: 5px;
+}
+
+.profile-avatar {
+  border-bottom: 1px solid #efefef;
+}
+.account-image {
+  margin-right: 7px;
+}
+
+.profile-address {
+  margin-left: 28px;
+}
+
+.highlight-container {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.myProfile {
+  border-bottom: 1px solid #efefef;
+}
+
+.custom-font-size {
+  font-size: 18px; /* Kích thước font tùy chỉnh */
+}
+
+.choose-image {
+  border-left: 1px solid #efefef;
+  padding-left: 80px;
+}
+
+.volume-image {
+  margin-left: 25px;
+}
+
+.choose-file-border {
+  border: 1px solid #efefef;
+}

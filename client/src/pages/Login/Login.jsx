@@ -77,7 +77,7 @@ const Login = (props) => {
   return (
     <>
       <h2 className="h2-login my-3">Sign in/up Form</h2>
-      <div className="wrapper-container">
+      <div className="wrapper-container p-5">
         <div className="container1 wrapper-body" id="container">
           <div className="form-container1 sign-up-container1">
             <form
@@ -85,7 +85,7 @@ const Login = (props) => {
               action="#"
               className="form-login"
             >
-              <h1 className="h1-login">Create Account</h1>
+              <p className="h1-login">Create Account</p>
               <div className="social-container1">
                 <a href="#" className="social a-login">
                   <FaFacebookF />
@@ -196,7 +196,7 @@ const Login = (props) => {
                   Enter your personal details and start journey with us
                 </p>
                 <button
-                  className="ghost button-login"
+                  className="ghost button-login "
                   id="signUp"
                   onClick={signUp}
                 >
