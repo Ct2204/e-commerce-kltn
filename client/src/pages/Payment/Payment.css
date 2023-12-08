@@ -347,3 +347,35 @@ h3.bwwaGp.iL6wsx {
   background: #ee4d2d;
   color: #fff;
 }
+
+
+/* payment content */
+.payment-address {
+  padding: 20px;
+  width: 800px;
+  height: 100px;
+ 
+}
+
+.payment-title {
+  font-size: 25px;
+  font-weight: 600;
+  padding: 10px 0;
+}
+.payment-address-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.addressName {
+  padding-right: 10px;
+}
+.updateAddress{
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+
+

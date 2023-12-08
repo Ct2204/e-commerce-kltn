@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
-import "./Home.css";
+import "./ProductCategory.css";
 import Carousel from "react-bootstrap/Carousel";
 import ProductCart from "../../components/ProductCart";
 import GuideCart from "../../components/GuideCart";
@@ -19,21 +19,6 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [productByCategoryNhan, setProductByCategoryNhan] = useState([]);
   const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
-
-
-  const containerRef = useRef(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const scrollLeft = () => {
-    if (containerRef.current) {
-      containerRef.current.scrollLeft -= 100; // Adjust the scroll distance as needed
-    }
-  };
-
-  const scrollRight = () => {
-    if (containerRef.current) {
-      containerRef.current.scrollLeft += 100; // Adjust the scroll distance as needed
-    }
-  };
 
   const handleProductsByCategoryNhan = async () => {
     setIsLoading(true);
@@ -124,11 +109,9 @@ const Home = () => {
           </svg>
         </button>
       </div>
-      <div className="container-fuild text-center"
-        style={{marginBottom:"200px"}}
-      >
+      <div className="container-fuild text-center">
         <div className="row mx-5">
-          <div className="col image-hover">
+          <div className="col ">
             <img
               src="https://theme.hstatic.net/200000593853/1001115480/14/img_home_banner_desktop_1.jpg?v=41"
               className="d-block w-100"
@@ -138,17 +121,14 @@ const Home = () => {
           <div className="col">
             <img
               src="https://theme.hstatic.net/200000593853/1001115480/14/img_home_banner_desktop_2.jpg?v=41"
-              className="d-block w-100 image-hover"
+              className="d-block w-100"
               alt="First slide"
             />
           </div>
         </div>
-        <div className="row m-5 "
-      
-        >
+        <div className="row m-5 ">
           <div className="col ">
             <h4>
-             
               <a
                 className="title"
                 href="https://the-swan.myharavan.com/collections/dong-ho"
@@ -198,63 +178,55 @@ const Home = () => {
           </div>
         </div>
       </div>
-
-
       <div className="sectionHeading text-center m-5">
-        <h3
-          style={{ fontSize: "45px", fontFamily: "Tinos, sans-serif", fontWeight: "400" }}
-        >
-          Danh mục sản phẩm</h3>{" "}
+        <h3>Danh mục sản phẩm</h3>{" "}
       </div>
-
-      {/* Category */}
-      <div className="product-container" ref={containerRef}>
-      <div className="product-item">
-        <img
-          src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_1.jpg?v=41"
-          alt="Product 1"
-        />
-        <p className="product-title">Đồng hồ nam</p>
-      </div>
-      <div className="product-item">
-        <img
-          src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_2.jpg?v=41"
-          alt="Product 2"
-        />
-        <p className="product-title">Nhẫn</p>
-      </div>
-      <div className="product-item">
-        <img
-          src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_3.jpg?v=41"
-          alt="Product 3"
-        />
-        <p className="product-title">Vòng tay</p>
-      </div>
-      <div className="product-item">
-        <img
-          src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_5.jpg?v=41"
-          alt="Product 4"
-        />
-        <p className="product-title">Hoa tai</p>
+      <div className="container-fluid  text-center">
+        <div className="row mx-5">
+          <div className="col">
+            <img
+              src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_1.jpg?v=41"
+              className="d-block w-100"
+              alt=""
+            />
+            <p className="title-category">Đồng hồ nam</p>
+          </div>
+          <div className="col">
+            <img
+              src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_2.jpg?v=41"
+              className="d-block w-100"
+              alt=""
+            />
+            <p className="title-category">Nhẫn</p>
+          </div>
+          <div className="col">
+            <img
+              src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_3.jpg?v=41"
+              className="d-block w-100"
+              alt=""
+            />
+            <p className="title-category">Vòng tay</p>
+          </div>
+          <div className="col">
+            <img
+              src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_5.jpg?v=41"
+              className="d-block w-100"
+              alt=""
+            />
+            <p className="title-category">Hoa tai</p>
+          </div>
         </div>
-        
-        {/* <div className="scroll-buttons">
-        <button className="left-button" onClick={scrollLeft} >
-          Left
+      </div>
+      <div className="text-center">
+        <button role="button" className="owl-dot active" aria-label="1">
+          <span></span>
         </button>
-        <button className="right-button" onClick={scrollRight}>
-          Right
-        </button>
-      </div> */}
-    </div>
-     
-
-      {/* Sản phẩm của đồng hồ */}
+      </div>
       {isLoading ? (
         <h1>Đang load dữ liệu</h1>
       ) : (
         <div classname="container-fuild">
-          <h3 className="text-center my-5" style={{fontSize:"45px",padding:"20px"}}>
+          <h3 className="text-center my-5">
             <a>Đồng hồ</a>
           </h3>
           <div className="row mx-5 ">
@@ -278,19 +250,16 @@ const Home = () => {
         </div>
       )}
 
-      {/* Xem thêm sản phẩm đồng hồ */}
       <div classname="container-fuild">
-        <div className="wraplist-ctas text-center"
-          >
+        <div className="wraplist-ctas text-center">
           <a
             href="/collections/trang-suc"
-            className="btn-collection button btnwhite dark mx-2" 
-
+            className="btn-collection button btnwhite dark mx-2"
           >
             Xem thêm sản phẩm
             <svg
-              width="20px"
-              height="20px"
+              width="20"
+              height="20"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
@@ -299,11 +268,8 @@ const Home = () => {
             </svg>
           </a>
         </div>
-
-
-        <div style={{paddingTop:"100px"}}>
-        <div className="container text-center mt-5" style={{paddingBottom:"40px"}}>
-          <div className="row ">
+        <div className="container text-center mt-5">
+          <div className="row align-items-center">
             <div className="col">
               <img
                 width="100%"
@@ -317,18 +283,15 @@ const Home = () => {
                 <div className="title-text-banner">
                   <h4>
                     <a
-                      className="text-decoration-none text-dark "
+                      className="text-decoration-none text-dark fs-1"
                       href="/collections/all"
-                        aria-label="ĐỒ TRANG SỨC ĐỘC QUYỀN"
-                      style={{fontSize:"50px"}}
+                      aria-label="ĐỒ TRANG SỨC ĐỘC QUYỀN"
                     >
                       ĐỒ TRANG SỨC ĐỘC QUYỀN
                     </a>
                   </h4>
                 </div>
-                  <p 
-                  style={{fontSize:"20px",padding:"10px"}}>
-                    
+                <p className="des-text-banner">
                   Ngày nay, thế giới trang sức nam, nữ chính hãng rất đẹp, đa
                   dạng với nhiều kiểu dáng, chất liệu khác nhau (vàng, bạc, đính
                   đá), từ vòng tay, hoa tai, dây chuyền cho đến cả nhẫn.
@@ -346,8 +309,6 @@ const Home = () => {
             </div>
           </div>
         </div>
-
-
         <div className="container text-center">
           <div className="row align-items-center">
             <div className="col">
@@ -355,16 +316,15 @@ const Home = () => {
                 <div className="title-text-banner">
                   <h4>
                     <a
-                      className="text-decoration-none text-dark "
+                      className="text-decoration-none text-dark fs-1"
                       href="/collections/all"
-                        aria-label="Đồ trang sức độc quyền"
-                        style={{fontSize:"50px"}}
+                      aria-label="Đồ trang sức độc quyền"
                     >
                       VÒNG TAY, LẮC TAY
                     </a>
                   </h4>
                 </div>
-                <p style={{fontSize:"20px",padding:"10px"}}>
+                <p className="des-text-banner">
                   Với chất liệu làm từ thép không gỉ 316L, đi kèm với đó là lớp
                   mạ vàng hồng thời thượng bên ngoài (tùy phiên bản), những
                   chiếc vòng tay, lắc tay đến từ thương hiệu Daniel Wellington
@@ -392,15 +352,11 @@ const Home = () => {
             </div>
           </div>
         </div>
-        </div>
-        
         {isLoading ? (
           <h1>Đang load dữ liệu</h1>
         ) : (
           <div classname="container-fuild">
-              <h3 className="text-center my-5"
-                style={{fontSize:"50px",padding:"20px"}}
-              >
+            <h3 className="text-center my-5">
               <a>Trang sức</a>
             </h3>
             <div className="row mx-5">
@@ -441,29 +397,21 @@ const Home = () => {
             </svg>
           </a>
         </div>
-
-
-
-        <div className="container-fuild" style={{paddingTop:"50px"}}>
+        <div className="container-fuild">
           <div className="sectionHeading text-center my-5">
             <h3>
-              <a className="text-decoration-none text-body" href="/blogs/news"
-              style={{fontSize:"50px",padding:"10px"}}
-
-              >
+              <a className="text-decoration-none text-body" href="/blogs/news">
                 Tin tức nổi bật
               </a>
             </h3>
           </div>
-
-
-          <div className="container-fuild text-center"style={{marginBottom:"100px"}}>
+          <div className="container-fuild text-center">
             <div className="row mx-5">
               <div className="col">
                 <GuideCart
-                  article="Giày boot là gì? Cách phân loại giày boot mà chị em cần biết"
-                  shortArticle="Giày boot là một trong những phụ kiện thời trang không thể thiếu dành cho phái nữ vào mùa đôgh..."
-                  image="https://file.hstatic.net/200000593853/article/blog01_90292ca06f044bdc98885cccc35c4745.jpg"
+                  article="Hướng dẫn cách tạo mục lục bài viết"
+                  shortArticle="Trong bài viết này, tôi sẽ hướng dẫn bạn cách tạo mục lục bài viết siêu đơn giản, không phải..."
+                  image="https://file.hstatic.net/200000593853/article/blog-img-2_993d9da631724c61b538ba9210cc0b0e_grande.jpeg"
                 />
               </div>
               <div className="col">
@@ -476,28 +424,20 @@ const Home = () => {
               <div className="col">
                 <GuideCart
                   article="Hướng dẫn cách tạo mục lục bài viết"
-                  shortArticle="Bạn có biết rằng một số loại đá quý và bán quý đặc biệt có thêm tác dụng hỗ trợ..."
-                  image="https://file.hstatic.net/200000593853/article/blog-img-4_297f5b2eed3f4cdc998fd1efec06b708.jpeg"
+                  shortArticle="Trong bài viết này, tôi sẽ hướng dẫn bạn cách tạo mục lục bài viết siêu đơn giản, không phải..."
+                  image="https://file.hstatic.net/200000593853/article/blog-img-2_993d9da631724c61b538ba9210cc0b0e_grande.jpeg"
                 />
               </div>
             </div>
           </div>
-
-
-
-          <section className="section-home-intro  pt-5 text-center lh-2 my-5"
-            style={{
-              backgroundColor: "#f8f8f8"}}
-          >
-          
-            <div className="container" 
-          >
+          <section className="section-home-intro bg-secondary pt-5 text-center lh-2 my-5">
+            <div className="container">
               <div className="home-intro">
                 <div className="home-intro--titles mb-5">
-                  <h2 style={{paddingTop:"80px",fontSize:"40px"}}>Về The Swan</h2>
+                  <h2>Về The Swan</h2>
                 </div>
                 <div className="home-intro--content pb-5">
-                  <p style={{fontSize:"20px"}}>
+                  <p>
                     Mỗi một người phụ nữ đều mang trong mình nét đẹp riêng &amp;
                     xứng đáng được ngưỡng mộ, được tôn vinh và được tự tin với
                     chính con người mình. Phụ nữ luôn xứng đáng với những điều
@@ -507,22 +447,15 @@ const Home = () => {
                     sống của những giá trị hoàn mỹ xứng đáng nhất dành cho phụ
                     nữ.
                   </p>
-                  <p style={{fontSize:"25px"}}>"TRANG SỨC The Swan – CHO PHỤ NỮ LUÔN TRỌN VẸN"</p>
+                  <p>"TRANG SỨC The Swan – CHO PHỤ NỮ LUÔN TRỌN VẸN"</p>
                 </div>
               </div>
             </div>
           </section>
-
-
-
-          
-          <section className="section-home-policy text-center  "
-            style={{ padding: "70px 10px", display: "flex",justifyContent:"space-around" }} >
+          <section className="section-home-policy text-center  ">
             <div className="container">
-              <div className="row" style={{margin:"0"}}>
-
-
-                <div className="item-policy col-6 col-lg-3" >
+              <div className="row">
+                <div className="item-policy col-6 col-lg-3">
                   <div className="wrapper-media">
                     <div className="media-policy mb-3">
                       <a href="/pages/about-us">
@@ -548,8 +481,6 @@ const Home = () => {
                     <p>Hotline hỗ trợ 1900.000.XXX</p>
                   </div>
                 </div>
-
-
                 <div className="item-policy col-6 col-lg-3">
                   <div className="wrapper-media">
                     <div className="media-policy mb-3">
@@ -578,8 +509,6 @@ const Home = () => {
                     </p>
                   </div>
                 </div>
-
-
                 <div className="item-policy col-6 col-lg-3">
                   <div className="wrapper-media">
                     <div className="media-policy mb-3">
@@ -594,8 +523,6 @@ const Home = () => {
                       </a>
                     </div>
                   </div>
-
-
                   <div className="info-policy">
                     <h4 className="mb-3">
                       <a

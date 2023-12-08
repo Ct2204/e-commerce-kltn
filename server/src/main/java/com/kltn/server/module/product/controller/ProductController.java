@@ -834,7 +834,15 @@ public class ProductController {
         responseDataDto.setMessage("Get list product successfully");
         responseDataDto.setData(pageProductRes);
         return responseDataDto;
+    }
 
-
+    @GetMapping("/category")
+    public ResponseEntity<ResponseDataDto> getProductCategory() {
+        ResponseDataDto responseDataDto = new ResponseDataDto();
+        responseDataDto.setStatus(HttpStatus.OK.series().name());
+        responseDataDto.setCode(HttpStatus.OK.value());
+        responseDataDto.setMessage("Get Product category Successfully!");
+        responseDataDto.setData(this.productService.getAllProductCategory());
+        return ResponseEntity.status(HttpStatus.OK).body(responseDataDto);
     }
 }

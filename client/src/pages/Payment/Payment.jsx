@@ -1,82 +1,112 @@
 import React, { useEffect, useState } from "react";
 import "./Payment.css";
+import { useSelector } from "react-redux";
+import { checkOutWithVnpay } from "../../services/PaymentService.js";
+import { useNavigate } from "react-router-dom";
 
 const Payment = (props) => {
   const [cart, setCart] = useState([]);
+  const navigate = useNavigate()
+
+  const orderId = useSelector((state) => state.order.orderId)
+  console.log("iddddddddđ",orderId)
   useEffect(() => {
     // Lấy thông tin giỏ hàng từ Local Storage
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const storedCart = JSON.parse(localStorage.getItem("cartOrder")) || [];
     setCart(storedCart);
   }, []);
 
-  const result = {};
-  cart.forEach((item) => {
-    if (!result[item.id]) {
-      result[item.id] = { ...item };
-    } else {
-      result[item.id].quantity += item.quantity;
-      result[item.id].price += item.price;
+  const performVnPayCheckout = async () => {
+    try {
+      const responseData = await checkOutWithVnpay(orderId);
+      if (responseData.code === 200) {
+        window.location.href =responseData.data
+      }
+    } catch (error) {
+      console.error("Error during VnPay checkout:", error);
     }
-  });
-  const mergedCart = Object.values(result);
-  console.log(mergedCart);
-  const totalPrice = mergedCart.reduce((acc, product) => {
-    return acc + product.price;
+  };
+
+  
+  
+  const totalPrice = cart.reduce((acc, product) => {
+    return acc + product.price*product.quantity;
   }, 0);
-  const totalProduct = mergedCart.reduce((acc, product) => {
-    return acc + product.quantity;
-  }, 0);
+  
   return (
     <>
       <div className="address-receive">
         <div className="vtrWey"></div>
-        <div className="payment-name">
-          <div>Địa chỉ nhận hàng</div>
-          <div>Trần Văn Thiên</div>
+        <div className="payment-address">
+          <div className="payment-title">Địa chỉ nhận hàng</div>
+          <div>
+          <div className="payment-address-content">
+              <div style={{display:'flex',fontSize:"17px"}}>
+                <p className="addressName">Lê Công Thương</p>
+            <p className="addresPhone">(+84) 362002021</p>
+              </div>
+              <div>
+              <p className="address">
+                Tân hòa, Tân Thủy, Lệ Thủy, Quảng Bình
+              </p>
+            </div >
+            <a className="updateAddress">Thay đổi</a>
+              
+            </div>
+            
+           
+          </div>
         </div>
 
         <div className="product-cart mt-5">
-          <div className="d-flex mt-5">
-            <div class="jNp+ZB ktatB-">
-              <h2 class="_6HCfS6">Sản phẩm</h2>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding:"20px"
+            }}>
+            <div 
+              style={{fontSize:"25px",fontWeight:"400"}}>
+              Sản phẩm
             </div>
-            <div class="jNp+ZB _04sLFc "></div>
-            <div class="jNp+ZB text-end">Đơn giá</div>
-            <div class="jNp+ZB">Số lượng</div>
-            <div class="jNp+ZB LBqTli text-end">Thành tiền</div>
+            
+            <div 
+              style={{fontSize:"25px",fontWeight:"400"}}
+            >Đơn giá</div>
+            <div  style={{fontSize:"25px",fontWeight:"400"}}>Số lượng</div>
+            <div  style={{fontSize:"25px",fontWeight:"400"}}>Thành tiền</div>
           </div>
-          {mergedCart.map((product, idx) => (
-            <div class="_2OGC7L iyDtv7">
-              <div class="h3ONzh EOqcX3">
+          {cart.map((product, idx) => (
+            <div style={{display:"flex"}}>
+              <div style={{display:"flex"}}>
+              
+                
+                
+                <div style={{ padding: "20px" }}>
                 <img
-                  class="rTOisL"
+                  
                   alt="product image"
-                  src={product.image}
-                  width="40"
-                  height="40"
+                  src={product.url}
+                  style={{width:"60px",height:"60px"}}
                 />
+                </div>
                 <span class="oEI3Ln">
-                  <span class="gHbVhc">{product.title}</span>
+                  <span class="gHbVhc" style={{fontSize:"20px"}}>{product.title}</span>
                 </span>
               </div>
-              <div class="h3ONzh Le31ox">
-                <span class="dVLwMH">Loại: Đen,S</span>
+             
+              <div class="h3ONzh1 text-center d-flex align-items-center justify-content-center "
+              style={{paddingLeft:"40px"}}
+              >
+                {product.price}
               </div>
-              <div class="h3ONzh1 text-center d-flex align-items-center justify-content-center ">
-                ₫69.000
-              </div>
-              <div class="h3ONzh2 d-flex align-items-center justify-content-center">
+              <div class="h3ONzh2 d-flex align-items-center justify-content-center" style={{paddingLeft:"100px"}}>
                 {product.quantity}
               </div>
-              <div class="h3ONzh3 fHRPUO text-end">{product.price}</div>
+              <div class="h3ONzh2 d-flex align-items-center justify-content-center" style={{paddingLeft:"40px"}}>{product.price}</div>
             </div>
           ))}
-          <div class="ULZMSb">
-            <div class="bwwaGp iL6wsx -snVIl">
-              Tổng số tiền ({totalProduct} sản phẩm):
-            </div>
-            <div class="bwwaGp R3a05f -snVIl kMV1h4">₫{totalPrice}</div>
-          </div>
+          
         </div>
 
         <div class="checkout-payment-method-view__current checkout-payment-setting product-cart mt-5">
@@ -183,7 +213,10 @@ const Payment = (props) => {
                 </a>
               </div>
             </div>
-            <button class="stardust-button stardust-button--primary stardust-button--large apLZEG N7Du4X">
+            <button
+              class="stardust-button stardust-button--primary stardust-button--large apLZEG N7Du4X"
+              onClick={()=>{performVnPayCheckout()}}
+            >
               Đặt hàng
             </button>
           </div>

@@ -71,6 +71,30 @@ export const getProductDescription = async (id) => {
   }
 };
 
+//get list category
+export const listCategory= async () => {
+  try {
+    let url = api.url.listCategory;
+
+    const response = await httpRequest({
+      url: url,
+      method: "GET",
+    });
+    if (response.code === 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (err) {
+    const errMessage = "Error in getting products list: ";
+    console.error(errMessage, err);
+    return {
+      success: false,
+      message: errMessage,
+    };
+  }
+};
+
 
 // get product by category
 export const getProductsByCategory = async (id) => {

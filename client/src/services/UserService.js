@@ -1,4 +1,6 @@
+
 import store from "../store";
+
 import api from "./api";
 import httpRequest from "./httpRequest";
 
@@ -48,6 +50,7 @@ export const register = async (fullName, email, password, confirmPassword) => {
     return null;
   }
 };
+
 
 export const getProfileOfUser = async (id) => {
   try {
@@ -135,12 +138,15 @@ export const getAddressOfUserById = async (id) => {
 };
 
 export const postUserAddress = async (data, id) => {
+
   try {
     const token = store.getState().auth.token;
     if (!token) {
       console.error("Token is not available.");
       return null;
     }
+
+     
 
     let url = `${api.url.postAddressOfUserById}/${id}`;
     const response = await httpRequest({
@@ -179,10 +185,12 @@ export const updateAddressOfUser = async (data, id) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+
     });
     if (response.code === 200) {
       return response;
     } else {
+
       return null;
     }
   } catch (err) {

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -221,5 +222,14 @@ public class ProductServiceImpl implements ProductService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public List<com.kltn.server.module.seller.dto.ProductCategoryDto> getAllProductCategory() {
+        return this.productCategoryRepository
+                .findAll(Sort.by(Sort.Direction.ASC, "id"))
+                .stream()
+                .map(p -> new com.kltn.server.module.seller.dto.ProductCategoryDto(p.getId(), p.getTitle(), p.getParentId()))
+                .collect(Collectors.toList());
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -122,7 +123,7 @@ public class OrderServiceImpl implements OrderService {
      */
 
     @Transactional
-    public void saveOrder(CreateOrderRequestDto orderInput) {
+    public HashMap<String,String> saveOrder(CreateOrderRequestDto orderInput) {
         List<CartItem> listCartItem = this.cartItemRepository.GetCartItemSelected(orderInput.getUserId(),
                 orderInput.getCartItemId());
         System.out.println(listCartItem);
@@ -158,6 +159,11 @@ public class OrderServiceImpl implements OrderService {
                     throw new ResourceNotFoundException("CartItem with " + item.getId() + " invalid please check !");
                 }
             }
+            HashMap<String, String> dataHashmap = new HashMap<>();
+
+            dataHashmap.put("order_id", String.valueOf(order.getId()));
+
+            return dataHashmap;
         }
     }
 
