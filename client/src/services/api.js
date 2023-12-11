@@ -12,7 +12,7 @@ const url = {
   updateProfile: "",
   uploadPicture: "",
   getProfile: "",
-  
+
   //product
   products: "/product/list-product",
   productdetail: "/product/product-information",
@@ -22,10 +22,10 @@ const url = {
   productoptiondetail: "product/product-option-detail",
   productitem: "product/product-item",
   productitems: "/product/product-items",
-  listCategory:"/product/category",
+  listCategory: "/product/category",
   //Cart
   createCart: "/cart-items",
-  updateCartItem:"/cart-items/update-all",
+  updateCartItem: "/cart-items/update-all",
   getCartItem: "/cart-items",
   deleteCartItem: "/cart-items",
   //Order
@@ -34,13 +34,13 @@ const url = {
   getOrderById: "/order/by-order",
   getOrderByStatus: "/order/by-status",
   getOrderByUserId: "/order/by-user",
-  getOrderDetailByOrderId:"/order/get-order-detail-by-order",
+  getOrderDetailByOrderId: "/order/get-order-detail-by-order",
   //Payment
   checkOutWithVnpay: "/order/payment/check-out-with-vnpay",
   checkOutWithPaypal: "/order/payment/check-out-with-pay-pal",
   getPaymentInfo: "/order/payment/get/payment/info",
   paymentSuccess: "/order/payment/success",
-  paymentCancel:"/order/payment/cancel",
+  paymentCancel: "/order/payment/cancel",
   //Admin
   postProductSeller: "/seller/product/add",
   getProductSellerById: "/seller/product",
@@ -57,6 +57,8 @@ const url = {
   postAddressOfUserById: "/users/address/add",
   updateAddressOfUserById: "/users/address/update",
   deleteAddressOfUserById: "/users/address/delete",
+
+  getRatingOfProduct: "/rating",
 };
 
 const instance = axios.create({

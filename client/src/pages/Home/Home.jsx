@@ -20,7 +20,6 @@ const Home = () => {
   const [productByCategoryNhan, setProductByCategoryNhan] = useState([]);
   const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
 
-
   const containerRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const scrollLeft = () => {
@@ -77,9 +76,9 @@ const Home = () => {
   const numberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-  
-  const isLogin = useSelector((state) => state.auth.isLoggedIn)
-  console.log("có dang nhập",isLogin)
+
+  const isLogin = useSelector((state) => state.auth.isLoggedIn);
+  console.log("có dang nhập", isLogin);
 
   return (
     <>
@@ -124,8 +123,9 @@ const Home = () => {
           </svg>
         </button>
       </div>
-      <div className="container-fuild text-center"
-        style={{marginBottom:"200px"}}
+      <div
+        className="container-fuild text-center"
+        style={{ marginBottom: "200px" }}
       >
         <div className="row mx-5">
           <div className="col image-hover">
@@ -143,12 +143,9 @@ const Home = () => {
             />
           </div>
         </div>
-        <div className="row m-5 "
-      
-        >
+        <div className="row m-5 ">
           <div className="col ">
             <h4>
-             
               <a
                 className="title"
                 href="https://the-swan.myharavan.com/collections/dong-ho"
@@ -199,45 +196,49 @@ const Home = () => {
         </div>
       </div>
 
-
       <div className="sectionHeading text-center m-5">
         <h3
-          style={{ fontSize: "45px", fontFamily: "Tinos, sans-serif", fontWeight: "400" }}
+          style={{
+            fontSize: "45px",
+            fontFamily: "Tinos, sans-serif",
+            fontWeight: "400",
+          }}
         >
-          Danh mục sản phẩm</h3>{" "}
+          Danh mục sản phẩm
+        </h3>{" "}
       </div>
 
       {/* Category */}
       <div className="product-container" ref={containerRef}>
-      <div className="product-item">
-        <img
-          src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_1.jpg?v=41"
-          alt="Product 1"
-        />
-        <p className="product-title">Đồng hồ nam</p>
-      </div>
-      <div className="product-item">
-        <img
-          src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_2.jpg?v=41"
-          alt="Product 2"
-        />
-        <p className="product-title">Nhẫn</p>
-      </div>
-      <div className="product-item">
-        <img
-          src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_3.jpg?v=41"
-          alt="Product 3"
-        />
-        <p className="product-title">Vòng tay</p>
-      </div>
-      <div className="product-item">
-        <img
-          src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_5.jpg?v=41"
-          alt="Product 4"
-        />
-        <p className="product-title">Hoa tai</p>
+        <div className="product-item">
+          <img
+            src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_1.jpg?v=41"
+            alt="Product 1"
+          />
+          <p className="product-title">Đồng hồ nam</p>
         </div>
-        
+        <div className="product-item">
+          <img
+            src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_2.jpg?v=41"
+            alt="Product 2"
+          />
+          <p className="product-title">Nhẫn</p>
+        </div>
+        <div className="product-item">
+          <img
+            src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_3.jpg?v=41"
+            alt="Product 3"
+          />
+          <p className="product-title">Vòng tay</p>
+        </div>
+        <div className="product-item">
+          <img
+            src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_5.jpg?v=41"
+            alt="Product 4"
+          />
+          <p className="product-title">Hoa tai</p>
+        </div>
+
         {/* <div className="scroll-buttons">
         <button className="left-button" onClick={scrollLeft} >
           Left
@@ -246,15 +247,17 @@ const Home = () => {
           Right
         </button>
       </div> */}
-    </div>
-     
+      </div>
 
       {/* Sản phẩm của đồng hồ */}
       {isLoading ? (
         <h1>Đang load dữ liệu</h1>
       ) : (
         <div classname="container-fuild">
-          <h3 className="text-center my-5" style={{fontSize:"45px",padding:"20px"}}>
+          <h3
+            className="text-center my-5"
+            style={{ fontSize: "45px", padding: "20px" }}
+          >
             <a>Đồng hồ</a>
           </h3>
           <div className="row mx-5 ">
@@ -280,12 +283,10 @@ const Home = () => {
 
       {/* Xem thêm sản phẩm đồng hồ */}
       <div classname="container-fuild">
-        <div className="wraplist-ctas text-center"
-          >
+        <div className="wraplist-ctas text-center">
           <a
             href="/collections/trang-suc"
-            className="btn-collection button btnwhite dark mx-2" 
-
+            className="btn-collection button btnwhite dark mx-2"
           >
             Xem thêm sản phẩm
             <svg
@@ -300,110 +301,110 @@ const Home = () => {
           </a>
         </div>
 
-
-        <div style={{paddingTop:"100px"}}>
-        <div className="container text-center mt-5" style={{paddingBottom:"40px"}}>
-          <div className="row ">
-            <div className="col">
-              <img
-                width="100%"
-                height="328.65"
-                src="https://theme.hstatic.net/200000593853/1001115480/14/img_banner_bottom_desktop_1.jpg?v=41"
-                alt=""
-              />
-            </div>
-            <div className="col">
-              <div className="info-banner-bottom">
-                <div className="title-text-banner">
-                  <h4>
-                    <a
-                      className="text-decoration-none text-dark "
-                      href="/collections/all"
+        <div style={{ paddingTop: "100px" }}>
+          <div
+            className="container text-center mt-5"
+            style={{ paddingBottom: "40px" }}
+          >
+            <div className="row ">
+              <div className="col">
+                <img
+                  width="100%"
+                  height="328.65"
+                  src="https://theme.hstatic.net/200000593853/1001115480/14/img_banner_bottom_desktop_1.jpg?v=41"
+                  alt=""
+                />
+              </div>
+              <div className="col">
+                <div className="info-banner-bottom">
+                  <div className="title-text-banner">
+                    <h4>
+                      <a
+                        className="text-decoration-none text-dark "
+                        href="/collections/all"
                         aria-label="ĐỒ TRANG SỨC ĐỘC QUYỀN"
-                      style={{fontSize:"50px"}}
-                    >
-                      ĐỒ TRANG SỨC ĐỘC QUYỀN
-                    </a>
-                  </h4>
-                </div>
-                  <p 
-                  style={{fontSize:"20px",padding:"10px"}}>
-                    
-                  Ngày nay, thế giới trang sức nam, nữ chính hãng rất đẹp, đa
-                  dạng với nhiều kiểu dáng, chất liệu khác nhau (vàng, bạc, đính
-                  đá), từ vòng tay, hoa tai, dây chuyền cho đến cả nhẫn.
-                </p>
-                <div className="action-banner-bottom">
-                  <a
-                    className="btn-home-banner"
-                    href="/collections/all"
-                    aria-label="Đồ trang sức độc quyền"
-                  >
-                    Xem ngay
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div className="container text-center">
-          <div className="row align-items-center">
-            <div className="col">
-              <div className="info-banner-bottom">
-                <div className="title-text-banner">
-                  <h4>
+                        style={{ fontSize: "50px" }}
+                      >
+                        ĐỒ TRANG SỨC ĐỘC QUYỀN
+                      </a>
+                    </h4>
+                  </div>
+                  <p style={{ fontSize: "20px", padding: "10px" }}>
+                    Ngày nay, thế giới trang sức nam, nữ chính hãng rất đẹp, đa
+                    dạng với nhiều kiểu dáng, chất liệu khác nhau (vàng, bạc,
+                    đính đá), từ vòng tay, hoa tai, dây chuyền cho đến cả nhẫn.
+                  </p>
+                  <div className="action-banner-bottom">
                     <a
-                      className="text-decoration-none text-dark "
+                      className="btn-home-banner"
                       href="/collections/all"
-                        aria-label="Đồ trang sức độc quyền"
-                        style={{fontSize:"50px"}}
+                      aria-label="Đồ trang sức độc quyền"
                     >
-                      VÒNG TAY, LẮC TAY
+                      Xem ngay
                     </a>
-                  </h4>
-                </div>
-                <p style={{fontSize:"20px",padding:"10px"}}>
-                  Với chất liệu làm từ thép không gỉ 316L, đi kèm với đó là lớp
-                  mạ vàng hồng thời thượng bên ngoài (tùy phiên bản), những
-                  chiếc vòng tay, lắc tay đến từ thương hiệu Daniel Wellington
-                  đã tạo nên cơn sốt không hề nhỏ trên thị trường kể từ thời
-                  điểm ra mắt.
-                </p>
-                <div className="action-banner-bottom">
-                  <a
-                    className="btn-home-banner"
-                    href="/collections/all"
-                    aria-label="Đồ trang sức độc quyền"
-                  >
-                    Xem ngay
-                  </a>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="col">
-              <img
-                width="100%"
-                height="328.65"
-                src="https://theme.hstatic.net/200000593853/1001115480/14/img_banner_bottom_desktop_1.jpg?v=41"
-                alt=""
-              />
+          </div>
+
+          <div className="container text-center">
+            <div className="row align-items-center">
+              <div className="col">
+                <div className="info-banner-bottom">
+                  <div className="title-text-banner">
+                    <h4>
+                      <a
+                        className="text-decoration-none text-dark "
+                        href="/collections/all"
+                        aria-label="Đồ trang sức độc quyền"
+                        style={{ fontSize: "50px" }}
+                      >
+                        VÒNG TAY, LẮC TAY
+                      </a>
+                    </h4>
+                  </div>
+                  <p style={{ fontSize: "20px", padding: "10px" }}>
+                    Với chất liệu làm từ thép không gỉ 316L, đi kèm với đó là
+                    lớp mạ vàng hồng thời thượng bên ngoài (tùy phiên bản),
+                    những chiếc vòng tay, lắc tay đến từ thương hiệu Daniel
+                    Wellington đã tạo nên cơn sốt không hề nhỏ trên thị trường
+                    kể từ thời điểm ra mắt.
+                  </p>
+                  <div className="action-banner-bottom">
+                    <a
+                      className="btn-home-banner"
+                      href="/collections/all"
+                      aria-label="Đồ trang sức độc quyền"
+                    >
+                      Xem ngay
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div className="col">
+                <img
+                  width="100%"
+                  height="328.65"
+                  src="https://theme.hstatic.net/200000593853/1001115480/14/img_banner_bottom_desktop_1.jpg?v=41"
+                  alt=""
+                />
+              </div>
             </div>
           </div>
         </div>
-        </div>
-        
+
         {isLoading ? (
           <h1>Đang load dữ liệu</h1>
         ) : (
           <div classname="container-fuild">
-              <h3 className="text-center my-5"
-                style={{fontSize:"50px",padding:"20px"}}
-              >
+            <h3
+              className="text-center my-5"
+              style={{ fontSize: "50px", padding: "20px" }}
+            >
               <a>Trang sức</a>
             </h3>
-            <div className="row mx-5">
+            <div className="row  mx-5">
               {productByCategoryNhan.map((aProducts, idx) => (
                 <div
                   key={idx}
@@ -418,7 +419,6 @@ const Home = () => {
                     priceSale={numberWithCommas(aProducts.price)}
                     percentDiscount={aProducts.percentDiscount}
                   />
-                
                 </div>
               ))}
             </div>
@@ -442,22 +442,23 @@ const Home = () => {
           </a>
         </div>
 
-
-
-        <div className="container-fuild" style={{paddingTop:"50px"}}>
+        <div className="container-fuild" style={{ paddingTop: "50px" }}>
           <div className="sectionHeading text-center my-5">
             <h3>
-              <a className="text-decoration-none text-body" href="/blogs/news"
-              style={{fontSize:"50px",padding:"10px"}}
-
+              <a
+                className="text-decoration-none text-body"
+                href="/blogs/news"
+                style={{ fontSize: "50px", padding: "10px" }}
               >
                 Tin tức nổi bật
               </a>
             </h3>
           </div>
 
-
-          <div className="container-fuild text-center"style={{marginBottom:"100px"}}>
+          <div
+            className="container-fuild text-center"
+            style={{ marginBottom: "100px" }}
+          >
             <div className="row mx-5">
               <div className="col">
                 <GuideCart
@@ -483,21 +484,21 @@ const Home = () => {
             </div>
           </div>
 
-
-
-          <section className="section-home-intro  pt-5 text-center lh-2 my-5"
+          <section
+            className="section-home-intro  pt-5 text-center lh-2 my-5"
             style={{
-              backgroundColor: "#f8f8f8"}}
+              backgroundColor: "#f8f8f8",
+            }}
           >
-          
-            <div className="container" 
-          >
+            <div className="container">
               <div className="home-intro">
                 <div className="home-intro--titles mb-5">
-                  <h2 style={{paddingTop:"80px",fontSize:"40px"}}>Về The Swan</h2>
+                  <h2 style={{ paddingTop: "80px", fontSize: "40px" }}>
+                    Về The Swan
+                  </h2>
                 </div>
                 <div className="home-intro--content pb-5">
-                  <p style={{fontSize:"20px"}}>
+                  <p style={{ fontSize: "20px" }}>
                     Mỗi một người phụ nữ đều mang trong mình nét đẹp riêng &amp;
                     xứng đáng được ngưỡng mộ, được tôn vinh và được tự tin với
                     chính con người mình. Phụ nữ luôn xứng đáng với những điều
@@ -507,22 +508,25 @@ const Home = () => {
                     sống của những giá trị hoàn mỹ xứng đáng nhất dành cho phụ
                     nữ.
                   </p>
-                  <p style={{fontSize:"25px"}}>"TRANG SỨC The Swan – CHO PHỤ NỮ LUÔN TRỌN VẸN"</p>
+                  <p style={{ fontSize: "25px" }}>
+                    "TRANG SỨC The Swan – CHO PHỤ NỮ LUÔN TRỌN VẸN"
+                  </p>
                 </div>
               </div>
             </div>
           </section>
 
-
-
-          
-          <section className="section-home-policy text-center  "
-            style={{ padding: "70px 10px", display: "flex",justifyContent:"space-around" }} >
+          <section
+            className="section-home-policy text-center  "
+            style={{
+              padding: "70px 10px",
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
             <div className="container">
-              <div className="row" style={{margin:"0"}}>
-
-
-                <div className="item-policy col-6 col-lg-3" >
+              <div className="row" style={{ margin: "0" }}>
+                <div className="item-policy col-6 col-lg-3">
                   <div className="wrapper-media">
                     <div className="media-policy mb-3">
                       <a href="/pages/about-us">
@@ -548,7 +552,6 @@ const Home = () => {
                     <p>Hotline hỗ trợ 1900.000.XXX</p>
                   </div>
                 </div>
-
 
                 <div className="item-policy col-6 col-lg-3">
                   <div className="wrapper-media">
@@ -579,7 +582,6 @@ const Home = () => {
                   </div>
                 </div>
 
-
                 <div className="item-policy col-6 col-lg-3">
                   <div className="wrapper-media">
                     <div className="media-policy mb-3">
@@ -594,7 +596,6 @@ const Home = () => {
                       </a>
                     </div>
                   </div>
-
 
                   <div className="info-policy">
                     <h4 className="mb-3">

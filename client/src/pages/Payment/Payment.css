@@ -348,13 +348,11 @@ h3.bwwaGp.iL6wsx {
   color: #fff;
 }
 
-
 /* payment content */
 .payment-address {
-  padding: 20px;
+  padding: 8px;
   width: 800px;
   height: 100px;
- 
 }
 
 .payment-title {
@@ -371,11 +369,7 @@ h3.bwwaGp.iL6wsx {
 .addressName {
   padding-right: 10px;
 }
-.updateAddress{
+.updateAddress {
   text-decoration: none;
   cursor: pointer;
 }
-
-
-
-
