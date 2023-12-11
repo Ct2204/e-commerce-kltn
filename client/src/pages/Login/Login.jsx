@@ -6,6 +6,7 @@ import Input from "../../components/Input";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { log } from "../../store/reducers/auth";
+import { toast } from "react-toastify";
 
 const Login = (props) => {
   const [message, setMessage] = React.useState("");
@@ -45,15 +46,12 @@ const Login = (props) => {
           userInfo: responseData.data,
         })
       );
-      
-      
-      navigate("/dashboard");
+      navigate("/");
     } else {
       setMessage(responseData.message);
     }
     console.log(responseData);
   };
-  
 
   const formRegisterSubmitHandler = async (e) => {
     e.preventDefault();
@@ -71,7 +69,7 @@ const Login = (props) => {
 
     if (responseData.code === 200) {
       setMessage(responseData.message);
-      navigate("/home");
+      toast.success(responseData.message);
     } else {
       setMessage(responseData.message);
     }

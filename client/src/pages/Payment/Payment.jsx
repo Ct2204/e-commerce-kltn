@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 const Payment = (props) => {
   const [cart, setCart] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const orderId = useSelector((state) => state.order.orderId)
-  console.log("iddddddddđ",orderId)
+  const orderId = useSelector((state) => state.order.orderId);
+  console.log("iddddddddđ", orderId);
   useEffect(() => {
     // Lấy thông tin giỏ hàng từ Local Storage
     const storedCart = JSON.parse(localStorage.getItem("cartOrder")) || [];
@@ -20,19 +20,17 @@ const Payment = (props) => {
     try {
       const responseData = await checkOutWithVnpay(orderId);
       if (responseData.code === 200) {
-        window.location.href =responseData.data
+        window.location.href = responseData.data;
       }
     } catch (error) {
       console.error("Error during VnPay checkout:", error);
     }
   };
 
-  
-  
   const totalPrice = cart.reduce((acc, product) => {
-    return acc + product.price*product.quantity;
+    return acc + product.price * product.quantity;
   }, 0);
-  
+
   return (
     <>
       <div className="address-receive">
@@ -40,73 +38,63 @@ const Payment = (props) => {
         <div className="payment-address">
           <div className="payment-title">Địa chỉ nhận hàng</div>
           <div>
-          <div className="payment-address-content">
-              <div style={{display:'flex',fontSize:"17px"}}>
+            <div className="payment-address-content">
+              <div style={{ display: "flex", fontSize: "17px" }}>
                 <p className="addressName">Lê Công Thương</p>
-            <p className="addresPhone">(+84) 362002021</p>
+                <p className="addresPhone">(+84) 362002021</p>
               </div>
               <div>
-              <p className="address">
-                Tân hòa, Tân Thủy, Lệ Thủy, Quảng Bình
-              </p>
-            </div >
-            <a className="updateAddress">Thay đổi</a>
-              
+                <p className="address">
+                  Tân hòa, Tân Thủy, Lệ Thủy, Quảng Bình
+                </p>
+              </div>
+              <a className="updateAddress">Thay đổi</a>
             </div>
-            
-           
           </div>
         </div>
-
-        <div className="product-cart mt-5">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              padding:"20px"
-            }}>
-            <div 
-              style={{fontSize:"25px",fontWeight:"400"}}>
-              Sản phẩm
-            </div>
-            
-            <div 
-              style={{fontSize:"25px",fontWeight:"400"}}
-            >Đơn giá</div>
-            <div  style={{fontSize:"25px",fontWeight:"400"}}>Số lượng</div>
-            <div  style={{fontSize:"25px",fontWeight:"400"}}>Thành tiền</div>
-          </div>
-          {cart.map((product, idx) => (
-            <div style={{display:"flex"}}>
-              <div style={{display:"flex"}}>
-              
-                
-                
-                <div style={{ padding: "20px" }}>
-                <img
-                  
-                  alt="product image"
-                  src={product.url}
-                  style={{width:"60px",height:"60px"}}
-                />
-                </div>
-                <span class="oEI3Ln">
-                  <span class="gHbVhc" style={{fontSize:"20px"}}>{product.title}</span>
-                </span>
-              </div>
-             
-              <div class="h3ONzh1 text-center d-flex align-items-center justify-content-center "
-              style={{paddingLeft:"40px"}}
-              >
-                {product.price}
-              </div>
-              <div class="h3ONzh2 d-flex align-items-center justify-content-center" style={{paddingLeft:"100px"}}>
-                {product.quantity}
-              </div>
-              <div class="h3ONzh2 d-flex align-items-center justify-content-center" style={{paddingLeft:"40px"}}>{product.price}</div>
-            </div>
-          ))}
-          
+        <div className="mt-5">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col" className="mx-2">
+                  Sản phẩm
+                </th>
+                <th scope="col">Đơn giá</th>
+                <th scope="col">Số lượng</th>
+                <th scope="col">Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.map((product, idx) => (
+                <tr key={idx}>
+                  <td>
+                    <div className="d-flex">
+                      <img
+                        className="mx-2"
+                        alt="product image"
+                        src={product.url}
+                        style={{ width: "60px", height: "60px" }}
+                      />
+                      <div>
+                        <p className="mt-3">{product.title}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="mt-3">{product.price}</div>
+                  </td>
+                  <td>
+                    <div className="mt-3">{product.quantity}</div>
+                  </td>
+                  <td>
+                    <div className="mt-3">
+                      {product.price * product.quantity}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         <div class="checkout-payment-method-view__current checkout-payment-setting product-cart mt-5">
@@ -215,7 +203,9 @@ const Payment = (props) => {
             </div>
             <button
               class="stardust-button stardust-button--primary stardust-button--large apLZEG N7Du4X"
-              onClick={()=>{performVnPayCheckout()}}
+              onClick={() => {
+                performVnPayCheckout();
+              }}
             >
               Đặt hàng
             </button>

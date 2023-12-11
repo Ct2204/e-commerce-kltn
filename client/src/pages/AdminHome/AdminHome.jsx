@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./AdminHome.css";
-// import "@fortawesome/fontawesome-free/css/all.min.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import {
   getProductDetail,
   getProductsByCategory,
@@ -10,7 +10,6 @@ import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import { useSelector, useDispatch } from "react-redux";
-
 
 import { logout } from "../../store/reducers/auth";
 import { toast } from "react-toastify";
@@ -27,7 +26,6 @@ import {
 } from "../../services/productSeller";
 
 import { logoutAsync } from "../../store/reducers/auth.js";
-
 
 import { Accordion, Pagination } from "react-bootstrap";
 
@@ -287,7 +285,7 @@ const AdminHome = (props) => {
   console.log(description);
 
   const userInfor = useSelector((state) => state.auth.userInfo);
-  console.log("hello",userInfor.user_id);
+  console.log("hello", userInfor.user_id);
 
   return (
     <div className="d-flex row my-override-class">
@@ -629,10 +627,8 @@ const AdminHome = (props) => {
                   Admin Account
                 </span>
                 <img
-
                   onClick={() => dispatch(logoutAsync())}
                   class="img-profile rounded-circle"
-
                   src="#"
                 />
               </a>
