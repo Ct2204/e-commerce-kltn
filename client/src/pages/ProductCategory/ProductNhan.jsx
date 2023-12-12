@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react";
-import "./Product.css";
+import "../Product/Product.css";
 import ProductCart from "../../components/ProductCart";
 import { FaFilter } from "react-icons/fa";
 import Dropdown from "react-bootstrap/Dropdown";
 import { getProductsByCategory } from "../../services/product";
 
-const Product = () => {
-  const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
+const ProductNhan = () => {
+  const [productByCategoryNhan, setProductByCategoryNhan] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const numberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const handleProductsByCategoryDongHo = async () => {
+  const handleProductsByCategoryNhan = async () => {
     setIsLoading(true);
-    const responseData = await getProductsByCategory(1);
-    setProductByCategoryDongHo(responseData.listProducts);
+    const responseData = await getProductsByCategory(2);
+    setProductByCategoryNhan(responseData.listProducts);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    handleProductsByCategoryDongHo();
+    handleProductsByCategoryNhan();
   }, []);
   return (
     <>
@@ -108,10 +108,10 @@ const Product = () => {
       </div>
       <div classname="container-fuild">
         <h3 className="text-center my-5">
-          <a>Đồng hồ</a>
+          <a>Nhẫn</a>
         </h3>
         <div className="row mx-5 ">
-          {productByCategoryDongHo.map((aProducts, idx) => (
+          {productByCategoryNhan.map((aProducts, idx) => (
             <div
               key={idx}
               className="col-3 product-card"
@@ -151,4 +151,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default ProductNhan;

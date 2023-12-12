@@ -3,7 +3,6 @@ import api from "./api";
 import httpRequest from "./httpRequest";
 import store from "../store";
 
-
 //get product detail
 export const getProductDetail = async (id) => {
   try {
@@ -49,7 +48,6 @@ export const getProductList = async () => {
   }
 };
 
-
 // get product description
 export const getProductDescription = async (id) => {
   try {
@@ -72,7 +70,7 @@ export const getProductDescription = async (id) => {
 };
 
 //get list category
-export const listCategory= async () => {
+export const listCategory = async () => {
   try {
     let url = api.url.listCategory;
 
@@ -95,11 +93,10 @@ export const listCategory= async () => {
   }
 };
 
-
 // get product by category
 export const getProductsByCategory = async (id) => {
   try {
-    let url = `${api.url.productsbycategory}/${id}`;
+    let url = `${api.url.productsbycategory}/${id}?perPage=100&currentPage=1`;
 
     const response = await httpRequest({
       url: url,
@@ -116,7 +113,6 @@ export const getProductsByCategory = async (id) => {
     return null;
   }
 };
-
 
 //get product option
 export const getProductOption = async (productId) => {
@@ -139,12 +135,14 @@ export const getProductOption = async (productId) => {
   }
 };
 
-
 //get product option detail
-export const getProductOptionDetail = async (productId, productOptionDetailId) => {
+export const getProductOptionDetail = async (
+  productId,
+  productOptionDetailId
+) => {
   try {
     let url = `${api.url.productoptiondetail}/${productId}/${productOptionDetailId}`;
-    console.log("url",url)
+    console.log("url", url);
     const response = await httpRequest({
       url: url,
       method: "GET",
@@ -182,7 +180,6 @@ export const getProductItem = async (id) => {
   }
 };
 
-
 //get product items
 export const getProductItems = async (id) => {
   try {
@@ -204,4 +201,51 @@ export const getProductItems = async (id) => {
   }
 };
 
+export const getRatingOfProduct = async (pageNum, pageLength, id) => {
+  try {
+    const token = store.getState().auth.token;
+    if (!token) {
+      console.error("Token is not available.");
+      return null;
+    }
+    const queryString = `${id}?perPage=${pageLength}&currentPage=${pageNum}`;
 
+    let url = `${api.url.getRatingOfProduct}/${queryString}`;
+    const response = await httpRequest({
+      url: url,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.code === 200) {
+      return response;
+    } else {
+      return response;
+    }
+  } catch (err) {
+    const errMessage = "Error in get description: ";
+    console.error(errMessage, err);
+    return null;
+  }
+};
+
+export const getProductsByCategory2 = async (id) => {
+  try {
+    let url = `${api.url.productsbycategory}/${id}?perPage=4&currentPage=1`;
+
+    const response = await httpRequest({
+      url: url,
+      method: "GET",
+    });
+    if (response.code === 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (err) {
+    const errMessage = "Error in getting productdetail: ";
+    console.error(errMessage, err);
+    return null;
+  }
+};

@@ -13,7 +13,7 @@ import {
 } from "../../services/product";
 import { useSelector } from "react-redux";
 
-const Home = () => {
+const ProductCategory = () => {
   const [products, setProducts] = useState([]);
   const [productDetail, setProductDetail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -62,9 +62,9 @@ const Home = () => {
   const numberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-  
-  const isLogin = useSelector((state) => state.auth.isLoggedIn)
-  console.log("có dang nhập",isLogin)
+
+  const isLogin = useSelector((state) => state.auth.isLoggedIn);
+  console.log("có dang nhập", isLogin);
 
   return (
     <>
@@ -374,7 +374,6 @@ const Home = () => {
                     priceSale={numberWithCommas(aProducts.price)}
                     percentDiscount={aProducts.percentDiscount}
                   />
-                
                 </div>
               ))}
             </div>
@@ -570,4 +569,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default ProductCategory;

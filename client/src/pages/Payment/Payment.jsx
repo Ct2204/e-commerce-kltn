@@ -1,37 +1,84 @@
 import React, { useEffect, useState } from "react";
 import "./Payment.css";
 import { useSelector } from "react-redux";
-import { checkOutWithVnpay } from "../../services/PaymentService.js";
+import { checkOutWithPaypal, checkOutWithVnpay } from "../../services/PaymentService.js";
 import { useNavigate } from "react-router-dom";
+import { getOrderById } from "../../services/OrderService.js";
 
 const Payment = (props) => {
-  const [cart, setCart] = useState([]);
+
+  const [orderProduct,setOrderProduct] = useState([])
+  const [paymentMethod,setPaymentMethod] = useState("")
   const navigate = useNavigate()
 
-  const orderId = useSelector((state) => state.order.orderId)
-  console.log("iddddddddđ",orderId)
+  const orderId = useSelector((state) => state.order.orderId);
+
+
+
   useEffect(() => {
-    // Lấy thông tin giỏ hàng từ Local Storage
-    const storedCart = JSON.parse(localStorage.getItem("cartOrder")) || [];
-    setCart(storedCart);
-  }, []);
+    handleToGetProductOrder();
+  },[])
+
+  const handleToGetProductOrder = async () => {
+    const responseData = await getOrderById(orderId);
+    setOrderProduct(responseData)
+    console.log("order:",responseData)
+  }
+
+ 
 
   const performVnPayCheckout = async () => {
     try {
       const responseData = await checkOutWithVnpay(orderId);
       if (responseData.code === 200) {
-        window.location.href =responseData.data
+        window.location.href = responseData.data;
       }
     } catch (error) {
       console.error("Error during VnPay checkout:", error);
     }
   };
 
+  const performPaypalCheckout = async () => {
+    try {
+      const responseData = await checkOutWithPaypal(orderId);
+      if (responseData.code === 200) {
+        window.location.href =responseData.data
+      }
+    } catch (error) {
+      console.error("Error during Papal checkout:", error);
+    }
+  };
+
+  const payment = () => {
+    switch (paymentMethod) {
+      case "VnPay":
+        performVnPayCheckout();
+        break;
+      case "Paypal":
+        performPaypalCheckout();
+        break;
+      case "ThanhToanKhiNhanHang":
+        //handleCashOnDelivery();
+        console.log("nhan hang");
+        break;
+      default:
+        // Xử lý các trường hợp khác hoặc cung cấp một hành động mặc định
+        break;
+    }
+  
+  }
+
   
   
-  const totalPrice = cart.reduce((acc, product) => {
-    return acc + product.price*product.quantity;
+  const totalPrice = orderProduct.reduce((acc, product) => {
+    return acc + product.price * product.quantity;
   }, 0);
+
+
+  const numberWithCommas = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+  console.log(paymentMethod)
   
   return (
     <>
@@ -40,128 +87,85 @@ const Payment = (props) => {
         <div className="payment-address">
           <div className="payment-title">Địa chỉ nhận hàng</div>
           <div>
-          <div className="payment-address-content">
-              <div style={{display:'flex',fontSize:"17px"}}>
+            <div className="payment-address-content">
+              <div style={{ display: "flex", fontSize: "17px" }}>
                 <p className="addressName">Lê Công Thương</p>
-            <p className="addresPhone">(+84) 362002021</p>
+                <p className="addresPhone">(+84) 362002021</p>
               </div>
               <div>
-              <p className="address">
-                Tân hòa, Tân Thủy, Lệ Thủy, Quảng Bình
-              </p>
-            </div >
-            <a className="updateAddress">Thay đổi</a>
-              
+                <p className="address">
+                  Tân hòa, Tân Thủy, Lệ Thủy, Quảng Bình
+                </p>
+              </div>
+              <a className="updateAddress">Thay đổi</a>
             </div>
-            
-           
           </div>
         </div>
-
-        <div className="product-cart mt-5">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              padding:"20px"
-            }}>
-            <div 
-              style={{fontSize:"25px",fontWeight:"400"}}>
-              Sản phẩm
-            </div>
-            
-            <div 
-              style={{fontSize:"25px",fontWeight:"400"}}
-            >Đơn giá</div>
-            <div  style={{fontSize:"25px",fontWeight:"400"}}>Số lượng</div>
-            <div  style={{fontSize:"25px",fontWeight:"400"}}>Thành tiền</div>
-          </div>
-          {cart.map((product, idx) => (
-            <div style={{display:"flex"}}>
-              <div style={{display:"flex"}}>
-              
-                
-                
-                <div style={{ padding: "20px" }}>
-                <img
-                  
-                  alt="product image"
-                  src={product.url}
-                  style={{width:"60px",height:"60px"}}
-                />
-                </div>
-                <span class="oEI3Ln">
-                  <span class="gHbVhc" style={{fontSize:"20px"}}>{product.title}</span>
-                </span>
-              </div>
-             
-              <div class="h3ONzh1 text-center d-flex align-items-center justify-content-center "
-              style={{paddingLeft:"40px"}}
-              >
-                {product.price}
-              </div>
-              <div class="h3ONzh2 d-flex align-items-center justify-content-center" style={{paddingLeft:"100px"}}>
-                {product.quantity}
-              </div>
-              <div class="h3ONzh2 d-flex align-items-center justify-content-center" style={{paddingLeft:"40px"}}>{product.price}</div>
-            </div>
-          ))}
-          
+        <div className="mt-5">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col" className="mx-2">
+                  Sản phẩm
+                </th>
+                <th scope="col">Đơn giá</th>
+                <th scope="col">Số lượng</th>
+                <th scope="col">Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orderProduct.map((product, idx) => (
+                <tr key={idx}>
+                  <td>
+                    <div className="d-flex">
+                      <img
+                        className="mx-2"
+                        alt="product image"
+                        src={product.url}
+                        style={{ width: "60px", height: "60px" }}
+                      />
+                      <div>
+                        <p className="mt-3">{product.title}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="mt-3">{numberWithCommas(product.price)}</div>
+                  </td>
+                  <td>
+                    <div className="mt-3">{product.quantity}</div>
+                  </td>
+                  <td>
+                    <div className="mt-3">
+                      {numberWithCommas(product.price * product.quantity)}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         <div class="checkout-payment-method-view__current checkout-payment-setting product-cart mt-5">
-          <div class="checkout-payment-method-view__current-title">
+          <div class="checkout-payment-method-view__current-title"
+           >
             Phương thức thanh toán
           </div>
           <div class="checkout-payment-setting__payment-methods-tab">
             <div role="radiogroup">
-              <span>
-                <button
-                  class="product-variation product-variation--selected"
-                  tabindex="0"
-                  role="radio"
-                  aria-label="Ví ShopeePay"
-                  aria-disabled="false"
-                  aria-checked="true"
-                >
-                  Ví ShopeePay
-                  <div class="product-variation__tick">
-                    <svg
-                      enable-background="new 0 0 12 12"
-                      viewBox="0 0 12 12"
-                      x="0"
-                      y="0"
-                      class="shopee-svg-icon icon-tick-bold"
-                    >
-                      <g>
-                        <path d="m5.2 10.9c-.2 0-.5-.1-.7-.2l-4.2-3.7c-.4-.4-.5-1-.1-1.4s1-.5 1.4-.1l3.4 3 5.1-7c .3-.4 1-.5 1.4-.2s.5 1 .2 1.4l-5.7 7.9c-.2.2-.4.4-.7.4 0-.1 0-.1-.1-.1z"></path>
-                      </g>
-                    </svg>
-                  </div>
-                </button>
-              </span>
+            
+             
               <span>
                 <button
                   class="product-variation product-variation--disabled"
                   tabindex="0"
                   role="radio"
-                  aria-label="Apple Pay"
+                  aria-label="Vnpay"
                   aria-disabled="true"
                   aria-checked="false"
+                  onClick={() => { setPaymentMethod("VnPay") } }
                 >
-                  Apple Pay
-                </button>
-              </span>
-              <span>
-                <button
-                  class="product-variation product-variation--disabled"
-                  tabindex="0"
-                  role="radio"
-                  aria-label="Thẻ Tín dụng/Ghi nợ"
-                  aria-disabled="true"
-                  aria-checked="false"
-                >
-                  Thẻ Tín dụng/Ghi nợ
+                  VnPay
                 </button>
               </span>
               <span>
@@ -169,11 +173,12 @@ const Payment = (props) => {
                   class="product-variation"
                   tabindex="0"
                   role="radio"
-                  aria-label="Thẻ nội địa NAPAS"
+                  aria-label="Paypal"
                   aria-disabled="false"
                   aria-checked="false"
+                  onClick={() => { setPaymentMethod("Paypal") } }
                 >
-                  Thẻ nội địa NAPAS
+                  Paypal
                 </button>
               </span>
               <span>
@@ -184,6 +189,7 @@ const Payment = (props) => {
                   aria-label="Thanh toán khi nhận hàng"
                   aria-disabled="false"
                   aria-checked="false"
+                  onClick={() => { setPaymentMethod("ThanhToanKhiNhanHang") } }
                 >
                   Thanh toán khi nhận hàng
                 </button>
@@ -192,30 +198,32 @@ const Payment = (props) => {
             <div aria-live="polite"></div>
           </div>
         </div>
-        <div class="KQyCj0" aria-live="polite">
+        <div class="KQyCj0" aria-live="polite" style={{paddingTop:"50px"}}>
           <h2 class="a11y-visually-hidden">Tổng thanh toán:</h2>
-          <h3 class="bwwaGp iL6wsx BcITa9">Tổng tiền hàng</h3>
-          <div class="bwwaGp R3a05f BcITa9">₫{totalPrice}</div>
-          <h3 class="bwwaGp iL6wsx RY9Grr">Phí vận chuyển</h3>
-          <div class="bwwaGp R3a05f RY9Grr">₫28.800</div>
-          <h3 class="bwwaGp iL6wsx _5y8V6a">Tổng thanh toán:</h3>
-          <div class="bwwaGp l2Nmnm R3a05f _5y8V6a">₫77.800</div>
+          <h3 class="bwwaGp iL6wsx BcITa9" style={{fontSize:"20px"}}>Tổng tiền hàng:</h3>
+          <div class="bwwaGp R3a05f BcITa9" style={{fontSize:"20px",color:"#ee4d2d"}}>{numberWithCommas(totalPrice)} ₫</div>
+          <h3 class="bwwaGp iL6wsx RY9Grr" style={{fontSize:"20px"}}>Phí vận chuyển:</h3>
+          <div class="bwwaGp R3a05f RY9Grr" style={{fontSize:"20px",color:"#ee4d2d"}}>28.800 ₫</div>
+          
           <div class="uTFqRt">
             <div class="k4VpYA">
               <div class="C-NSr-">
                 Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo{" "}
                 <a
-                  href="https://help.shopee.vn/portal/article/77242"
+                  href=""
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Điều khoản Shopee
+                  Điều khoản của Shop
                 </a>
               </div>
             </div>
             <button
               class="stardust-button stardust-button--primary stardust-button--large apLZEG N7Du4X"
-              onClick={()=>{performVnPayCheckout()}}
+              onClick={() => {
+                performVnPayCheckout();
+              }}
+             
             >
               Đặt hàng
             </button>

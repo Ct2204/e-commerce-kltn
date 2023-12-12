@@ -151,7 +151,7 @@ const User = () => {
 
   return (
     <div className="fontSizePageUser">
-      <div className="container p-5 px-5">
+      <div className="container py-5">
         <div className="row">
           <div className="col-2">
             <div className="d-flex profile-avatar pb-3">
@@ -214,6 +214,24 @@ const User = () => {
                 >
                   Địa Chỉ
                 </Link>
+              </div>
+            </div>
+            <div className="mt-4">
+              <div className="stardust-dropdown__item-header">
+                <a
+                  class="d-flex text-decoration-none"
+                  href="/user/account/profile"
+                >
+                  <div className="account-image">
+                    <img
+                      src="https://down-vn.img.susercontent.com/file/f0049e9df4e536bc3e7f140d071e9078"
+                      style={{ width: "20px", height: "20px" }}
+                    />
+                  </div>
+                  <div className="">
+                    <span className="fw-bold text-body">Đơn mua</span>
+                  </div>
+                </a>
               </div>
             </div>
           </div>
