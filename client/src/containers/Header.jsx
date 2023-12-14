@@ -183,8 +183,16 @@ const Header = () => {
                         <Popover.Body>
                           <div className="my-2">
                             <div className="my-2 account-container">
-                                <button>Trang cá nhân</button>
-                                {/* <button onClick={() => dispatch(logout())}>Đăng xuất</button> */}
+                                <Link to="user/profile"><button>Trang cá nhân</button></Link>
+                                <button >
+                                  <Link
+                                    style={{
+                                      textDecoration: 'none',
+                                      color:"inherit"
+
+                                    }} to="/user/purchase">Đơn mua</Link>
+                                </button>
+                              
                                 <button onClick={() => handleToLogout()}>
                                   Đăng xuất
                                 </button>
@@ -272,6 +280,7 @@ const Header = () => {
 
                 {isLogedIn && (
                   <div>
+                    <Link to="/cart">
                     <Button
                       className="bg-white border border-white"
                       variant="primary"
@@ -314,6 +323,7 @@ const Header = () => {
                         )}
                       </div>
                     </Button>
+                    </Link>
                   </div>
                 )}
               </div>

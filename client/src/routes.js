@@ -1,4 +1,5 @@
 import Address from "./pages/Address/Address";
+import AddProuct from "./pages/AdminHome/AddProduct.jsx";
 import AdminHome from "./pages/AdminHome/AdminHome";
 import Cart from "./pages/Cart/Cart";
 import Comment from "./pages/Comment/Comment";
@@ -10,6 +11,7 @@ import ProductKinhMat from "./pages/ProductCategory/ProductKinhMat";
 
 import ProductNhan from "./pages/ProductCategory/ProductNhan";
 import ProductDetail from "./pages/ProductDetail/ProductDetail";
+import Profile from "./pages/Profile/Profile.jsx";
 import PurchaseOrder from "./pages/PurchaseOder/PurchaseOrder";
 import User from "./pages/User/User";
 import VerificationCodeForm from "./pages/VerificationCode/VerificationCodeForm";
@@ -33,8 +35,13 @@ const routes = [
   { path: "/product/lactay", component: <Product /> },
   { path: "/product/vongco", component: <ProductNhan /> },
   { path: "/product/trangsucmuahe", component: <ProductKinhMat /> },
+  { path: "/user/profile", component: <Profile /> },
+  {path: "/seller/addproduct", component: <AddProuct />},
 ];
 
-export const routesAdmin = [{ path: "/", component: <AdminHome /> }];
+export const routesAdmin = [{
+  path: "/", component: <AdminHome />,
+  
+}];
 
 export default routes;

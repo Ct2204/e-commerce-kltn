@@ -10,6 +10,7 @@ import {
 } from "../../services/UserService";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import User from "../User/User.jsx";
 
 const Address = () => {
   const [show, setShow] = useState(false);
@@ -143,90 +144,10 @@ const Address = () => {
     <>
       <div className="fontSizePageUser">
         <div className="container py-5 ">
-          <div className="row">
+          <div className="row" >
+           
             <div className="col-2">
-              <div className="d-flex profile-avatar pb-3">
-                <a>
-                  <img
-                    src="https://leplateau.edu.vn/wp-content/uploads/2023/10/hinh-anh-con-gai-1.jpg"
-                    style={{ width: "48px", height: "48px" }}
-                    className="rounded-circle"
-                  />
-                </a>
-                <div className="mx-3">
-                  <div className="fw-bold text-body">Trần Văn Thiên</div>
-                  <div>
-                    <a
-                      className="text-decoration-none text-body"
-                      href="/user/account/profile"
-                    >
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 12 12"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="edit-font"
-                      >
-                        <path
-                          d="M8.54 0L6.987 1.56l3.46 3.48L12 3.48M0 8.52l.073 3.428L3.46 12l6.21-6.18-3.46-3.48"
-                          fill="#9B9B9B"
-                          fill-rule="evenodd"
-                        ></path>
-                      </svg>
-                      Sửa hồ sơ
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-4">
-                <div className="stardust-dropdown__item-header">
-                  <a
-                    class="d-flex text-decoration-none"
-                    href="/user/account/profile"
-                  >
-                    <div className="account-image">
-                      <img
-                        src="https://down-vn.img.susercontent.com/file/ba61750a46794d8847c3f463c5e71cc4"
-                        style={{ width: "20px", height: "20px" }}
-                      />
-                    </div>
-                    <div className="">
-                      <span className="fw-bold text-body">
-                        Tài khoản của tôi
-                      </span>
-                    </div>
-                  </a>
-                </div>
-              </div>
-              <div>
-                <div class="d-flex flex-column profile-address my-2">
-                  <Link
-                    to="/user"
-                    className="mt-2 text-decoration-none text-body"
-                  >
-                    Hồ sơ
-                  </Link>
-                  <a className="mt-2 text-decoration-none text-body">Địa Chỉ</a>
-                </div>
-              </div>
-              <div className="mt-4">
-                <div className="stardust-dropdown__item-header">
-                  <a
-                    class="d-flex text-decoration-none"
-                    href="/user/account/profile"
-                  >
-                    <div className="account-image">
-                      <img
-                        src="https://down-vn.img.susercontent.com/file/f0049e9df4e536bc3e7f140d071e9078"
-                        style={{ width: "20px", height: "20px" }}
-                      />
-                    </div>
-                    <div className="">
-                      <span className="fw-bold text-body">Đơn mua</span>
-                    </div>
-                  </a>
-                </div>
-              </div>
+            <User/>
             </div>
 
             <Modal

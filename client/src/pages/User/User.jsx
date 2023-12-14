@@ -153,7 +153,7 @@ const User = () => {
     <div className="fontSizePageUser">
       <div className="container py-5">
         <div className="row">
-          <div className="col-2">
+          
             <div className="d-flex profile-avatar pb-3">
               <a>
                 <img
@@ -206,249 +206,31 @@ const User = () => {
               </div>
             </div>
             <div>
-              <div class="d-flex flex-column profile-address my-2">
-                <a>Hồ Sơ</a>
+            <div class="d-flex flex-column profile-address my-2">
+            <Link
+                  to="/user/profile"
+                  className="mt-2 text-decoration-none text-body"
+                >
+                  Hồ sơ
+                </Link>
+               
                 <Link
                   to="/user/address"
                   className="mt-2 text-decoration-none text-body"
                 >
                   Địa Chỉ
                 </Link>
-              </div>
-            </div>
-            <div className="mt-4">
-              <div className="stardust-dropdown__item-header">
-                <a
-                  class="d-flex text-decoration-none"
-                  href="/user/account/profile"
+                <Link
+                  to="/user/purchase"
+                  className="mt-2 text-decoration-none text-body"
                 >
-                  <div className="account-image">
-                    <img
-                      src="https://down-vn.img.susercontent.com/file/f0049e9df4e536bc3e7f140d071e9078"
-                      style={{ width: "20px", height: "20px" }}
-                    />
-                  </div>
-                  <div className="">
-                    <span className="fw-bold text-body">Đơn mua</span>
-                  </div>
-                </a>
+                  Đơn hàng
+                </Link>
               </div>
             </div>
-          </div>
+           
 
-          <div className="col-10 bg-white highlight-container">
-            <div class="mx-3 myProfile pb-3">
-              <div className="mt-3 fs-5 fw-bold">Hồ sơ của tôi</div>
-              <div className="">
-                Quản lý thông tin hồ sơ để bảo mật tài khoản
-              </div>
-            </div>
-            <div className="row px-3">
-              <div className="col-8 ">
-                <form onSubmit={handleFormSubmit}>
-                  <div className="mb-3 row " style={{ width: "450px" }}>
-                    <label
-                      htmlFor="inputPassword"
-                      className="col-3 col-form-label"
-                    >
-                      Họ và tên
-                    </label>
-                    <div className="col-9">
-                      <input
-                        type="text"
-                        name="title"
-                        value={fullName}
-                        onChange={handleFullNameChange}
-                        className="form-control"
-                      />
-                    </div>
-                  </div>
-                  <div className="mb-3 row" style={{ width: "450px" }}>
-                    <label
-                      htmlFor="inputPassword"
-                      className="col-3 col-form-label"
-                    >
-                      Email
-                    </label>
-                    <div class="col-9 d-flex">
-                      <div class="mt-2">{userInfo.email}</div>
-                    </div>
-                  </div>
-                  <div className="mb-3 row" style={{ width: "450px" }}>
-                    <label
-                      htmlFor="inputPassword"
-                      className="col-3 col-form-label"
-                    >
-                      Số điện thoại
-                    </label>
-                    <div class="col-9 d-flex">
-                      <div class="mt-2">0967064267</div>
-                    </div>
-                  </div>
-                  <div className="mb-3 row" style={{ width: "450px" }}>
-                    <div className="d-flex mt-3">
-                      <div className="col-3">
-                        <label
-                          htmlFor="inputPassword"
-                          className=" col-form-label"
-                        >
-                          Giới tính
-                        </label>
-                      </div>
-                      <div className="d-flex col-9">
-                        <div className="form-check mt-1 mx-2">
-                          <input
-                            className="form-check-input"
-                            type="radio"
-                            name="gender"
-                            id="radioOption1"
-                            value="Male"
-                            checked={gender === "Male"}
-                            onChange={handleGenderChange}
-                          />
-                          <label
-                            className="form-check-label mt-1 mx-2"
-                            htmlFor="radioOption1"
-                          >
-                            Nam
-                          </label>
-                        </div>
-                        <div className="form-check mt-1 mx-2">
-                          <input
-                            className="form-check-input"
-                            type="radio"
-                            name="gender"
-                            id="radioOption2"
-                            value="Female"
-                            checked={gender === "Female"}
-                            onChange={handleGenderChange}
-                          />
-                          <label
-                            className="form-check-label mt-1 mx-2"
-                            htmlFor="radioOption2"
-                          >
-                            Nữ
-                          </label>
-                        </div>
-                        <div className="form-check mt-1 mx-2">
-                          <input
-                            className="form-check-input"
-                            type="radio"
-                            name="gender"
-                            id="radioOption3"
-                            value="Khác"
-                            checked={gender === "Khác"}
-                            onChange={handleGenderChange}
-                          />
-                          <label
-                            className="form-check-label mt-1 mx-2"
-                            htmlFor="radioOption3"
-                          >
-                            Khác
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mb-3 row" style={{ width: "450px" }}>
-                      <label
-                        htmlFor="inputPassword"
-                        className="col-3 col-form-label"
-                      >
-                        Ngày sinh
-                      </label>
-                      <div className="col-9 d-flex">
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="day"
-                          name="day"
-                          placeholder="1"
-                          value={day}
-                          min="1"
-                          max="31"
-                          onChange={handleDayChange}
-                          required
-                        />
-                        <select
-                          class="form-select"
-                          id="month"
-                          name="month"
-                          value={month}
-                          required
-                          onChange={handleMonthChange}
-                        >
-                          <option value="" disabled selected>
-                            Tháng
-                          </option>
-                          <option value="1">Tháng 1</option>
-                          <option value="2">Tháng 2</option>
-                          <option value="3">Tháng 3</option>
-                          <option value="4">Tháng 4</option>
-                          <option value="5">Tháng 5</option>
-                          <option value="6">Tháng 6</option>
-                          <option value="7">Tháng 7</option>
-                          <option value="8">Tháng 8</option>
-                          <option value="9">Tháng 9</option>
-                          <option value="10">Tháng 10</option>
-                          <option value="11">Tháng 11</option>
-                          <option value="12">Tháng 12</option>
-                        </select>
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="year"
-                          name="year"
-                          placeholder="2001"
-                          value={year}
-                          min="1980"
-                          max="2010"
-                          required
-                          onChange={handleYearChange}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    style={{ widht: "70px", height: "40px" }}
-                    onClick={handleSave}
-                  >
-                    Lưu
-                  </button>
-                </form>
-              </div>
-              <div className="col-4 ">
-                <div className="mt-5">
-                  <div className="d-flex flex-column choose-image">
-                    <img
-                      src={imageUrl}
-                      style={{ width: "100px", height: "100px" }}
-                      className="rounded-circle volume-image"
-                    />
-                    <Form.Group controlId="formFile" className="mx-4 ">
-                      <div className="d-flex">
-                        <Button
-                          className="bg-white text-body border border-secondary mx-1 mt-2"
-                          onClick={handleButtonClick}
-                        >
-                          Chọn ảnh
-                        </Button>
-                        <Form.Control
-                          type="file"
-                          ref={fileInputRef}
-                          style={{ display: "none" }}
-                          onChange={handleFileChange}
-                        />
-                      </div>
-                    </Form.Group>
-                    <div class="my-3 ">
-                      <div class="">Dụng lượng file tối đa 1 MB</div>
-                      <div class="">Định dạng:.JPEG, .PNG</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+         
         </div>
       </div>
     </div>
