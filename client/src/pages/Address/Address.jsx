@@ -212,7 +212,9 @@ const Address = () => {
               <div className="mt-4">
                 <div className="stardust-dropdown__item-header">
                   <a
+
                     className="d-flex text-decoration-none"
+
                     href="/user/account/profile"
                   >
                     <div className="account-image">

@@ -210,6 +210,7 @@ export const getRatingOfProduct = async (pageNum, pageLength, id) => {
     }
     const queryString = `${id}?perPage=${pageLength}&currentPage=${pageNum}`;
 
+
     let url = `${api.url.getRatingOfProduct}/${queryString}`;
     const response = await httpRequest({
       url: url,
@@ -263,6 +264,7 @@ export const searchProductName = async (name) => {
     const queryString = `?keyword=${name}&pageNumber=1`;
 
     let url = `${api.url.searchProductName}${queryString}`;
+
     const response = await httpRequest({
       url: url,
       method: "GET",
@@ -273,7 +275,9 @@ export const searchProductName = async (name) => {
     if (response.code === 200) {
       return response;
     } else {
+
       return null;
+
     }
   } catch (err) {
     const errMessage = "Error in get description: ";
@@ -281,3 +285,25 @@ export const searchProductName = async (name) => {
     return null;
   }
 };
+
+
+export const getProductsByCategory2 = async (id) => {
+  try {
+    let url = `${api.url.productsbycategory}/${id}?perPage=4&currentPage=1`;
+
+    const response = await httpRequest({
+      url: url,
+      method: "GET",
+    });
+    if (response.code === 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (err) {
+    const errMessage = "Error in getting productdetail: ";
+    console.error(errMessage, err);
+    return null;
+  }
+};
+

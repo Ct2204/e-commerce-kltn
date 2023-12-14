@@ -249,6 +249,7 @@ const ProductDetail = (props) => {
     } else {
       setMessage(responseData.message);
     }
+
   };
 
   const handleProductsByCategoryNhan = async () => {
@@ -267,6 +268,7 @@ const ProductDetail = (props) => {
     navigate(`/productdetail?productId=${id}`);
     window.scrollTo(0, 0);
   };
+
 
   useEffect(() => {
     handleProductsByCategoryDongHo();
@@ -302,9 +304,11 @@ const ProductDetail = (props) => {
       {isLoading ? (
         <h1>Đang load dữ liệu</h1>
       ) : (
+
         <div className="container text-center">
           <div className="row">
             <div className="col-4">
+
               <div className="mt-5">
                 <img
                   className="img-feature"
@@ -578,6 +582,7 @@ const ProductDetail = (props) => {
                         </span>
                       </div>
 
+
                       <div className="infoList-deliverly">
                         <div
                           className="deliverly-item"
@@ -587,6 +592,28 @@ const ProductDetail = (props) => {
                             <img
                               style={{
                                 height: "26px",
+                                width: "35px",
+                                paddingRight: "10px",
+                              }}
+                              className=" ls-is-cached lazyloaded"
+                              data-src="//theme.hstatic.net/200000593853/1001115480/14/product_deliverly_1_ico.png?v=43"
+                              src="//theme.hstatic.net/200000593853/1001115480/14/product_deliverly_1_ico.png?v=43"
+                              alt="Cam kết 100% chính hãng"
+                            />
+                          </span>
+                          Cam kết 100% chính hãng
+                        </div>
+
+                        <div
+                          className="deliverly-item "
+
+                          style={{ fontSize: "16px" }}
+                        >
+                          <span>
+                            <img
+                              style={{
+                                height: "26px",
+
                                 width: "35px",
                                 paddingRight: "10px",
                               }}
@@ -620,6 +647,7 @@ const ProductDetail = (props) => {
                         </div>
 
                         <div
+
                           className="deliverly-item mb-3"
                           style={{ fontSize: "16px" }}
                         >
@@ -868,6 +896,7 @@ const ProductDetail = (props) => {
             <div>
               <div className="d-flex row background-comment">
                 <div className="col-2">
+
                   <div className="text-start text-color-rating">
                     <span className="fs-2">{averageOfStars}</span>
                     <span className="fs-4"> trên 5 </span>
@@ -877,6 +906,7 @@ const ProductDetail = (props) => {
                       <div className="">
                         <div
                           className="shopee-rating-stars__lit"
+
                           style={{ width: "26px", height: "26px" }}
                         >
                           <FaStar
@@ -885,9 +915,11 @@ const ProductDetail = (props) => {
                           />
                         </div>
                       </div>
+
                       <div className="shopee-rating-stars__star-wrapper">
                         <div
                           className="shopee-rating-stars__lit"
+
                           style={{ width: "26px", height: "26px" }}
                         >
                           <FaStar
@@ -896,9 +928,11 @@ const ProductDetail = (props) => {
                           />
                         </div>
                       </div>
+
                       <div className="shopee-rating-stars__star-wrapper">
                         <div
                           className="shopee-rating-stars__lit"
+
                           style={{ width: "26px", height: "30px" }}
                         >
                           <FaStar
@@ -907,9 +941,11 @@ const ProductDetail = (props) => {
                           />
                         </div>
                       </div>
+
                       <div className="shopee-rating-stars__star-wrapper">
                         <div
                           className="shopee-rating-stars__lit"
+
                           style={{ width: "26px", height: "26px" }}
                         >
                           <FaStar
@@ -918,9 +954,11 @@ const ProductDetail = (props) => {
                           />
                         </div>
                       </div>
+
                       <div className="shopee-rating-stars__star-wrapper">
                         <div
                           className="shopee-rating-stars__lit"
+
                           style={{ width: "26px", height: "26px" }}
                         >
                           <FaStar
@@ -949,7 +987,9 @@ const ProductDetail = (props) => {
 
                   <div className="col-auto text-start">
                     <a
+
                       className="text-decoration-none text-body"
+
                       href="/shop/953904967"
                     >
                       {aRatings.fullName}
@@ -985,7 +1025,9 @@ const ProductDetail = (props) => {
                 <div
                   key={idx}
                   className="col-3 product-card"
+
                   onClick={(e) => changePageHandler(e, aProducts.id)}
+
                 >
                   <ProductCart
                     title={aProducts.title}
@@ -1003,7 +1045,9 @@ const ProductDetail = (props) => {
                 <div
                   key={idx}
                   className="col-3 product-card"
+
                   onClick={(e) => changePageHandler(e, aProducts.id)}
+
                 >
                   <ProductCart
                     title={aProducts.title}

@@ -4,13 +4,16 @@ import ProductCart from "../../components/ProductCart";
 import { FaFilter } from "react-icons/fa";
 import Dropdown from "react-bootstrap/Dropdown";
 import { getProductsByCategory } from "../../services/product";
+
 import { useNavigate } from "react-router-dom";
+
 
 const ProductKinhMat = () => {
   const [productByCategoryKinhMat, setProductByCategoryKinhMat] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+
 
   const numberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -22,6 +25,7 @@ const ProductKinhMat = () => {
     setProductByCategoryKinhMat(responseData.listProducts);
     setIsLoading(false);
   };
+
 
   const handleSortPriceAscending = () => {
     const sortedProducts = [...productByCategoryKinhMat].sort(
@@ -41,6 +45,7 @@ const ProductKinhMat = () => {
     navigate(`/productdetail?productId=${id}`);
     window.scrollTo(0, 0);
   };
+
 
   useEffect(() => {
     handleProductsByCategoryKinhMat();
@@ -120,12 +125,14 @@ const ProductKinhMat = () => {
               Sắp xếp
             </Dropdown.Toggle>
             <Dropdown.Menu>
+
               <Dropdown.Item onClick={(e) => handleSortPriceAscending()}>
                 Giá: Tăng dần
               </Dropdown.Item>
               <Dropdown.Item onClick={(e) => handleSortPiceDescending()}>
                 Giá: Giảm dần
               </Dropdown.Item>
+
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -139,7 +146,9 @@ const ProductKinhMat = () => {
             <div
               key={idx}
               className="col-3 product-card"
+
               onClick={(e) => changePageHandler(e, aProducts.id)}
+
             >
               <ProductCart
                 title={aProducts.title}

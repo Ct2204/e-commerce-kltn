@@ -1,5 +1,7 @@
 package com.kltn.server.module.user.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.kltn.server.common.entity.UserProfile;
 import com.kltn.server.common.exception.InternalServerErrorException;
 import com.kltn.server.common.exception.ResourceNotFoundException;
@@ -21,6 +23,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserProfileServiceImpl implements UserProfileService {
@@ -38,6 +41,12 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Value("${kltn.domain}")
     private String domain;
+
+    @Autowired
+    private Cloudinary cloudinary; // Inject Cloudinary bean
+
+    @Value("${cloudinary.folder}") // Specify the Cloudinary folder
+    private String cloudinaryFolder;
 
     public static String sha256(final String base) {
         try {
@@ -160,26 +169,38 @@ public class UserProfileServiceImpl implements UserProfileService {
         }
 
         try {
-            // Generate a unique file name to avoid conflicts
-            int lastDotIndex = file.getOriginalFilename().toString().lastIndexOf(".");
-            String fileNameDecoded = decode + "." + file
-                    .getOriginalFilename()
-                    .toString()
-                    .substring(lastDotIndex + 1);
-            // Get the resource folder path
-            Path resourcePath = Paths.get(dirLocation);
+//            // Generate a unique file name to avoid conflicts
+//            int lastDotIndex = file.getOriginalFilename().toString().lastIndexOf(".");
+//            String fileNameDecoded = decode + "." + file
+//                    .getOriginalFilename()
+//                    .toString()
+//                    .substring(lastDotIndex + 1);
+//            // Get the resource folder path
+//            Path resourcePath = Paths.get(dirLocation);
+//
+//            // Formatting the path
+//            Path destinationFilePath = resourcePath
+//                    .resolve(Paths.get(fileNameDecoded))
+//                    .normalize();
+//
+//            // Save the file to the specified path
+//            Files.copy(file.getInputStream(), destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
+//
+//            // Setting the path of picture profile as a relative path
+//            userProfile.setProfilePicture(domain + IMAGE_PROFILE_PATH + "/" + fileNameDecoded);
+//            this.userProfileRepository.save(userProfile);
 
-            // Formatting the path
-            Path destinationFilePath = resourcePath
-                    .resolve(Paths.get(fileNameDecoded))
-                    .normalize();
+            // Upload the file to Cloudinary
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("folder", cloudinaryFolder));
 
-            // Save the file to the specified path
-            Files.copy(file.getInputStream(), destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
+            // Get the URL of the uploaded image from Cloudinary response
+            String imageUrl = (String) uploadResult.get("secure_url");
 
-            // Setting the path of picture profile as a relative path
-            userProfile.setProfilePicture(domain + IMAGE_PROFILE_PATH + "/" + fileNameDecoded);
+            // Set the profile picture URL
+            userProfile.setProfilePicture(imageUrl);
             this.userProfileRepository.save(userProfile);
+
+
         } catch (IOException e) {
             // Handle file upload failure
             throw new InternalServerErrorException("Failed to upload the file!");

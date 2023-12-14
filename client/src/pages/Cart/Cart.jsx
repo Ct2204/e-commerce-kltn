@@ -23,8 +23,10 @@ const Cart = () => {
   const userInfor = useSelector((state) => state.auth.userInfo);
   console.log(userInfor.user_id, "ssssssss");
 
+
   const isLogin = useSelector((state) => state.auth.isLoggedIn);
   console.log("có dang nhập", isLogin);
+
 
   const [carts, setCarts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -149,6 +151,7 @@ const Cart = () => {
     }
     localStorage.setItem("cartOrder", JSON.stringify(cartOrder));
 
+
     navigate("/payment");
     console.log(responseData.message);
   };
@@ -166,6 +169,7 @@ const Cart = () => {
     setIsLoading(false);
   };
 
+
   useEffect(() => {
     handleProductsByCategoryDongHo();
   }, []);
@@ -174,10 +178,12 @@ const Cart = () => {
     handleProductsByCategoryNhan();
   }, []);
 
+
   const changePageHandler = async (e, id) => {
     navigate(`/productdetail?productId=${id}`);
     window.scrollTo(0, 0);
   };
+
 
   return (
     <>
@@ -368,12 +374,14 @@ const Cart = () => {
                             <h3 className="item--title">
                               <a
                                 className="text-decoration-none  mx-5"
+
                                 style={{
                                   color: "#000",
                                   fontSize: "25px",
                                   verticalAlign: "top",
                                   display: "inline-block",
                                 }}
+
                               >
                                 {cartItem.title}
                               </a>
@@ -532,7 +540,10 @@ const Cart = () => {
                 className="summary-warning alert-order"
                 style={{ opacity: 0.9 }}
               >
+
                 <p className="textmr">
+
+
                   <strong style={{ padding: "10px 5px" }}>
                     Chính sách mua hàng
                   </strong>
@@ -564,7 +575,9 @@ const Cart = () => {
             <div
               key={idx}
               className="col-3 product-card"
+
               onClick={(e) => changePageHandler(e, aProducts.id)}
+
             >
               <ProductCart
                 title={aProducts.title}
@@ -582,7 +595,9 @@ const Cart = () => {
             <div
               key={idx}
               className="col-3 product-card"
+
               onClick={(e) => changePageHandler(e, aProducts.id)}
+
             >
               <ProductCart
                 title={aProducts.title}

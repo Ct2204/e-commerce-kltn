@@ -68,6 +68,7 @@ const url = {
   //search product name
 
   searchProductName: "/product/search-product-by-text",
+
 };
 
 const instance = axios.create({

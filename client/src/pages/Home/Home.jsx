@@ -20,6 +20,7 @@ const Home = () => {
   const [productByCategoryNhan, setProductByCategoryNhan] = useState([]);
   const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
 
+
   const initialItemCount = 8;
   const dataArrayForDongHo = productByCategoryDongHo; // Điền mảng của bạn vào đây
   const dataArrayForNhan = productByCategoryNhan; // Điền mảng của bạn vào đây
@@ -49,6 +50,7 @@ const Home = () => {
       visibleItemCountForDongHo + additionalItemCountForDongHo
     );
   };
+
 
   const containerRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -253,42 +255,40 @@ const Home = () => {
       </div>
 
       {/* Category */}
-      <div className="slider">
-        <div
-          className="product-container"
-          ref={containerRef}
-          style={{ width: `${containerWidth}%` }}
-        >
-          <div className="product-item">
-            <img
-              src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_1.jpg?v=41"
-              alt="Product 1"
-            />
-            <p className="product-title">Đồng hồ nam</p>
-          </div>
-          <div className="product-item">
-            <img
-              src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_2.jpg?v=41"
-              alt="Product 2"
-            />
-            <p className="product-title">Nhẫn</p>
-          </div>
-          <div className="product-item">
-            <img
-              src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_3.jpg?v=41"
-              alt="Product 3"
-            />
-            <p className="product-title">Vòng tay</p>
-          </div>
-          <div className="product-item">
-            <img
-              src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_5.jpg?v=41"
-              alt="Product 4"
-            />
-            <p className="product-title">Hoa tai</p>
-          </div>
 
-          {/* <div className="scroll-buttons">
+
+      <div className="product-container" ref={containerRef}>
+        <div className="product-item">
+          <img
+            src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_1.jpg?v=41"
+            alt="Product 1"
+          />
+          <p className="product-title">Đồng hồ nam</p>
+        </div>
+        <div className="product-item">
+          <img
+            src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_2.jpg?v=41"
+            alt="Product 2"
+          />
+          <p className="product-title">Nhẫn</p>
+        </div>
+        <div className="product-item">
+          <img
+            src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_3.jpg?v=41"
+            alt="Product 3"
+          />
+          <p className="product-title">Vòng tay</p>
+        </div>
+        <div className="product-item">
+          <img
+            src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_5.jpg?v=41"
+            alt="Product 4"
+          />
+          <p className="product-title">Hoa tai</p>
+        </div>
+
+        {/* <div className="scroll-buttons">
+
         <button className="left-button" onClick={scrollLeft} >
           Left
         </button>
@@ -296,10 +296,12 @@ const Home = () => {
           Right
         </button>
       </div> */}
+
         </div>
 
         <button onClick={handleMoveLeft}>Left</button>
         <button onClick={handleMoveRight}>Right</button>
+
       </div>
 
       {/* Sản phẩm của đồng hồ */}
@@ -337,6 +339,7 @@ const Home = () => {
       )}
 
       <div classname="container-fuild">
+
         {visibleItemCountForDongHo < dataArrayForDongHo.length && (
           <div
             onClick={handleShowMoreForDongHo}
@@ -362,6 +365,7 @@ const Home = () => {
             className="container text-center mt-5"
             style={{ paddingBottom: "40px" }}
           >
+
             <div className="row ">
               <div className="col">
                 <img
@@ -461,6 +465,7 @@ const Home = () => {
               <a>Trang sức</a>
             </h3>
             <div className="row  mx-5">
+
               {productByCategoryNhan
                 .slice(0, visibleItemCountForNhan)
                 .map((aProducts, idx) => (
@@ -479,6 +484,7 @@ const Home = () => {
                     />
                   </div>
                 ))}
+
             </div>
           </div>
         )}
@@ -487,6 +493,7 @@ const Home = () => {
             onClick={handleShowMoreForNhan}
             className="wraplist-ctas text-center"
           >
+
             <a className="btn-collection button btnwhite dark mx-2">
               Xem thêm sản phẩm
               <svg
@@ -501,6 +508,7 @@ const Home = () => {
             </a>
           </div>
         )}
+
 
         <div className="container-fuild" style={{ paddingTop: "50px" }}>
           <div className="sectionHeading text-center my-5">

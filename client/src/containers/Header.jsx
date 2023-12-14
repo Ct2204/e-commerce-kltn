@@ -121,7 +121,9 @@ const Header = () => {
                 <div className="category-container ">
                   <div className="category row d-flex flex-wrap ">
                     {category.map((categoryItem, idx) => (
+
                       <div key={idx} className="col-lg-4 ">
+
                         <ul className="subchildmenu-item list-unstyled">
                           <li className="category-item">
                             <Link
@@ -195,6 +197,7 @@ const Header = () => {
                                   Trang cá nhân
                                 </button>
                                 {/* <button onClick={() => dispatch(logout())}>Đăng xuất</button> */}
+
                                 <button
                                   className="text-white"
                                   style={{
@@ -215,6 +218,8 @@ const Header = () => {
                                 //   src="#"
                                 /> */}
                               </div>
+                  
+                     
                             </div>
                           </Popover.Body>
                         </Popover>

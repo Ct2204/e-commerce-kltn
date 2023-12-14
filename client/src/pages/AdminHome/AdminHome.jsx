@@ -308,6 +308,11 @@ const AdminHome = (props) => {
       setIsLoading(false);
     }
   };
+  console.log(description);
+
+  const userInfor = useSelector((state) => state.auth.userInfo);
+  console.log("hello", userInfor.user_id);
+
 
   const numberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -654,7 +659,10 @@ const AdminHome = (props) => {
                 </span>
                 <img
                   onClick={() => dispatch(logoutAsync())}
+
                   className="img-profile rounded-circle"
+
+                
                   src="#"
                 />
               </a>
