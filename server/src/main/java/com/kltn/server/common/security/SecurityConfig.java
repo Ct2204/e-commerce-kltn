@@ -56,6 +56,8 @@ public class SecurityConfig {
             "/api/v1/users/activate-user",
             "/api/v1/product/**",
             "/api/v1/seller/login",
+            "/api/v1/order/payment/cancel",
+            "/api/v1/order/payment/success"
 
     };
 
@@ -99,6 +101,13 @@ public class SecurityConfig {
         configuration.addAllowedHeader("Content-Type");
         configuration.addAllowedHeader("Accept");
         configuration.addAllowedHeader("Authorization");
+
+        configuration.addAllowedHeader("Content-Disposition");
+        configuration.addAllowedHeader("Content-Disposition");
+        configuration.addAllowedHeader("Cache-Control");
+        configuration.addAllowedHeader("X-Requested-With");
+
+
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

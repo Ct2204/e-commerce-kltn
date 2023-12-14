@@ -6,13 +6,6 @@ const url = {
   login: "/users/login",
   register: "/users/register",
   logout: "/users/logout",
-  //address
-
-  //profile
-  updateProfile: "",
-  uploadPicture: "",
-  getProfile: "",
-
   //product
   products: "/product/list-product",
   productdetail: "/product/product-information",
@@ -51,14 +44,31 @@ const url = {
   getListProductOnePage: "/seller/list-product",
   postDescriptionBySeller: "/seller/product/description/add",
   getDescriptionBySeller: "/seller/product/description",
+  //profile
   getProfileOfUser: "/users/profile",
   updateUserProfile: "/users/profile/update",
+  uploadPictureProfile: "users/profile/upload-picture/",
+  getPictureProfile: "/users/profile/get-picture",
+  
+
+  //address
   getAddressOfUserById: "/users/address/by-user",
   postAddressOfUserById: "/users/address/add",
   updateAddressOfUserById: "/users/address/update",
   deleteAddressOfUserById: "/users/address/delete",
 
+  //rating
   getRatingOfProduct: "/rating",
+
+  //verification code
+  sendVerificationCode: "/users/send-verification-code",
+  enterVerificationCode: "/users/activate-user",
+  changePassword: "/users/change-password",
+
+  //search product name
+
+  searchProductName: "/product/search-product-by-text",
+
 };
 
 const instance = axios.create({
@@ -66,6 +76,7 @@ const instance = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
+    Accept:"multipart/form-data"
   },
 });
 

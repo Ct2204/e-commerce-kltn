@@ -4,6 +4,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import {
   getProductDetail,
   getProductsByCategory,
+  searchProductName,
 } from "../../services/product";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -33,6 +34,7 @@ const AdminHome = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState([]);
   const [products, setProducts] = useState([]);
+  const [searchProduct, setSearchProduct] = useState([]);
   const [saveProducts, setSaveProducts] = useState([]);
   const [productId, setProductId] = useState(0);
   const [show, setShow] = useState(false);
@@ -44,6 +46,14 @@ const AdminHome = (props) => {
   const [description, setDescription] = useState("");
   const [activeKey, setActiveKey] = useState("0");
   const [descriptionById, setDescriptionById] = useState("");
+
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  console.log(searchValue);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -282,11 +292,32 @@ const AdminHome = (props) => {
     }
   };
 
+  const handleSearchProductName = async (e) => {
+    try {
+      setIsLoading(true);
+      const responseData = await searchProductName(searchValue);
+      if (responseData) {
+        console.log(responseData);
+        setSearchProduct(responseData.data.listProduct);
+      } else {
+        setSearchProduct([]);
+      }
+      setIsLoading(false);
+    } catch (err) {
+      console.error("Error in handleUpdateProduct: ", err);
+      setIsLoading(false);
+    }
+  };
   console.log(description);
 
   const userInfor = useSelector((state) => state.auth.userInfo);
   console.log("hello", userInfor.user_id);
 
+
+  const numberWithCommas = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+  console.log(products);
   return (
     <div className="d-flex row my-override-class">
       <div className="navbar-parent col-2 p-0" style={{ height: "100vh" }}>
@@ -306,7 +337,7 @@ const AdminHome = (props) => {
           <hr className="sidebar-divider my-0" />
 
           <li className="nav-item">
-            <a class="nav-link text-white" href="index.html">
+            <a className="nav-link text-white" href="index.html">
               <i className="fas fa-fw fa-tachometer-alt mx-3"></i>
               <span>Trang chủ</span>
             </a>
@@ -363,14 +394,14 @@ const AdminHome = (props) => {
           </li>
 
           <li className="nav-item text-white">
-            <a class="nav-link" href="charts.html">
+            <a className="nav-link" href="charts.html">
               <i className="fas fa-fw fa-chart-area mx-3"></i>
               <span>Charts</span>
             </a>
           </li>
 
           <li className="nav-item text-white">
-            <a class="nav-link" href="tables.html">
+            <a className="nav-link" href="tables.html">
               <i className="fas fa-fw fa-table mx-3"></i>
               <span>Tables</span>
             </a>
@@ -398,7 +429,7 @@ const AdminHome = (props) => {
                 aria-describedby="basic-addon2"
               />
               <div className="input-group-append">
-                <button class="btn btn-primary" type="button">
+                <button className="btn btn-primary" type="button">
                   <i className="fas fa-search fa-sm"></i>
                 </button>
               </div>
@@ -433,7 +464,7 @@ const AdminHome = (props) => {
                       aria-describedby="basic-addon2"
                     />
                     <div className="input-group-append">
-                      <button class="btn btn-primary" type="button">
+                      <button className="btn btn-primary" type="button">
                         <i className="fas fa-search fa-sm"></i>
                       </button>
                     </div>
@@ -462,7 +493,7 @@ const AdminHome = (props) => {
                 aria-labelledby="alertsDropdown"
               >
                 <h6 className="dropdown-header">Alerts Center</h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                <a className="dropdown-item d-flex align-items-center" href="#">
                   <div className="mr-3">
                     <div className="icon-circle bg-primary">
                       <i className="fas fa-file-alt text-white"></i>
@@ -475,7 +506,7 @@ const AdminHome = (props) => {
                     </span>
                   </div>
                 </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                <a className="dropdown-item d-flex align-items-center" href="#">
                   <div className="mr-3">
                     <div className="icon-circle bg-success">
                       <i className="fas fa-donate text-white"></i>
@@ -486,7 +517,7 @@ const AdminHome = (props) => {
                     $290.29 has been deposited into your account!
                   </div>
                 </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                <a className="dropdown-item d-flex align-items-center" href="#">
                   <div className="mr-3">
                     <div className="icon-circle bg-warning">
                       <i className="fas fa-exclamation-triangle text-white"></i>
@@ -527,7 +558,7 @@ const AdminHome = (props) => {
                 aria-labelledby="messagesDropdown"
               >
                 <h6 className="dropdown-header">Message Center</h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                <a className="dropdown-item d-flex align-items-center" href="#">
                   <div className="dropdown-list-image mr-3">
                     <img
                       className="rounded-circle"
@@ -546,7 +577,7 @@ const AdminHome = (props) => {
                     </div>
                   </div>
                 </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                <a className="dropdown-item d-flex align-items-center" href="#">
                   <div className="dropdown-list-image mr-3">
                     <img
                       className="rounded-circle"
@@ -563,7 +594,7 @@ const AdminHome = (props) => {
                     <div className="small text-gray-500">Jae Chun · 1d</div>
                   </div>
                 </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                <a className="dropdown-item d-flex align-items-center" href="#">
                   <div className="dropdown-list-image mr-3">
                     <img
                       className="rounded-circle"
@@ -582,7 +613,7 @@ const AdminHome = (props) => {
                     </div>
                   </div>
                 </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                <a className="dropdown-item d-flex align-items-center" href="#">
                   <div className="dropdown-list-image mr-3">
                     <img
                       className="rounded-circle"
@@ -628,7 +659,10 @@ const AdminHome = (props) => {
                 </span>
                 <img
                   onClick={() => dispatch(logoutAsync())}
-                  class="img-profile rounded-circle"
+
+                  className="img-profile rounded-circle"
+
+                
                   src="#"
                 />
               </a>
@@ -637,15 +671,15 @@ const AdminHome = (props) => {
                 className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="userDropdown"
               >
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profile
                 </a>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Settings
                 </a>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                   Activity Log
                 </a>
@@ -680,7 +714,7 @@ const AdminHome = (props) => {
                 >
                   <div className="row">
                     <div className="col-sm-12 col-md-6">
-                      <div class="dataTables_length" id="dataTable_length">
+                      <div className="dataTables_length" id="dataTable_length">
                         <label className="">
                           Show{" "}
                           <select
@@ -707,18 +741,36 @@ const AdminHome = (props) => {
                             type="search"
                             className="form-control form-control-sm"
                             placeHolder=""
-                            aria-controls="dataTable"
+                            value={searchValue}
+                            onChange={handleSearchChange}
                           />
                         </label>
                       </div>
-                      <div className="input-group-append">
-                        <button class="btn btn-primary" type="button">
+                      <div
+                        className="input-group-append"
+                        onClick={(e) => handleSearchProductName(e)}
+                      >
+                        <button className="btn btn-primary" type="button">
                           <i className="fas fa-search fa-sm"></i>
                         </button>
                       </div>
                       <div className="mx-5">
-                        <button onClick={(e) => showModalHandler(e, 0)}>
-                          <i className="fa-solid fa-plus"></i>
+                        <button
+                          className="text-white"
+                          style={{
+                            padding: "6px 15px",
+                            backgroundColor: "#216fdb",
+                            border: "none",
+                            borderRadius: "6px",
+                            paddingTop: "5px",
+                            paddingBottom: "5px",
+                          }}
+                          onClick={(e) => showModalHandler(e, 0)}
+                        >
+                          <i
+                            style={{ color: "white", marginRight: "5px" }}
+                            className="fa-solid fa-plus"
+                          ></i>
                           Add
                         </button>
                       </div>
@@ -737,7 +789,7 @@ const AdminHome = (props) => {
                           <form>
                             <div
                               className="mb-3 row"
-                              style={{ width: "340px" }}
+                              style={{ width: "490px" }}
                             >
                               <label
                                 htmlFor="inputPassword"
@@ -757,7 +809,7 @@ const AdminHome = (props) => {
                             </div>
                             <div
                               className="mb-3 row"
-                              style={{ width: "340px" }}
+                              style={{ width: "490px" }}
                             >
                               <label
                                 htmlFor="inputPassword"
@@ -777,7 +829,7 @@ const AdminHome = (props) => {
                             </div>
                             <div
                               className="mb-3 row"
-                              style={{ width: "340px" }}
+                              style={{ width: "490px" }}
                             >
                               <label
                                 htmlFor="inputPassword"
@@ -797,7 +849,7 @@ const AdminHome = (props) => {
                             </div>
                             <div
                               className="mb-3 row"
-                              style={{ width: "340px" }}
+                              style={{ width: "490px" }}
                             >
                               <label
                                 htmlFor="inputPassword"
@@ -875,7 +927,7 @@ const AdminHome = (props) => {
                               </div>
                               <div
                                 className="mb-3 row"
-                                style={{ width: "340px" }}
+                                style={{ width: "490px" }}
                               >
                                 <label
                                   htmlFor="inputPassword"
@@ -899,7 +951,7 @@ const AdminHome = (props) => {
                               ) : (
                                 <div
                                   className="d-flex mt-3"
-                                  style={{ width: "340px" }}
+                                  style={{ width: "490px" }}
                                 >
                                   <label
                                     htmlFor="inputPassword"
@@ -950,7 +1002,7 @@ const AdminHome = (props) => {
                         className="table table-bordered dataTable"
                         id="dataTable"
                         width="100%"
-                        cellspacing="0"
+                        cellSpacing="0"
                         role="grid"
                         aria-describedby="dataTable_info"
                         style={{ width: "100%" }}
@@ -1029,71 +1081,180 @@ const AdminHome = (props) => {
                             </th>
                           </tr>
                         </thead>
+                        <tbody>
+                          {searchProduct.length > 0
+                            ? // Hiển thị kết quả search khi có giá trị trong searchProduct
+                              searchProduct.map((aProducts, idx) => (
+                                <tr key={idx} className="odd">
+                                  <td>{idx + 1}</td>
+                                  <td>{aProducts.productTitle}</td>
+                                  <td className="sorting_1">
+                                    {aProducts.productTitle}
+                                  </td>
+                                  <td>
+                                    <img
+                                      style={{ height: "50px", width: "50px" }}
+                                      src={aProducts.imageUrl}
+                                    />
+                                  </td>
 
-                        {isLoading ? (
-                          <h1>Đang load dữ liệu</h1>
-                        ) : (
-                          <tbody>
-                            {products.map((aProducts, idx) => (
-                              <tr key={idx} className="odd">
-                                <td>{idx + 1}</td>
-                                <td>{aProducts.categoryTitle}</td>
-                                <td className="sorting_1">{aProducts.title}</td>
-                                <td>
-                                  <img
-                                    style={{ height: "50px", width: "50px" }}
-                                    src={aProducts.url}
-                                  />
-                                </td>
+                                  <td>{numberWithCommas(aProducts.price)}đ</td>
+                                  <td>
+                                    <Accordion
+                                      key={aProducts.id}
+                                      activeKey={activeKey}
+                                      onSelect={handleAccordionClick}
+                                    >
+                                      <Accordion.Item eventKey="0">
+                                        <Accordion.Header>
+                                          Description Product
+                                          <span
+                                            onClick={() =>
+                                              handleGetDescription(aProducts.id)
+                                            }
+                                          >
+                                            Xem
+                                          </span>
+                                        </Accordion.Header>
+                                        <Accordion.Body>
+                                          {descriptionById}
+                                        </Accordion.Body>
+                                      </Accordion.Item>
+                                    </Accordion>
+                                  </td>
 
-                                <td>{aProducts.price}</td>
-                                <td>
-                                  <Accordion
-                                    dactiveKey={activeKey}
-                                    onSelect={handleAccordionClick}
-                                  >
-                                    <Accordion.Item eventKey="0">
-                                      <Accordion.Header>
-                                        Description Product
-                                        <button
-                                          onClick={() =>
-                                            handleGetDescription(aProducts.id)
-                                          }
-                                        >
-                                          Xem
-                                        </button>
-                                      </Accordion.Header>
-                                      <Accordion.Body>
-                                        {descriptionById}
-                                      </Accordion.Body>
-                                    </Accordion.Item>
-                                  </Accordion>
-                                </td>
+                                  <td className="d-flex">
+                                    <button
+                                      className="mx-2"
+                                      style={{
+                                        padding: "0 20px",
+                                        backgroundColor: "#216fdb",
+                                        border: "none",
+                                        borderRadius: "6px",
+                                        paddingTop: "5px",
+                                        paddingBottom: "5px",
+                                      }}
+                                      onClick={(e) =>
+                                        showModalHandler(e, aProducts.id)
+                                      }
+                                    >
+                                      <i
+                                        style={{ color: "white" }}
+                                        className="fa-solid fa-pen-to-square"
+                                      ></i>
+                                    </button>
+                                    <button
+                                      style={{
+                                        padding: "0 20px",
+                                        backgroundColor: "#216fdb",
+                                        border: "none",
+                                        borderRadius: "6px",
+                                        paddingTop: "5px",
+                                        paddingBottom: "5px",
+                                      }}
+                                      onClick={() =>
+                                        handleDeleteProduct(aProducts.id)
+                                      }
+                                    >
+                                      <i
+                                        style={{ color: "white" }}
+                                        className="fa-solid fa-trash-can"
+                                      ></i>
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))
+                            : // Hiển thị toàn bộ danh sách nếu searchProduct là mảng rỗng
 
-                                <td className="d-flex">
-                                  <button
-                                    onClick={(e) =>
-                                      showModalHandler(e, aProducts.id)
-                                    }
-                                  >
-                                    <i className="fa-solid fa-pen-to-square"></i>
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      handleDeleteProduct(aProducts.id)
-                                    }
-                                  >
-                                    <i className="fa-solid fa-trash-can"></i>
-                                  </button>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        )}
+                              products.map((aProducts, idx) => (
+                                <tr key={idx} className="odd">
+                                  <td>{idx + 1}</td>
+                                  <td>{aProducts.categoryTitle}</td>
+                                  <td className="sorting_1">
+                                    {aProducts.title}
+                                  </td>
+                                  <td>
+                                    <img
+                                      style={{ height: "50px", width: "50px" }}
+                                      src={aProducts.url}
+                                    />
+                                  </td>
+
+                                  <td>{numberWithCommas(aProducts.price)}đ</td>
+                                  <td>
+                                    <Accordion
+                                      key={aProducts.id}
+                                      activeKey={activeKey}
+                                      onSelect={handleAccordionClick}
+                                    >
+                                      <Accordion.Item eventKey="0">
+                                        <Accordion.Header>
+                                          Description Product
+                                          <span
+                                            onClick={() =>
+                                              handleGetDescription(aProducts.id)
+                                            }
+                                          >
+                                            Xem
+                                          </span>
+                                        </Accordion.Header>
+                                        <Accordion.Body>
+                                          {descriptionById}
+                                        </Accordion.Body>
+                                      </Accordion.Item>
+                                    </Accordion>
+                                  </td>
+
+                                  <td className="d-flex">
+                                    <button
+                                      className="mx-2"
+                                      style={{
+                                        padding: "0 20px",
+                                        backgroundColor: "#216fdb",
+                                        border: "none",
+                                        borderRadius: "6px",
+                                        paddingTop: "5px",
+                                        paddingBottom: "5px",
+                                      }}
+                                      onClick={(e) =>
+                                        showModalHandler(e, aProducts.id)
+                                      }
+                                    >
+                                      <i
+                                        style={{ color: "white" }}
+                                        className="fa-solid fa-pen-to-square"
+                                      ></i>
+                                    </button>
+                                    <button
+                                      style={{
+                                        padding: "0 20px",
+                                        backgroundColor: "#216fdb",
+                                        border: "none",
+                                        borderRadius: "6px",
+                                        paddingTop: "5px",
+                                        paddingBottom: "5px",
+                                      }}
+                                      onClick={() =>
+                                        handleDeleteProduct(aProducts.id)
+                                      }
+                                    >
+                                      <i
+                                        style={{ color: "white" }}
+                                        className="fa-solid fa-trash-can"
+                                      ></i>
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                        </tbody>
                       </table>
-                      <Pagination className="mb-0 justify-content-end">
-                        {pagingItems}
-                      </Pagination>
+                      {searchProduct.length > 0 ? (
+                        <div></div>
+                      ) : (
+                        <Pagination className="mb-0 justify-content-end">
+                          {pagingItems}
+                        </Pagination>
+                      )}
                     </div>
                   </div>
                 </div>

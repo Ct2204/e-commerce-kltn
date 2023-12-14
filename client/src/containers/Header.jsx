@@ -121,7 +121,9 @@ const Header = () => {
                 <div className="category-container ">
                   <div className="category row d-flex flex-wrap ">
                     {category.map((categoryItem, idx) => (
-                      <div className="col-lg-4 ">
+
+                      <div key={idx} className="col-lg-4 ">
+
                         <ul className="subchildmenu-item list-unstyled">
                           <li className="category-item">
                             <Link
@@ -157,41 +159,53 @@ const Header = () => {
               <div className="col-6 d-flex">
                 {isLogedIn ? (
                   <div>
-                    <div ref={ref1}>
-                      <Button
-                        className="bg-white border border-white"
-                        onClick={handleClick1}
-                      >
-                        <CiUser
-                          style={{
-                            color: "black",
-                            width: "40px",
-                            height: "40px",
-                          }}
-                        />
-                      </Button>
-                      <Overlay
-                        show={show1}
-                        target={target1}
-                        placement="bottom"
-                        container={ref1}
-                        containerPadding={20}
-                      >
-                        <Popover id="popover-contained">
-                          <Popover.Body>
-                            <div className="my-2">
-                              <div className="my-2 account-container">
-                                <button>Trang cá nhân</button>
-                                {/* <button onClick={() => dispatch(logout())}>Đăng xuất</button> */}
+                  <div ref={ref1}>
+                    <Button
+                      className="bg-white border border-white"
+                      onClick={handleClick1}
+                    >
+                      <CiUser
+                        style={{
+                          color: "black",
+                          width: "40px",
+                          height: "40px",
+                        }}
+                        
+                      />
+                    </Button>
+                    <Overlay
+                      show={show1}
+                      target={target1}
+                      placement="bottom"
+                      container={ref1}
+                      containerPadding={20}
+                    >
+                      <Popover id="popover-contained">
+                        
+                        <Popover.Body>
+                          <div className="my-2">
+                            <div className="my-2 account-container">
+                                <Link to="user/profile"><button>Trang cá nhân</button></Link>
+                                <button >
+                                  <Link
+                                    style={{
+                                      textDecoration: 'none',
+                                      color:"inherit"
+
+                                    }} to="/user/purchase">Đơn mua</Link>
+                                </button>
+                              
                                 <button onClick={() => handleToLogout()}>
                                   Đăng xuất
                                 </button>
-                                <img
+                                {/* <img
                                 //   onClick={() => dispatch(logout())}
-                                //   class="img-profile rounded-circle"
+                                //   className="img-profile rounded-circle"
                                 //   src="#"
-                                />
+                                /> */}
                               </div>
+                  
+                     
                             </div>
                           </Popover.Body>
                         </Popover>
@@ -253,15 +267,15 @@ const Header = () => {
                           TÌM KIẾM
                         </Popover.Header>
                         <Popover.Body>
-                          <div class="box">
+                          <div className="box">
                             <div className="container-1 ">
                               <input
                                 className="searchInput"
                                 type="search"
                                 id="search"
-                                placeholder="Tìm kiếm sản phẩm..."
+                                placeHolder="Tìm kiếm sản phẩm..."
                               />
-                              <span class="icon">
+                              <span className="icon">
                                 <BiSearch />
                               </span>
                             </div>
@@ -274,6 +288,7 @@ const Header = () => {
 
                 {isLogedIn && (
                   <div>
+                    <Link to="/cart">
                     <Button
                       className="bg-white border border-white"
                       variant="primary"
@@ -316,6 +331,7 @@ const Header = () => {
                         )}
                       </div>
                     </Button>
+                    </Link>
                   </div>
                 )}
               </div>

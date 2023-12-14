@@ -38,6 +38,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             "/api/v1/users/activate-user",
             "/api/v1/product",
             "/api/v1/seller/login",
+            "/api/v1/order/payment/cancel",
+            "/api/v1/order/payment/success"
     };
 
     @Autowired

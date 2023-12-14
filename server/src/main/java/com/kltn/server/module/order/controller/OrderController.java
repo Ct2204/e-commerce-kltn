@@ -64,12 +64,11 @@ public class OrderController {
 
     @GetMapping({"/by-user/{id}"})
     public ResponseEntity<ResponseDataDto> getOrderByUserId(@PathVariable("id") Long id) {
-        List<OrderDto> items = this.orderService.getAllOrderByUserId(id);
         ResponseDataDto responseDataDto = new ResponseDataDto();
         responseDataDto.setStatus(HttpStatus.OK.series().name());
         responseDataDto.setCode(HttpStatus.OK.value());
-        responseDataDto.setMessage(items == null ? "Not exist any Order of user " + id : "Get order Successfully!");
-        responseDataDto.setData(items);
+        responseDataDto.setMessage(this.orderService.getAllOrderByUserId(id) == null ? "Not exist any Order of user " + id : "Get order Successfully!");
+        responseDataDto.setData(this.orderService.getAllOrderByUserId(id));
         return ResponseEntity.status(HttpStatus.OK).body(responseDataDto);
     }
 
@@ -102,12 +101,12 @@ public class OrderController {
 
     @GetMapping({"/by-status/{status}"})
     public ResponseEntity<ResponseDataDto> getOrderByStatus(@PathVariable("status") OrderStatusE status) {
-        List<OrderDto> items = this.orderService.getOrderByStatus(status);
+
         ResponseDataDto responseDataDto = new ResponseDataDto();
         responseDataDto.setStatus(HttpStatus.OK.series().name());
         responseDataDto.setCode(HttpStatus.OK.value());
-        responseDataDto.setMessage(items == null ? "Not exist any Order with " + status : "Get order Successfully!");
-        responseDataDto.setData(items);
+        responseDataDto.setMessage(this.orderService.getOrderByStatus(status) == null ? "Not exist any Order with " + status : "Get order Successfully!");
+        responseDataDto.setData(this.orderService.getOrderByStatus(status));
         return ResponseEntity.status(HttpStatus.OK).body(responseDataDto);
     }
 
@@ -138,12 +137,12 @@ public class OrderController {
             parameters = @Parameter(name = "id", description = "order id", example = "1"))
     @GetMapping({"/by-order/{id}"})
     public ResponseEntity<ResponseDataDto> getOrderById(@ PathVariable("id") Long id) {
-        OrderDto items = this.orderService.getOrderById(id);
+
         ResponseDataDto responseDataDto = new ResponseDataDto();
         responseDataDto.setStatus(HttpStatus.OK.series().name());
         responseDataDto.setCode(HttpStatus.OK.value());
-        responseDataDto.setMessage(items == null ? "Not exist any Order with " + id : "Get order Successfully!");
-        responseDataDto.setData(items);
+        responseDataDto.setMessage(this.orderService.getOrderProductInfoWithVisualUrl(id) == null ? "Not exist any Order with " + id : "Get order Successfully!");
+        responseDataDto.setData(this.orderService.getOrderProductInfoWithVisualUrl(id));
         return ResponseEntity.status(HttpStatus.OK).body(responseDataDto);
     }
 

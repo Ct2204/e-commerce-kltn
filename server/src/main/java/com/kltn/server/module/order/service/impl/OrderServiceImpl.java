@@ -9,6 +9,7 @@ import com.kltn.server.common.vo.ProductStatusType;
 import com.kltn.server.module.cart.repository.CartItemRepository;
 import com.kltn.server.module.order.dto.CreateOrderRequestDto;
 import com.kltn.server.module.order.dto.OrderDto;
+import com.kltn.server.module.order.dto.OrderProductDto;
 import com.kltn.server.module.order.repository.OrderDetailRepository;
 import com.kltn.server.module.order.repository.OrderRepository;
 import com.kltn.server.module.order.service.OrderService;
@@ -60,6 +61,23 @@ public class OrderServiceImpl implements OrderService {
         return this.mapperOrderEntityToDto(order);
     }
 
+    public List<OrderProductDto> getOrderProductInfoWithVisualUrl(Long orderId) {
+        return orderRepository.getOrderProductInfoWithVisualUrl(orderId)
+                .stream()
+                .map(this::mapper).collect(Collectors.toList());
+    }
+
+    public OrderProductDto mapper(Object[] ob) {
+        return new OrderProductDto(
+                 Long.valueOf(String.valueOf(ob[0])),
+                Integer.valueOf(String.valueOf(ob[1])),
+                String.valueOf(ob[2]),
+                ob[3] != null ? String.valueOf(ob[3]) : null,
+                OrderStatusE.valueOf(String.valueOf(ob[4])),
+                String.valueOf((ob[5]))
+               );
+    }
+
     /**
      * Get all order by userID .
      *
@@ -67,12 +85,14 @@ public class OrderServiceImpl implements OrderService {
      * @return The list order.
      */
 
-    public List<OrderDto> getAllOrderByUserId(Long id) {
+    public List<OrderProductDto> getAllOrderByUserId(Long id) {
         if (this.userRepository.findById(id).isEmpty()) {
             throw new ResourceNotFoundException("user with id " + id + " not found!");
         }
-        List<Order> list = this.orderRepository.getAllOrderByUserId(id);
-        return list.stream().map(this::mapperOrderEntityToDto).collect(Collectors.toList());
+        return orderRepository.getAllOrderByUserId(id)
+                .stream()
+                .map(this::mapper).collect(Collectors.toList());
+
     }
 
     /**
@@ -82,9 +102,10 @@ public class OrderServiceImpl implements OrderService {
      * @return The list order.
      */
 
-    public List<OrderDto> getOrderByStatus(OrderStatusE status) {
-        List<Order> list = this.orderRepository.getAllOrderByStatus(status);
-        return list.stream().map(this::mapperOrderEntityToDto).collect(Collectors.toList());
+    public List<OrderProductDto> getOrderByStatus(OrderStatusE status) {
+        return orderRepository.getAllOrderByStatus(status)
+                .stream()
+                .map(this::mapper).collect(Collectors.toList());
     }
 
     /**
@@ -177,8 +198,12 @@ public class OrderServiceImpl implements OrderService {
                     .multiply(orderDetail.getProductItem().getPrice());
             totalPrice = totalPrice.add(total1);
         }
+
+
         orderDto.setTotalPrice(totalPrice);
         orderDto.setStatus(order.getStatus());
         return orderDto;
     }
+
+
 }

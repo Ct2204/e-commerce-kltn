@@ -20,17 +20,63 @@ const Home = () => {
   const [productByCategoryNhan, setProductByCategoryNhan] = useState([]);
   const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
 
+
+  const initialItemCount = 8;
+  const dataArrayForDongHo = productByCategoryDongHo; // Điền mảng của bạn vào đây
+  const dataArrayForNhan = productByCategoryNhan; // Điền mảng của bạn vào đây
+
+  const [visibleItemCountForNhan, setVisibleItemCountForNhan] =
+    useState(initialItemCount);
+  const [visibleItemCountForDongHo, setVisibleItemCountForDongHo] =
+    useState(initialItemCount);
+
+  const additionalItemCountForDongHo = Math.max(
+    0,
+    productByCategoryDongHo.length - visibleItemCountForDongHo
+  );
+  const additionalItemCountForNhan = Math.max(
+    0,
+    productByCategoryNhan.length - visibleItemCountForNhan
+  );
+
+  const handleShowMoreForNhan = () => {
+    setVisibleItemCountForNhan(
+      visibleItemCountForNhan + additionalItemCountForNhan
+    );
+  };
+
+  const handleShowMoreForDongHo = () => {
+    setVisibleItemCountForDongHo(
+      visibleItemCountForDongHo + additionalItemCountForDongHo
+    );
+  };
+
+
   const containerRef = useRef(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const scrollLeft = () => {
-    if (containerRef.current) {
-      containerRef.current.scrollLeft -= 100; // Adjust the scroll distance as needed
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const totalSlides = 4; // Tổng số ảnh
+  const slideWidth = 397; // Chiều rộng của mỗi ảnh
+  const containerWidth = totalSlides * slideWidth;
+
+  const handleMoveRight = () => {
+    if (currentSlide < totalSlides - 1) {
+      setCurrentSlide(currentSlide + 1);
+      scrollToCurrentSlide();
     }
   };
 
-  const scrollRight = () => {
+  const handleMoveLeft = () => {
+    if (currentSlide > 0) {
+      setCurrentSlide(currentSlide - 1);
+      scrollToCurrentSlide();
+    }
+  };
+
+  const scrollToCurrentSlide = () => {
     if (containerRef.current) {
-      containerRef.current.scrollLeft += 100; // Adjust the scroll distance as needed
+      const scrollLeft = currentSlide * slideWidth;
+      containerRef.current.scrollTo({ left: scrollLeft, behavior: "smooth" });
     }
   };
 
@@ -209,6 +255,8 @@ const Home = () => {
       </div>
 
       {/* Category */}
+
+
       <div className="product-container" ref={containerRef}>
         <div className="product-item">
           <img
@@ -240,6 +288,7 @@ const Home = () => {
         </div>
 
         {/* <div className="scroll-buttons">
+
         <button className="left-button" onClick={scrollLeft} >
           Left
         </button>
@@ -247,7 +296,13 @@ const Home = () => {
           Right
         </button>
       </div> */}
-      </div>
+
+        </div>
+
+        <button onClick={handleMoveLeft}>Left</button>
+        <button onClick={handleMoveRight}>Right</button>
+
+      
 
       {/* Sản phẩm của đồng hồ */}
       {isLoading ? (
@@ -261,51 +316,56 @@ const Home = () => {
             <a>Đồng hồ</a>
           </h3>
           <div className="row mx-5 ">
-            {productByCategoryDongHo.map((aProducts, idx) => (
-              <div
-                key={idx}
-                className="col-3 product-card"
-                onClick={(e) => changePageHandler(e, aProducts.id)}
-              >
-                <ProductCart
-                  title={aProducts.title}
-                  imageSrc={aProducts.listMediaProduct[0].url}
-                  imageSrc1={aProducts.listMediaProduct[1].url}
-                  price={numberWithCommas(aProducts.priceSales)}
-                  priceSale={numberWithCommas(aProducts.price)}
-                  percentDiscount={aProducts.percentDiscount}
-                />
-              </div>
-            ))}
+            {productByCategoryDongHo
+              .slice(0, visibleItemCountForDongHo)
+              .map((aProducts, idx) => (
+                <div
+                  key={idx}
+                  className="col-3 product-card"
+                  onClick={(e) => changePageHandler(e, aProducts.id)}
+                >
+                  <ProductCart
+                    title={aProducts.title}
+                    imageSrc={aProducts.listMediaProduct[0].url}
+                    imageSrc1={aProducts.listMediaProduct[1].url}
+                    price={numberWithCommas(aProducts.priceSales)}
+                    priceSale={numberWithCommas(aProducts.price)}
+                    percentDiscount={aProducts.percentDiscount}
+                  />
+                </div>
+              ))}
           </div>
         </div>
       )}
 
-      {/* Xem thêm sản phẩm đồng hồ */}
       <div classname="container-fuild">
-        <div className="wraplist-ctas text-center">
-          <a
-            href="/collections/trang-suc"
-            className="btn-collection button btnwhite dark mx-2"
+
+        {visibleItemCountForDongHo < dataArrayForDongHo.length && (
+          <div
+            onClick={handleShowMoreForDongHo}
+            className="wraplist-ctas text-center"
           >
-            Xem thêm sản phẩm
-            <svg
-              width="20px"
-              height="20px"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path d="M17.707 9.293l-5-5a.999.999 0 10-1.414 1.414L14.586 9H3a1 1 0 100 2h11.586l-3.293 3.293a.999.999 0 101.414 1.414l5-5a.999.999 0 000-1.414z"></path>
-            </svg>
-          </a>
-        </div>
+            <a className="btn-collection button btnwhite dark mx-2">
+              Xem thêm sản phẩm
+              <svg
+                width="20px"
+                height="20px"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path d="M17.707 9.293l-5-5a.999.999 0 10-1.414 1.414L14.586 9H3a1 1 0 100 2h11.586l-3.293 3.293a.999.999 0 101.414 1.414l5-5a.999.999 0 000-1.414z"></path>
+              </svg>
+            </a>
+          </div>
+        )}
 
         <div style={{ paddingTop: "100px" }}>
           <div
             className="container text-center mt-5"
             style={{ paddingBottom: "40px" }}
           >
+
             <div className="row ">
               <div className="col">
                 <img
@@ -405,42 +465,50 @@ const Home = () => {
               <a>Trang sức</a>
             </h3>
             <div className="row  mx-5">
-              {productByCategoryNhan.map((aProducts, idx) => (
-                <div
-                  key={idx}
-                  className="col-3 product-card"
-                  onClick={(e) => changePageHandler(e, aProducts.id)}
-                >
-                  <ProductCart
-                    title={aProducts.title}
-                    imageSrc={aProducts.listMediaProduct[0].url}
-                    imageSrc1={aProducts.listMediaProduct[1].url}
-                    price={numberWithCommas(aProducts.priceSales)}
-                    priceSale={numberWithCommas(aProducts.price)}
-                    percentDiscount={aProducts.percentDiscount}
-                  />
-                </div>
-              ))}
+
+              {productByCategoryNhan
+                .slice(0, visibleItemCountForNhan)
+                .map((aProducts, idx) => (
+                  <div
+                    key={idx}
+                    className="col-3 product-card"
+                    onClick={(e) => changePageHandler(e, aProducts.id)}
+                  >
+                    <ProductCart
+                      title={aProducts.title}
+                      imageSrc={aProducts.listMediaProduct[0].url}
+                      imageSrc1={aProducts.listMediaProduct[1].url}
+                      price={numberWithCommas(aProducts.priceSales)}
+                      priceSale={numberWithCommas(aProducts.price)}
+                      percentDiscount={aProducts.percentDiscount}
+                    />
+                  </div>
+                ))}
+
             </div>
           </div>
         )}
-        <div className="wraplist-ctas text-center">
-          <a
-            href="/collections/trang-suc"
-            className="btn-collection button btnwhite dark mx-2"
+        {visibleItemCountForNhan < dataArrayForNhan.length && (
+          <div
+            onClick={handleShowMoreForNhan}
+            className="wraplist-ctas text-center"
           >
-            Xem thêm sản phẩm
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path d="M17.707 9.293l-5-5a.999.999 0 10-1.414 1.414L14.586 9H3a1 1 0 100 2h11.586l-3.293 3.293a.999.999 0 101.414 1.414l5-5a.999.999 0 000-1.414z"></path>
-            </svg>
-          </a>
-        </div>
+
+            <a className="btn-collection button btnwhite dark mx-2">
+              Xem thêm sản phẩm
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path d="M17.707 9.293l-5-5a.999.999 0 10-1.414 1.414L14.586 9H3a1 1 0 100 2h11.586l-3.293 3.293a.999.999 0 101.414 1.414l5-5a.999.999 0 000-1.414z"></path>
+              </svg>
+            </a>
+          </div>
+        )}
+
 
         <div className="container-fuild" style={{ paddingTop: "50px" }}>
           <div className="sectionHeading text-center my-5">

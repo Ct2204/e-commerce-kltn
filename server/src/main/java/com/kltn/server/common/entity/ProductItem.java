@@ -2,10 +2,7 @@ package com.kltn.server.common.entity;
 
 import com.kltn.server.base.entity.BaseAuditEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+
 @Table(name = "product_items")
 public class ProductItem extends BaseAuditEntity {
 

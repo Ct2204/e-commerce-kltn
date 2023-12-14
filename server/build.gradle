@@ -38,6 +38,10 @@ dependencies {
 	implementation 'commons-io:commons-io:2.6'
 	implementation 'com.paypal.sdk:rest-api-sdk:LATEST_VERSION'
 	implementation group: 'com.paypal.sdk', name: 'rest-api-sdk', version: '1.14.0'
+	implementation 'com.cloudinary:cloudinary-http44:1.19.0'
+
+
+
 
 	compileOnly 'org.springframework.boot:spring-boot-devtools'
 	compileOnly 'javax.servlet:servlet-api:2.5'
