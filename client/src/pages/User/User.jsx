@@ -26,6 +26,7 @@ const User = () => {
   const [imageUrl, setImageUrl] = useState(
     "https://inkythuatso.com/uploads/thumbnails/800/2023/03/9-anh-dai-dien-trang-inkythuatso-03-15-27-03.jpg"
   );
+  console.log(imageUrl);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -190,7 +191,7 @@ const User = () => {
             <div className="mt-4">
               <div className="stardust-dropdown__item-header">
                 <a
-                  class="d-flex text-decoration-none"
+                  className="d-flex text-decoration-none"
                   href="/user/account/profile"
                 >
                   <div className="account-image">
@@ -206,7 +207,7 @@ const User = () => {
               </div>
             </div>
             <div>
-              <div class="d-flex flex-column profile-address my-2">
+              <div className="d-flex flex-column profile-address my-2">
                 <a>Hồ Sơ</a>
                 <Link
                   to="/user/address"
@@ -219,7 +220,9 @@ const User = () => {
             <div className="mt-4">
               <div className="stardust-dropdown__item-header">
                 <a
-                  class="d-flex text-decoration-none"
+
+                  className="d-flex text-decoration-none"
+
                   href="/user/account/profile"
                 >
                   <div className="account-image">
@@ -236,8 +239,8 @@ const User = () => {
             </div>
           </div>
 
-          <div className="col-10 bg-white highlight-container">
-            <div class="mx-3 myProfile pb-3">
+          <div className="col-10 bg-white highlight-container pb-3">
+            <div className="mx-3 myProfile pb-3">
               <div className="mt-3 fs-5 fw-bold">Hồ sơ của tôi</div>
               <div className="">
                 Quản lý thông tin hồ sơ để bảo mật tài khoản
@@ -246,7 +249,7 @@ const User = () => {
             <div className="row px-3">
               <div className="col-8 ">
                 <form onSubmit={handleFormSubmit}>
-                  <div className="mb-3 row " style={{ width: "450px" }}>
+                  <div className="my-3 row " style={{ width: "450px" }}>
                     <label
                       htmlFor="inputPassword"
                       className="col-3 col-form-label"
@@ -270,8 +273,8 @@ const User = () => {
                     >
                       Email
                     </label>
-                    <div class="col-9 d-flex">
-                      <div class="mt-2">{userInfo.email}</div>
+                    <div className="col-9 d-flex">
+                      <div className="mt-2">{userInfo.email}</div>
                     </div>
                   </div>
                   <div className="mb-3 row" style={{ width: "450px" }}>
@@ -281,8 +284,8 @@ const User = () => {
                     >
                       Số điện thoại
                     </label>
-                    <div class="col-9 d-flex">
-                      <div class="mt-2">0967064267</div>
+                    <div className="col-9 d-flex">
+                      <div className="mt-2">0967064267</div>
                     </div>
                   </div>
                   <div className="mb-3 row" style={{ width: "450px" }}>
@@ -359,10 +362,10 @@ const User = () => {
                       <div className="col-9 d-flex">
                         <input
                           type="number"
-                          class="form-control"
+                          className="form-control"
                           id="day"
                           name="day"
-                          placeholder="1"
+                          placeHolder="1"
                           value={day}
                           min="1"
                           max="31"
@@ -370,7 +373,7 @@ const User = () => {
                           required
                         />
                         <select
-                          class="form-select"
+                          className="form-select"
                           id="month"
                           name="month"
                           value={month}
@@ -395,10 +398,10 @@ const User = () => {
                         </select>
                         <input
                           type="number"
-                          class="form-control"
+                          className="form-control"
                           id="year"
                           name="year"
-                          placeholder="2001"
+                          placeHolder="2001"
                           value={year}
                           min="1980"
                           max="2010"
@@ -409,7 +412,14 @@ const User = () => {
                     </div>
                   </div>
                   <button
-                    style={{ widht: "70px", height: "40px" }}
+                    className="bg-primary"
+                    style={{
+                      width: "70px",
+                      height: "40px",
+                      border: "none",
+                      borderRadius: "6px",
+                      marginLeft: "250px",
+                    }}
                     onClick={handleSave}
                   >
                     Lưu
@@ -440,9 +450,9 @@ const User = () => {
                         />
                       </div>
                     </Form.Group>
-                    <div class="my-3 ">
-                      <div class="">Dụng lượng file tối đa 1 MB</div>
-                      <div class="">Định dạng:.JPEG, .PNG</div>
+                    <div className="my-3 ">
+                      <div className="">Dụng lượng file tối đa 1 MB</div>
+                      <div className="">Định dạng:.JPEG, .PNG</div>
                     </div>
                   </div>
                 </div>

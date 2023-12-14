@@ -1,4 +1,3 @@
-
 import store from "../store";
 
 import api from "./api";
@@ -54,10 +53,10 @@ export const register = async (fullName, email, password, confirmPassword) => {
 export const logout = async () => {
   try {
     const token = store.getState().auth.token;
-      if (!token) {
-        console.error("Token is not available.");
-        return null;
-      }
+    if (!token) {
+      console.error("Token is not available.");
+      return null;
+    }
     let url = api.url.logout;
 
     const response = await httpRequest({
@@ -65,8 +64,7 @@ export const logout = async () => {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-      }
-      
+      },
     });
     if (response.code === 200) {
       return response;
@@ -79,7 +77,6 @@ export const logout = async () => {
     return null;
   }
 };
-
 
 export const getProfileOfUser = async (id) => {
   try {
@@ -167,15 +164,12 @@ export const getAddressOfUserById = async (id) => {
 };
 
 export const postUserAddress = async (data, id) => {
-
   try {
     const token = store.getState().auth.token;
     if (!token) {
       console.error("Token is not available.");
       return null;
     }
-
-     
 
     let url = `${api.url.postAddressOfUserById}/${id}`;
     const response = await httpRequest({
@@ -214,12 +208,10 @@ export const updateAddressOfUser = async (data, id) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-
     });
     if (response.code === 200) {
       return response;
     } else {
-
       return null;
     }
   } catch (err) {
@@ -252,6 +244,82 @@ export const deleteAddressOfUserById = async (id) => {
     }
   } catch (err) {
     const errMessage = "Error in delete address of user: ";
+    console.error(errMessage, err);
+    return null;
+  }
+};
+
+//send verification code
+
+export const postVerificationCode = async (email) => {
+  try {
+    let url = api.url.sendVerificationCode;
+
+    const response = await httpRequest({
+      url: url,
+      method: "POST",
+      data: { email: email },
+    });
+    if (response.code === 200) {
+      return response;
+    } else {
+      return null;
+    }
+  } catch (err) {
+    const errMessage = "Error in post verification code: ";
+    console.error(errMessage, err);
+    return null;
+  }
+};
+
+export const enterVerificationCode = async (verificationcode) => {
+  try {
+    let url = api.url.enterVerificationCode;
+
+    const response = await httpRequest({
+      url: url,
+      method: "POST",
+      data: { verificationCode: verificationcode },
+    });
+    if (response.code === 200) {
+      return response;
+    } else {
+      return response;
+    }
+  } catch (err) {
+    const errMessage = "Error in post verification code: ";
+    console.error(errMessage, err);
+    return null;
+  }
+};
+
+//Change Password
+
+export const changePassword = async (email, newpassword) => {
+  try {
+    const token = store.getState().auth.token;
+    if (!token) {
+      console.error("Token is not available.");
+      return null;
+    }
+    console.log("Thien", newpassword);
+    let url = api.url.changePassword;
+
+    const response = await httpRequest({
+      url: url,
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: { email: email, password: newpassword },
+    });
+    if (response.code === 200) {
+      return response;
+    } else {
+      return response;
+    }
+  } catch (err) {
+    const errMessage = "Error in posting login: ";
     console.error(errMessage, err);
     return null;
   }

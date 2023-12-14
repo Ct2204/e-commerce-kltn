@@ -51,7 +51,9 @@ const PurchaseOrder = () => {
             <div className="mt-4">
               <div className="stardust-dropdown__item-header">
                 <a
-                  class="d-flex text-decoration-none"
+
+                  className="d-flex text-decoration-none"
+
                   href="/user/account/profile"
                 >
                   <div className="account-image">
@@ -67,7 +69,9 @@ const PurchaseOrder = () => {
               </div>
             </div>
             <div>
-              <div class="d-flex flex-column profile-address my-2">
+
+              <div className="d-flex flex-column profile-address my-2">
+
                 <a>Hồ Sơ</a>
                 <Link
                   to="/user/address"
@@ -80,7 +84,9 @@ const PurchaseOrder = () => {
             <div className="mt-4">
               <div className="stardust-dropdown__item-header">
                 <a
-                  class="d-flex text-decoration-none"
+
+                  className="d-flex text-decoration-none"
+
                   href="/user/account/profile"
                 >
                   <div className="account-image">
@@ -116,28 +122,36 @@ const PurchaseOrder = () => {
                           style={{ width: "82px", height: "82px" }}
                         />
                       </div>
-                      <div class="text-start">
+
+                      <div className="text-start">
                         <div>
-                          <div class="iJlxsT">
-                            <span class="x5GTyN" tabindex="0">
+                          <div className="iJlxsT">
+                            <span className="x5GTyN" tabindex="0">
+
                               Áo sơ mi tay ngắn nam nữ form rộng sơ mi cổ vest
                               unisex tay lỡ, chất vải lụa mịn chống nhăn
                             </span>
                           </div>
                         </div>
                         <div>
-                          <div class="vb0b-P" tabindex="0">
+
+                          <div className="vb0b-P" tabindex="0">
                             Phân loại hàng: Be CV,L
                           </div>
-                          <div class="_3F1-5M" tabindex="0">
+                          <div className="_3F1-5M" tabindex="0">
+
                             x1
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="col-2 d-flex align-items-center">
-                      <span class="text-decoration-line-through">₫140.000</span>
-                      <span class="text-danger">₫99.000</span>
+
+                      <span className="text-decoration-line-through">
+                        ₫140.000
+                      </span>
+                      <span className="text-danger">₫99.000</span>
+
                     </div>
                   </div>
                 </Tab>

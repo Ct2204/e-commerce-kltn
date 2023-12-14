@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { postVerificationCode } from "../../services/UserService";
 import { toast } from "react-toastify";
-import { enterVerificationCode } from "../../services/UserService";
+import { useNavigate } from "react-router-dom";
 
-const VerificationCode = () => {
-  const [verification, setVerification] = useState("");
+const SendVerificationCode = () => {
+  const [email, setEmail] = useState({});
 
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -13,27 +13,28 @@ const VerificationCode = () => {
     // Lấy giá trị từ thẻ input
     const inputValue = e.target.value;
     // Cập nhật state email
-    setVerification(inputValue);
+    setEmail(inputValue);
   };
-  console.log(verification);
-  const handleEnterVerificationCode = async (e) => {
+
+  const handleSendVerificationCode = async (e) => {
     try {
       setIsLoading(true);
-      const responseData = await enterVerificationCode(verification);
+      const responseData = await postVerificationCode(email);
       if (responseData) {
         console.log(responseData);
         toast.success(responseData.message);
-        navigate("/login");
+        navigate("/login/verificationcode");
       } else {
         console.log(responseData);
         toast.error("Failed.");
       }
       setIsLoading(false);
     } catch (err) {
-      console.error("Error in enter verification code: ", err);
+      console.error("Error in send verification code: ", err);
       setIsLoading(false);
     }
   };
+
   return (
     <div
       style={{
@@ -54,7 +55,7 @@ const VerificationCode = () => {
         }}
       >
         <div style={{ borderBottom: "1px solid rgba(0, 0, 0, .1)" }}>
-          <h5 className="fw-bold m-3 py-1">Nhập mã xác nhận từ email</h5>
+          <h5 className="fw-bold m-3 py-1">Gửi mã xác nhận qua email</h5>
         </div>
         <div className="phl ptm uiInterstitialContent">
           <div className="identify_yourself_block">
@@ -63,8 +64,9 @@ const VerificationCode = () => {
                 <tr>
                   <td></td>
                   <td>
-                    <div className="mx-3 mt-3">
-                      Vui lòng nhập mã xác nhận để kích hoạt tài khoản
+                    <div className="m-3">
+                      Vui lòng nhập email của bạn để được nhận mã xác nhận để
+                      kích hoạt tài khoản
                     </div>
                   </td>
                 </tr>
@@ -84,22 +86,23 @@ const VerificationCode = () => {
                         borderRadius: "6px",
                         border: "1px solid #ccd0d5",
                       }}
-                      type="password"
+                      type="text"
                       className="m-3"
                       id="identify_email"
-                      name="verification"
-                      placeHolder="Mã xác nhận"
+                      name="email"
+                      placeHolder="Địa chỉ email"
                       autofocus="1"
-                      aria-label="Mã xác nhận"
+                      aria-label="Địa chỉ email"
                       onChange={handleInputChange}
                     />
                   </td>
                 </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                </tr>
               </tbody>
             </table>
-          </div>
-          <div className="mx-3 mb-3">
-            <a href="#">Bạn chưa nhân được mã xác thực? </a>
           </div>
         </div>
         <div className="" style={{ borderTop: "1px solid rgba(0, 0, 0, .1)" }}>
@@ -129,11 +132,9 @@ const VerificationCode = () => {
                   paddingTop: "5px",
                   paddingBottom: "5px",
                 }}
-                onClick={(e) => {
-                  handleEnterVerificationCode(e);
-                }}
+                onClick={(e) => handleSendVerificationCode(e)}
               >
-                Tiếp tục
+                Gửi
               </button>
             </div>
           </div>
@@ -143,4 +144,4 @@ const VerificationCode = () => {
   );
 };
 
-export default VerificationCode;
+export default SendVerificationCode;
