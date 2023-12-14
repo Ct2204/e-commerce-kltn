@@ -302,7 +302,7 @@ const Home = () => {
         <button onClick={handleMoveLeft}>Left</button>
         <button onClick={handleMoveRight}>Right</button>
 
-      </div>
+      
 
       {/* Sản phẩm của đồng hồ */}
       {isLoading ? (
