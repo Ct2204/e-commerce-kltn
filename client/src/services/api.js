@@ -47,7 +47,7 @@ const url = {
   //profile
   getProfileOfUser: "/users/profile",
   updateUserProfile: "/users/profile/update",
-  uploadPictureProfile: "users/profile/upload-picture/",
+  uploadPictureProfile: "/users/profile/upload-picture/",
   getPictureProfile: "/users/profile/get-picture",
   
 

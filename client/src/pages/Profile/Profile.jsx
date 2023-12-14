@@ -45,16 +45,21 @@ const Profile = () => {
   const handleToUploadPicture = async () => {
     const file = fileInputRef.current.click();
     console.log("hiii",file);
-    const responseData = await uploadPictureProfile(userId, file);
-    console.log("hello",responseData.message)
+    // const responseData = await uploadPictureProfile(userId, file);
+    // console.log("hello",responseData.message)
   }
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
+    
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const selectedFile = e.target.files[0];
+    console.log(selectedFile, "111")
+    
+     const responseData = await uploadPictureProfile(userId, selectedFile);
+    console.log("hello",responseData.message)
 
     // Hủy URL cũ nếu có
     if (imageUrl) {
@@ -64,6 +69,9 @@ const Profile = () => {
     // Kiểm tra nếu có tệp tin được chọn
     if (selectedFile) {
       const url = URL.createObjectURL(selectedFile);
+
+
+      // console.log("helllo",url)
       setImageUrl(url);
     }
   };
@@ -377,7 +385,7 @@ const Profile = () => {
                       <div className="d-flex">
                         <Button
                           className="bg-white text-body border border-secondary mx-1 mt-2"
-                          onClick={()=>{handleToUploadPicture()}}
+                          onClick={()=>{handleButtonClick()}}
                         >
                           Chọn ảnh
                         </Button>

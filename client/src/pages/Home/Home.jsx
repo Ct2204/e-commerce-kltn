@@ -299,8 +299,8 @@ const Home = () => {
 
         </div>
 
-        <button onClick={handleMoveLeft}>Left</button>
-        <button onClick={handleMoveRight}>Right</button>
+        {/* <button onClick={handleMoveLeft}>Left</button>
+        <button onClick={handleMoveRight}>Right</button> */}
 
       
 
