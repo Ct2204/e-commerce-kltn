@@ -198,11 +198,7 @@ const Header = () => {
                                 <button onClick={() => handleToLogout()}>
                                   Đăng xuất
                                 </button>
-                                {/* <img
-                                //   onClick={() => dispatch(logout())}
-                                //   className="img-profile rounded-circle"
-                                //   src="#"
-                                /> */}
+  
                               </div>
                   
                      

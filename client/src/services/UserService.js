@@ -172,7 +172,7 @@ export const uploadPictureProfile = async (userId,file) => {
       return null;
     }
 
-    let url = `${api.url.uploadPictureProfile}/${userId}`;
+    let url = `${api.url.uploadPictureProfile}${userId}`;
     const formData = new FormData();
     formData.append('file',file)
     const response = await httpRequest({
