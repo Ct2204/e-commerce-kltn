@@ -249,3 +249,35 @@ export const getProductsByCategory2 = async (id) => {
     return null;
   }
 };
+
+//search Product Name
+
+export const searchProductName = async (name) => {
+  try {
+    const token = store.getState().auth.token;
+    if (!token) {
+      console.error("Token is not available.");
+      return null;
+    }
+    if (name === "") return null;
+    const queryString = `?keyword=${name}&pageNumber=1`;
+
+    let url = `${api.url.searchProductName}${queryString}`;
+    const response = await httpRequest({
+      url: url,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.code === 200) {
+      return response;
+    } else {
+      return null;
+    }
+  } catch (err) {
+    const errMessage = "Error in get description: ";
+    console.error(errMessage, err);
+    return null;
+  }
+};

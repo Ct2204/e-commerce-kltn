@@ -48,7 +48,17 @@ const Login = (props) => {
       );
       navigate("/");
     } else {
+      console.log(responseData);
       setMessage(responseData.message);
+      if (responseData.code === 403) {
+        toast.error("Bạn sẽ được chuyển qua trang để kích hoạt email!");
+        const timeoutId = setTimeout(() => {
+          // Hàm này sẽ chạy sau 3 giây
+          navigate("/login/sendverificationcode");
+        }, 3000);
+      } else {
+        toast.error(responseData.message);
+      }
     }
     console.log(responseData);
   };

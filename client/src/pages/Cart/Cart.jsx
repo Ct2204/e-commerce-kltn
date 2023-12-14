@@ -174,6 +174,11 @@ const Cart = () => {
     handleProductsByCategoryNhan();
   }, []);
 
+  const changePageHandler = async (e, id) => {
+    navigate(`/productdetail?productId=${id}`);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       <div className="container-fuild px-2 pt-3 nav-border">
@@ -363,7 +368,12 @@ const Cart = () => {
                             <h3 className="item--title">
                               <a
                                 className="text-decoration-none  mx-5"
-                                style={{ color: "#000", fontSize: "25px" }}
+                                style={{
+                                  color: "#000",
+                                  fontSize: "25px",
+                                  verticalAlign: "top",
+                                  display: "inline-block",
+                                }}
                               >
                                 {cartItem.title}
                               </a>
@@ -522,7 +532,7 @@ const Cart = () => {
                 className="summary-warning alert-order"
                 style={{ opacity: 0.9 }}
               >
-                <p class="textmr">
+                <p className="textmr">
                   <strong style={{ padding: "10px 5px" }}>
                     Chính sách mua hàng
                   </strong>
@@ -554,7 +564,7 @@ const Cart = () => {
             <div
               key={idx}
               className="col-3 product-card"
-              // onClick={(e) => changePageHandler(e, aProducts.id)}
+              onClick={(e) => changePageHandler(e, aProducts.id)}
             >
               <ProductCart
                 title={aProducts.title}
@@ -572,7 +582,7 @@ const Cart = () => {
             <div
               key={idx}
               className="col-3 product-card"
-              // onClick={(e) => changePageHandler(e, aProducts.id)}
+              onClick={(e) => changePageHandler(e, aProducts.id)}
             >
               <ProductCart
                 title={aProducts.title}

@@ -121,7 +121,7 @@ const Header = () => {
                 <div className="category-container ">
                   <div className="category row d-flex flex-wrap ">
                     {category.map((categoryItem, idx) => (
-                      <div className="col-lg-4 ">
+                      <div key={idx} className="col-lg-4 ">
                         <ul className="subchildmenu-item list-unstyled">
                           <li className="category-item">
                             <Link
@@ -181,16 +181,39 @@ const Header = () => {
                           <Popover.Body>
                             <div className="my-2">
                               <div className="my-2 account-container">
-                                <button>Trang cá nhân</button>
+                                <button
+                                  className="text-white mb-3"
+                                  style={{
+                                    padding: "0 20px",
+                                    backgroundColor: "#216fdb",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    paddingTop: "5px",
+                                    paddingBottom: "5px",
+                                  }}
+                                >
+                                  Trang cá nhân
+                                </button>
                                 {/* <button onClick={() => dispatch(logout())}>Đăng xuất</button> */}
-                                <button onClick={() => handleToLogout()}>
+                                <button
+                                  className="text-white"
+                                  style={{
+                                    padding: "0 20px",
+                                    backgroundColor: "#216fdb",
+                                    border: "none",
+                                    borderRadius: "6px",
+                                    paddingTop: "5px",
+                                    paddingBottom: "5px",
+                                  }}
+                                  onClick={() => handleToLogout()}
+                                >
                                   Đăng xuất
                                 </button>
-                                <img
+                                {/* <img
                                 //   onClick={() => dispatch(logout())}
-                                //   class="img-profile rounded-circle"
+                                //   className="img-profile rounded-circle"
                                 //   src="#"
-                                />
+                                /> */}
                               </div>
                             </div>
                           </Popover.Body>
@@ -253,15 +276,15 @@ const Header = () => {
                           TÌM KIẾM
                         </Popover.Header>
                         <Popover.Body>
-                          <div class="box">
+                          <div className="box">
                             <div className="container-1 ">
                               <input
                                 className="searchInput"
                                 type="search"
                                 id="search"
-                                placeholder="Tìm kiếm sản phẩm..."
+                                placeHolder="Tìm kiếm sản phẩm..."
                               />
-                              <span class="icon">
+                              <span className="icon">
                                 <BiSearch />
                               </span>
                             </div>

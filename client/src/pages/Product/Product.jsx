@@ -4,11 +4,13 @@ import ProductCart from "../../components/ProductCart";
 import { FaFilter } from "react-icons/fa";
 import Dropdown from "react-bootstrap/Dropdown";
 import { getProductsByCategory } from "../../services/product";
+import { useNavigate } from "react-router-dom";
 
 const Product = () => {
   const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const navigate = useNavigate();
   const numberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
@@ -20,9 +22,28 @@ const Product = () => {
     setIsLoading(false);
   };
 
+  const handleSortPriceAscending = () => {
+    const sortedProducts = [...productByCategoryDongHo].sort(
+      (a, b) => a.priceSales - b.priceSales
+    );
+    setProductByCategoryDongHo(sortedProducts);
+  };
+
+  const handleSortPiceDescending = () => {
+    const sortedProducts = [...productByCategoryDongHo].sort(
+      (a, b) => b.priceSales - a.priceSales
+    );
+    setProductByCategoryDongHo(sortedProducts);
+  };
+
   useEffect(() => {
     handleProductsByCategoryDongHo();
   }, []);
+
+  const changePageHandler = async (e, id) => {
+    navigate(`/productdetail?productId=${id}`);
+    window.scrollTo(0, 0);
+  };
   return (
     <>
       <div className="container-fuild px-2 pt-3 border-product">
@@ -98,10 +119,12 @@ const Product = () => {
               Sắp xếp
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Giá: Tăng dần</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Giá: Giảm dần</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Tên: A-Z</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Tên: Z-A</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => handleSortPriceAscending()}>
+                Giá: Tăng dần
+              </Dropdown.Item>
+              <Dropdown.Item onClick={(e) => handleSortPiceDescending()}>
+                Giá: Giảm dần
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -115,7 +138,7 @@ const Product = () => {
             <div
               key={idx}
               className="col-3 product-card"
-              // onClick={(e) => changePageHandler(e, aProducts.id)}
+              onClick={(e) => changePageHandler(e, aProducts.id)}
             >
               <ProductCart
                 title={aProducts.title}
