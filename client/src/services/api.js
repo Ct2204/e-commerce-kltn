@@ -59,6 +59,16 @@ const url = {
 
   //rating
   getRatingOfProduct: "/rating",
+
+  //verification code
+  sendVerificationCode: "/users/send-verification-code",
+  enterVerificationCode: "/users/activate-user",
+  changePassword: "/users/change-password",
+
+  //search product name
+
+  searchProductName: "/product/search-product-by-text",
+
 };
 
 const instance = axios.create({

@@ -121,7 +121,9 @@ const Header = () => {
                 <div className="category-container ">
                   <div className="category row d-flex flex-wrap ">
                     {category.map((categoryItem, idx) => (
-                      <div className="col-lg-4 ">
+
+                      <div key={idx} className="col-lg-4 ">
+
                         <ul className="subchildmenu-item list-unstyled">
                           <li className="category-item">
                             <Link
@@ -196,14 +198,20 @@ const Header = () => {
                                 <button onClick={() => handleToLogout()}>
                                   Đăng xuất
                                 </button>
-                              
+                                {/* <img
+                                //   onClick={() => dispatch(logout())}
+                                //   className="img-profile rounded-circle"
+                                //   src="#"
+                                /> */}
+                              </div>
+                  
+                     
                             </div>
-                          </div>
-                        </Popover.Body>
-                      </Popover>
-                    </Overlay>
+                          </Popover.Body>
+                        </Popover>
+                      </Overlay>
+                    </div>
                   </div>
-                </div>
                 ) : (
                   <Link to={"/login"}>
                     <button
@@ -259,15 +267,15 @@ const Header = () => {
                           TÌM KIẾM
                         </Popover.Header>
                         <Popover.Body>
-                          <div class="box">
+                          <div className="box">
                             <div className="container-1 ">
                               <input
                                 className="searchInput"
                                 type="search"
                                 id="search"
-                                placeholder="Tìm kiếm sản phẩm..."
+                                placeHolder="Tìm kiếm sản phẩm..."
                               />
-                              <span class="icon">
+                              <span className="icon">
                                 <BiSearch />
                               </span>
                             </div>

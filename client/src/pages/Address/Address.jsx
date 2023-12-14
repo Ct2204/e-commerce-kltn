@@ -288,16 +288,24 @@ const Address = () => {
             </Modal>
 
             <div className="col-10 bg-white highlight-container pb-5">
-              <div class="myProfile pb-3 d-flex">
+              <div className="myProfile pb-3 d-flex">
                 <div className="m-4 fs-6 fw-bold">Địa chỉ của tôi</div>
                 <div className="ms-auto m-4">
                   <button
                     onClick={(e) => handleShowButton(userId)}
-                    class="shopee-button-solid shopee-button-solid--primary ErE1Vh"
+                    style={{
+                      padding: "0 20px",
+                      backgroundColor: "#216fdb",
+                      border: "none",
+                      borderRadius: "6px",
+                      paddingTop: "5px",
+                      paddingBottom: "5px",
+                    }}
+                    className="text-white shopee-button-solid shopee-button-solid--primary ErE1Vh"
                   >
-                    <div class="d-flex">
-                      <div class="">
-                        <i class="fa-solid fa-plus"></i>
+                    <div className="d-flex">
+                      <div className="">
+                        <i className="fa-solid fa-plus"></i>
                       </div>
                       <div>Thêm địa chỉ mới</div>
                     </div>
@@ -310,25 +318,41 @@ const Address = () => {
               {isLoading ? (
                 <h1>Đang load dữ liệu</h1>
               ) : (
-                <div class=" ">
+                <div className=" ">
                   {Array.from(address).map((aAddress, idx) => (
-                    <div class="border-items-address mb-5" key={idx}>
-                      <div class="d-flex">
-                        <div class="d-flex align-items-center">
-                          <div class="mx-4 fw-bold border-name">
+                    <div className="border-items-address mb-5" key={idx}>
+                      <div className="d-flex">
+                        <div className="d-flex align-items-center">
+                          <div className="mx-4 fw-bold border-name">
                             {aAddress.fullName}
                           </div>
-                          <div class="">(+84) {aAddress.phone}</div>
+                          <div className="">(+84) {aAddress.phone}</div>
                         </div>
-                        <div class="ms-auto">
+                        <div className="ms-auto">
                           <button
-                            class=" text-primary bg-white "
+                            style={{
+                              padding: "0 20px",
+                              backgroundColor: "#216fdb",
+                              border: "none",
+                              borderRadius: "6px",
+                              paddingTop: "5px",
+                              paddingBottom: "5px",
+                            }}
+                            className="text-primary bg-white "
                             onClick={(e) => handleShowButton(aAddress.id)}
                           >
                             Cập nhật
                           </button>
                           <button
-                            class="text-primary bg-white"
+                            style={{
+                              padding: "0 20px",
+                              backgroundColor: "#216fdb",
+                              border: "none",
+                              borderRadius: "6px",
+                              paddingTop: "5px",
+                              paddingBottom: "5px",
+                            }}
+                            className="text-primary bg-white"
                             onClick={(e) =>
                               handleDeleteAddressOfUserById(aAddress.id)
                             }
@@ -337,24 +361,19 @@ const Address = () => {
                           </button>
                         </div>
                       </div>
-                      <div class="d-flex">
-                        <div class="">
-                          <div class=" mx-4">
-                            <div class="">{aAddress.street}</div>
-                            <div class="d-flex">
+                      <div className="d-flex">
+                        <div className="">
+                          <div className=" mx-4">
+                            <div className="">{aAddress.street}</div>
+                            <div className="d-flex">
                               <div>{aAddress.ward},</div>
                               <div className="mx-2">{aAddress.district},</div>
                               <div>{aAddress.region}</div>
                             </div>
                           </div>
                         </div>
-                        <div class="ms-auto border-adrress ">
-                          <button class="bg-white text-body">
-                            Thiết lập mặc định
-                          </button>
-                        </div>
                       </div>
-                      <div class="TArgaE mt-2">
+                      <div className="TArgaE mt-2">
                         <span className="text-primary border border-primary px-2 py-1 mx-4 ">
                           Mặc định
                         </span>

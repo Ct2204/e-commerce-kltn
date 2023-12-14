@@ -39,7 +39,6 @@ const PurchaseOrder = () => {
         <div className="col-2">
             <User/>
             </div>
-
           <div className="col-10">
             <div className="d-flex row text-center">
               <Tabs

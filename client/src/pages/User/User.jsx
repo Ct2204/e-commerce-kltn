@@ -26,6 +26,7 @@ const User = () => {
   const [imageUrl, setImageUrl] = useState(
     "https://inkythuatso.com/uploads/thumbnails/800/2023/03/9-anh-dai-dien-trang-inkythuatso-03-15-27-03.jpg"
   );
+  console.log(imageUrl);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -190,7 +191,7 @@ const User = () => {
             <div className="mt-4">
               <div className="stardust-dropdown__item-header">
                 <a
-                  class="d-flex text-decoration-none"
+                  className="d-flex text-decoration-none"
                   href="/user/account/profile"
                 >
                   <div className="account-image">

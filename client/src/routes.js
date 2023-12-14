@@ -2,6 +2,9 @@ import Address from "./pages/Address/Address";
 import AddProuct from "./pages/AdminHome/AddProduct.jsx";
 import AdminHome from "./pages/AdminHome/AdminHome";
 import Cart from "./pages/Cart/Cart";
+
+import ChangePassword from "./pages/ChangePassword/ChangePassword";
+
 import Comment from "./pages/Comment/Comment";
 import NotFound from "./pages/ErrorPage/NotFound";
 import Home from "./pages/Home/Home";
@@ -13,6 +16,9 @@ import ProductNhan from "./pages/ProductCategory/ProductNhan";
 import ProductDetail from "./pages/ProductDetail/ProductDetail";
 import Profile from "./pages/Profile/Profile.jsx";
 import PurchaseOrder from "./pages/PurchaseOder/PurchaseOrder";
+
+import SendVerificationCode from "./pages/SendVerificationCode/SendVerificationCode";
+
 import User from "./pages/User/User";
 import VerificationCodeForm from "./pages/VerificationCode/VerificationCodeForm";
 
@@ -37,6 +43,10 @@ const routes = [
   { path: "/product/trangsucmuahe", component: <ProductKinhMat /> },
   { path: "/user/profile", component: <Profile /> },
   {path: "/seller/addproduct", component: <AddProuct />},
+
+  { path: "/login/sendverificationcode", component: <SendVerificationCode /> },
+  { path: "/login/changepassword", component: <ChangePassword /> },
+
 ];
 
 export const routesAdmin = [{

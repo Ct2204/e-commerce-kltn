@@ -7,6 +7,8 @@ import { getOrderById } from "../../services/OrderService.js";
 
 const Payment = (props) => {
 
+
+
   const [orderProduct,setOrderProduct] = useState([])
   const [paymentMethod,setPaymentMethod] = useState("")
   const navigate = useNavigate()
@@ -80,6 +82,7 @@ const Payment = (props) => {
   };
   console.log(paymentMethod)
   
+
   return (
     <>
       <div className="address-receive">
@@ -114,7 +117,10 @@ const Payment = (props) => {
               </tr>
             </thead>
             <tbody>
+
+
               {orderProduct.map((product, idx) => (
+
                 <tr key={idx}>
                   <td>
                     <div className="d-flex">
@@ -130,14 +136,20 @@ const Payment = (props) => {
                     </div>
                   </td>
                   <td>
+
+
                     <div className="mt-3">{numberWithCommas(product.price)}</div>
+
                   </td>
                   <td>
                     <div className="mt-3">{product.quantity}</div>
                   </td>
                   <td>
                     <div className="mt-3">
+
+
                       {numberWithCommas(product.price * product.quantity)}
+
                     </div>
                   </td>
                 </tr>
@@ -146,18 +158,19 @@ const Payment = (props) => {
           </table>
         </div>
 
+
         <div class="checkout-payment-method-view__current checkout-payment-setting product-cart mt-5">
           <div class="checkout-payment-method-view__current-title"
            >
+
             Phương thức thanh toán
           </div>
-          <div class="checkout-payment-setting__payment-methods-tab">
+          <div className="checkout-payment-setting__payment-methods-tab">
             <div role="radiogroup">
-            
-             
+
               <span>
                 <button
-                  class="product-variation product-variation--disabled"
+                  className="product-variation product-variation--disabled"
                   tabindex="0"
                   role="radio"
                   aria-label="Vnpay"
@@ -170,7 +183,7 @@ const Payment = (props) => {
               </span>
               <span>
                 <button
-                  class="product-variation"
+                  className="product-variation"
                   tabindex="0"
                   role="radio"
                   aria-label="Paypal"
@@ -183,7 +196,7 @@ const Payment = (props) => {
               </span>
               <span>
                 <button
-                  class="product-variation"
+                  className="product-variation"
                   tabindex="0"
                   role="radio"
                   aria-label="Thanh toán khi nhận hàng"
@@ -198,6 +211,7 @@ const Payment = (props) => {
             <div aria-live="polite"></div>
           </div>
         </div>
+
         <div class="KQyCj0" aria-live="polite" style={{paddingTop:"50px"}}>
           <h2 class="a11y-visually-hidden">Tổng thanh toán:</h2>
           <h3 class="bwwaGp iL6wsx BcITa9" style={{fontSize:"20px"}}>Tổng tiền hàng:</h3>
@@ -208,6 +222,7 @@ const Payment = (props) => {
           <div class="uTFqRt">
             <div class="k4VpYA">
               <div class="C-NSr-">
+
                 Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo{" "}
                 <a
                   href=""
@@ -219,11 +234,13 @@ const Payment = (props) => {
               </div>
             </div>
             <button
+
               class="stardust-button stardust-button--primary stardust-button--large apLZEG N7Du4X"
               onClick={() => {
                 performVnPayCheckout();
               }}
              
+
             >
               Đặt hàng
             </button>
