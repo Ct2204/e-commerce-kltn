@@ -121,9 +121,7 @@ const Header = () => {
                 <div className="category-container ">
                   <div className="category row d-flex flex-wrap ">
                     {category.map((categoryItem, idx) => (
-
                       <div key={idx} className="col-lg-4 ">
-
                         <ul className="subchildmenu-item list-unstyled">
                           <li className="category-item">
                             <Link
@@ -159,49 +157,82 @@ const Header = () => {
               <div className="col-6 d-flex">
                 {isLogedIn ? (
                   <div>
-                  <div ref={ref1}>
-                    <Button
-                      className="bg-white border border-white"
-                      onClick={handleClick1}
-                    >
-                      <CiUser
-                        style={{
-                          color: "black",
-                          width: "40px",
-                          height: "40px",
-                        }}
-                        
-                      />
-                    </Button>
-                    <Overlay
-                      show={show1}
-                      target={target1}
-                      placement="bottom"
-                      container={ref1}
-                      containerPadding={20}
-                    >
-                      <Popover id="popover-contained">
-                        
-                        <Popover.Body>
-                          <div className="my-2">
-                            <div className="my-2 account-container">
-                                <Link to="user/profile"><button>Trang cá nhân</button></Link>
-                                <button >
+                    <div ref={ref1}>
+                      <Button
+                        className="bg-white border border-white"
+                        onClick={handleClick1}
+                      >
+                        <CiUser
+                          style={{
+                            color: "black",
+                            width: "40px",
+                            height: "40px",
+                          }}
+                        />
+                      </Button>
+                      <Overlay
+                        show={show1}
+                        target={target1}
+                        placement="bottom"
+                        container={ref1}
+                        containerPadding={20}
+                      >
+                        <Popover id="popover-contained">
+                          <Popover.Body>
+                            <div className="my-2">
+                              <div className="my-2 account-container">
+                                <Link to="user/profile">
+                                  <button
+                                    style={{
+                                      padding: "0 20px",
+                                      backgroundColor: "#216fdb",
+                                      border: "none",
+                                      borderRadius: "6px",
+                                      paddingTop: "5px",
+                                      paddingBottom: "5px",
+                                    }}
+                                    className="text-white mb-2"
+                                  >
+                                    Trang cá nhân
+                                  </button>
+                                </Link>
+                                <button
+                                  style={{
+                                    padding: "0 20px",
+                                    backgroundColor: "#216fdb",
+                                    border: "none",
+                                    borderRadius: "6px",
+                                    paddingTop: "5px",
+                                    paddingBottom: "5px",
+                                  }}
+                                  className="text-white mb-2"
+                                >
                                   <Link
                                     style={{
-                                      textDecoration: 'none',
-                                      color:"inherit"
-
-                                    }} to="/user/purchase">Đơn mua</Link>
+                                      textDecoration: "none",
+                                      color: "inherit",
+                                    }}
+                                    to="/user/purchase"
+                                  >
+                                    Đơn mua
+                                  </Link>
                                 </button>
-                              
-                                <button onClick={() => handleToLogout()}>
+
+                                <button
+                                  style={{
+                                    padding: "0 20px",
+                                    backgroundColor: "#216fdb",
+                                    border: "none",
+                                    borderRadius: "6px",
+                                    paddingTop: "5px",
+                                    paddingBottom: "5px",
+                                  }}
+                                  className="text-white"
+                                  onClick={() => handleToLogout()}
+                                >
                                   Đăng xuất
                                 </button>
-  
                               </div>
-                  
-                     
                             </div>
                           </Popover.Body>
                         </Popover>
@@ -285,48 +316,48 @@ const Header = () => {
                 {isLogedIn && (
                   <div>
                     <Link to="/cart">
-                    <Button
-                      className="bg-white border border-white"
-                      variant="primary"
-                      onClick={handleShow}
-                    >
-                      <div
-                        style={{
-                          position: "relative",
-                          display: "inline-block",
-                        }}
+                      <Button
+                        className="bg-white border border-white"
+                        variant="primary"
+                        onClick={handleShow}
                       >
-                        <AiOutlineShoppingCart
+                        <div
                           style={{
-                            color: "black",
-                            width: "35px",
-                            height: "35px",
-                            transition: "color 0.3s ease",
+                            position: "relative",
+                            display: "inline-block",
                           }}
-                        />
-                        {carts.length > 0 && (
-                          <div
-                            className="quantity-cart"
+                        >
+                          <AiOutlineShoppingCart
                             style={{
-                              position: "absolute",
-                              top: "-5px",
-                              right: "-5px",
-                              width: "22px",
-                              height: "22px",
-                              background: "red",
-                              color: "white",
-                              borderRadius: "50%",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              fontWeight: "bold",
+                              color: "black",
+                              width: "35px",
+                              height: "35px",
+                              transition: "color 0.3s ease",
                             }}
-                          >
-                            {carts.length}
-                          </div>
-                        )}
-                      </div>
-                    </Button>
+                          />
+                          {carts.length > 0 && (
+                            <div
+                              className="quantity-cart"
+                              style={{
+                                position: "absolute",
+                                top: "-5px",
+                                right: "-5px",
+                                width: "22px",
+                                height: "22px",
+                                background: "red",
+                                color: "white",
+                                borderRadius: "50%",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {carts.length}
+                            </div>
+                          )}
+                        </div>
+                      </Button>
                     </Link>
                   </div>
                 )}
