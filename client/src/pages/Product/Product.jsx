@@ -7,11 +7,9 @@ import { getProductsByCategory } from "../../services/product";
 
 import { useNavigate } from "react-router-dom";
 
-
 const Product = () => {
   const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
 
   const navigate = useNavigate();
 
@@ -25,7 +23,6 @@ const Product = () => {
     setProductByCategoryDongHo(responseData.listProducts);
     setIsLoading(false);
   };
-
 
   const handleSortPriceAscending = () => {
     const sortedProducts = [...productByCategoryDongHo].sort(
@@ -89,7 +86,7 @@ const Product = () => {
                 itemprop="item"
               >
                 <span className="text-secondary" itemprop="name">
-                  /&ensp;&ensp;&ensp;Trang sức
+                  /&ensp;&ensp;&ensp; Đồng hồ
                 </span>
               </a>
               <meta itemprop="position" content="2" />
@@ -125,14 +122,12 @@ const Product = () => {
               Sắp xếp
             </Dropdown.Toggle>
             <Dropdown.Menu>
-
               <Dropdown.Item onClick={(e) => handleSortPriceAscending()}>
                 Giá: Tăng dần
               </Dropdown.Item>
               <Dropdown.Item onClick={(e) => handleSortPiceDescending()}>
                 Giá: Giảm dần
               </Dropdown.Item>
-
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -146,9 +141,7 @@ const Product = () => {
             <div
               key={idx}
               className="col-3 product-card"
-
               onClick={(e) => changePageHandler(e, aProducts.id)}
-
             >
               <ProductCart
                 title={aProducts.title}
@@ -161,24 +154,6 @@ const Product = () => {
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="wraplist-ctas text-center">
-        <a
-          href="/collections/trang-suc"
-          className="btn-collection button btnwhite dark mx-2"
-        >
-          Xem thêm sản phẩm
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path d="M17.707 9.293l-5-5a.999.999 0 10-1.414 1.414L14.586 9H3a1 1 0 100 2h11.586l-3.293 3.293a.999.999 0 101.414 1.414l5-5a.999.999 0 000-1.414z"></path>
-          </svg>
-        </a>
       </div>
     </>
   );

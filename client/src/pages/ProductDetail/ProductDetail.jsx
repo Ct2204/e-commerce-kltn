@@ -361,7 +361,11 @@ const ProductDetail = (props) => {
                     </span>
                   </div>
 
-                  <div className="product-price my-4" id="price-preview">
+                  <div
+                    className="product-price my-4"
+                    style={{ marginRight: "54px" }}
+                    id="price-preview"
+                  >
                     <span className="pro-title">Giá: </span>
                     {productDetail?.priceSales === undefined ? null : (
                       <span className="pro-price">
@@ -432,7 +436,7 @@ const ProductDetail = (props) => {
                   )}
 
                   <div className="d-flex color my-4">
-                    <div>
+                    <div className="mt-2">
                       <strong style={{ fontSize: "18px" }}>Số lượng:</strong>
                     </div>
                     <div className="quantity-container">
@@ -476,7 +480,10 @@ const ProductDetail = (props) => {
                         )
                         .map((filteredItem, idx) => {
                           return (
-                            <p key={idx} style={{ fontSize: "16px" }}>
+                            <p
+                              key={idx}
+                              style={{ fontSize: "16px", marginTop: "12px" }}
+                            >
                               {filteredItem.quantity} sản phẩm có sẵn
                               {console.log(filteredItem.id)}
                             </p>

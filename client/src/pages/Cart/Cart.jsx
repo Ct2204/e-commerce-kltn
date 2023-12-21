@@ -23,10 +23,8 @@ const Cart = () => {
   const userInfor = useSelector((state) => state.auth.userInfo);
   console.log(userInfor.user_id, "ssssssss");
 
-
   const isLogin = useSelector((state) => state.auth.isLoggedIn);
   console.log("có dang nhập", isLogin);
-
 
   const [carts, setCarts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -151,7 +149,6 @@ const Cart = () => {
     }
     localStorage.setItem("cartOrder", JSON.stringify(cartOrder));
 
-
     navigate("/payment");
     console.log(responseData.message);
   };
@@ -169,7 +166,6 @@ const Cart = () => {
     setIsLoading(false);
   };
 
-
   useEffect(() => {
     handleProductsByCategoryDongHo();
   }, []);
@@ -178,12 +174,10 @@ const Cart = () => {
     handleProductsByCategoryNhan();
   }, []);
 
-
   const changePageHandler = async (e, id) => {
     navigate(`/productdetail?productId=${id}`);
     window.scrollTo(0, 0);
   };
-
 
   return (
     <>
@@ -191,9 +185,9 @@ const Cart = () => {
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a className="text-decoration-none text-body" href="#">
+              <Link to="/" className="text-decoration-none text-body" href="#">
                 Trang chủ
-              </a>
+              </Link>
             </li>
             <li className="breadcrumb-item">
               <a className="text-decoration-none text-body" href="#">
@@ -352,7 +346,7 @@ const Cart = () => {
                                 onClick={() => {
                                   handleToRemoveCartItem(cartItem.cartItemId);
                                 }}
-                                className=""
+                                className="mt-1"
                                 style={{
                                   color: "#fff",
                                   fontSize: "13px",
@@ -368,20 +362,18 @@ const Cart = () => {
                           </a>
                           {/* tittle and price */}
                           <div
-                            className="item-info"
+                            className="item-info mt-2"
                             style={{ width: "330px", height: "120px" }}
                           >
                             <h3 className="item--title">
                               <a
                                 className="text-decoration-none  mx-5"
-
                                 style={{
                                   color: "#000",
                                   fontSize: "25px",
                                   verticalAlign: "top",
                                   display: "inline-block",
                                 }}
-
                               >
                                 {cartItem.title}
                               </a>
@@ -499,7 +491,7 @@ const Cart = () => {
                 </div>
               </div>
             )}
-            <div className="col-4">
+            <div className="col-4" style={{ marginTop: "107px" }}>
               <div className="order-summary-block mt-5">
                 <h2
                   className="summary-title"
@@ -540,10 +532,7 @@ const Cart = () => {
                 className="summary-warning alert-order"
                 style={{ opacity: 0.9 }}
               >
-
                 <p className="textmr">
-
-
                   <strong style={{ padding: "10px 5px" }}>
                     Chính sách mua hàng
                   </strong>
@@ -575,9 +564,7 @@ const Cart = () => {
             <div
               key={idx}
               className="col-3 product-card"
-
               onClick={(e) => changePageHandler(e, aProducts.id)}
-
             >
               <ProductCart
                 title={aProducts.title}
@@ -595,9 +582,7 @@ const Cart = () => {
             <div
               key={idx}
               className="col-3 product-card"
-
               onClick={(e) => changePageHandler(e, aProducts.id)}
-
             >
               <ProductCart
                 title={aProducts.title}

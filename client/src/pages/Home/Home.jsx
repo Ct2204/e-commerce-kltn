@@ -190,12 +190,9 @@ const Home = () => {
         <div className="row m-5 ">
           <div className="col ">
             <h4>
-              <a
-                className="title"
-                href="https://the-swan.myharavan.com/collections/dong-ho"
-              >
+              <Link className="title" to="/product/đongho">
                 Đồng hồ
-              </a>
+              </Link>
             </h4>
             <p className="text">
               Cùng với sự phát triển không ngừng của thời trang thế giới, rất
@@ -553,7 +550,7 @@ const Home = () => {
               </div>
               <div className="col">
                 <GuideCart
-                  article="Hướng Dẫn Cách Tạo Mục Lục Bài Viết"
+                  article="Hướng Dẫn Cách Tạo Mục Lục Bài Viết Của Website"
                   shortArticle="Trong bài viết này, tôi sẽ hướng dẫn bạn cách tạo mục lục bài viết siêu đơn giản, không phải..."
                   image="https://file.hstatic.net/200000593853/article/blog-img-2_993d9da631724c61b538ba9210cc0b0e_grande.jpeg"
                 />

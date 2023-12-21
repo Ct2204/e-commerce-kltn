@@ -7,14 +7,11 @@ import { getProductsByCategory } from "../../services/product";
 
 import { useNavigate } from "react-router-dom";
 
-
 const ProductNhan = () => {
   const [productByCategoryNhan, setProductByCategoryNhan] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-
   const navigate = useNavigate();
-
 
   const numberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -26,7 +23,6 @@ const ProductNhan = () => {
     setProductByCategoryNhan(responseData.listProducts);
     setIsLoading(false);
   };
-
 
   const handleSortPriceAscending = () => {
     const sortedProducts = [...productByCategoryNhan].sort(
@@ -46,7 +42,6 @@ const ProductNhan = () => {
     navigate(`/productdetail?productId=${id}`);
     window.scrollTo(0, 0);
   };
-
 
   useEffect(() => {
     handleProductsByCategoryNhan();
@@ -90,7 +85,7 @@ const ProductNhan = () => {
                 itemprop="item"
               >
                 <span className="text-secondary" itemprop="name">
-                  /&ensp;&ensp;&ensp;Trang sức
+                  /&ensp;&ensp;&ensp; Nhẫn cưới
                 </span>
               </a>
               <meta itemprop="position" content="2" />
@@ -126,14 +121,12 @@ const ProductNhan = () => {
               Sắp xếp
             </Dropdown.Toggle>
             <Dropdown.Menu>
-
               <Dropdown.Item onClick={(e) => handleSortPriceAscending()}>
                 Giá: Tăng dần
               </Dropdown.Item>
               <Dropdown.Item onClick={(e) => handleSortPiceDescending()}>
                 Giá: Giảm dần
               </Dropdown.Item>
-
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -147,9 +140,7 @@ const ProductNhan = () => {
             <div
               key={idx}
               className="col-3 product-card"
-
               onClick={(e) => changePageHandler(e, aProducts.id)}
-
             >
               <ProductCart
                 title={aProducts.title}
