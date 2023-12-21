@@ -13,32 +13,25 @@ import { getOrderByStatus } from "../../services/OrderService.js";
 import { log } from "../../store/reducers/auth.js";
 
 const PurchaseOrder = () => {
+  const [orderProduct, setOrderProduct] = useState([]);
 
-
-  const [orderProduct, setOrderProduct] = useState([])
-
-  const [statusOrder, setStatusOrder] = useState("PENDING")
- 
-
+  const [statusOrder, setStatusOrder] = useState("PENDING");
 
   const handleToGetProductByOrderStatus = async () => {
     const responseData = await getOrderByStatus(statusOrder);
-    setOrderProduct(responseData)
-  }
+    setOrderProduct(responseData);
+  };
   useEffect(() => {
-    handleToGetProductByOrderStatus()
-  },[statusOrder])
-
+    handleToGetProductByOrderStatus();
+  }, [statusOrder]);
 
   return (
     <div className="fontSizePageUser">
       <div className="container py-5">
         <div className="row">
-        
-          
-        <div className="col-2">
-            <User/>
-            </div>
+          <div className="col-2">
+            <User />
+          </div>
           <div className="col-10">
             <div className="d-flex row text-center">
               <Tabs
@@ -46,65 +39,95 @@ const PurchaseOrder = () => {
                 id="uncontrolled-tab-example"
                 className="mb-3 col"
               >
-               
                 <Tab
                   className="col"
                   eventKey="chờ thanh toán"
-                  title={<p className="col text-body fs-5"
-                  onClick={()=>{setStatusOrder("PENDING")}}
-                  >Chờ thanh toán</p>}
-                  
+                  title={
+                    <p
+                      className="col text-body fs-5"
+                      onClick={() => {
+                        setStatusOrder("PENDING");
+                      }}
+                    >
+                      Chờ thanh toán
+                    </p>
+                  }
                 ></Tab>
                 <Tab
                   className="col"
                   eventKey="vận chuyển"
-                  title={<p className=" col text-body fs-5"
-                  onClick={() => { setStatusOrder("SHIPPED")}}>Vận chuyển</p>}
-                 
+                  title={
+                    <p
+                      className=" col text-body fs-5"
+                      onClick={() => {
+                        setStatusOrder("SHIPPED");
+                      }}
+                    >
+                      Vận chuyển
+                    </p>
+                  }
                 ></Tab>
                 <Tab
                   className="col"
                   eventKey="chờ giao hàng"
-                  title={<p className=" col text-body fs-5"
-                  onClick={()=>{setStatusOrder("DELIVERED")}}
-                  >Chờ giao hàng</p>}
-                  
-                  
+                  title={
+                    <p
+                      className=" col text-body fs-5"
+                      onClick={() => {
+                        setStatusOrder("DELIVERED");
+                      }}
+                    >
+                      Chờ giao hàng
+                    </p>
+                  }
                 ></Tab>
                 <Tab
                   className="col"
                   eventKey="hoàn thành"
-                  title={<p className="col text-body fs-5"
-                  onClick={()=>{setStatusOrder("PAID")}}
-                  >Hoàn thành</p>}
-                  
+                  title={
+                    <p
+                      className="col text-body fs-5"
+                      onClick={() => {
+                        setStatusOrder("PAID");
+                      }}
+                    >
+                      Hoàn thành
+                    </p>
+                  }
                 ></Tab>
                 <Tab
                   className="col"
                   eventKey="đã huỷ"
-                  title={<p className="col text-body fs-5 "
-                  onClick={()=>{setStatusOrder("CANCELED")}}
-                  >Đã huỷ</p>}
-                  
+                  title={
+                    <p
+                      className="col text-body fs-5 "
+                      onClick={() => {
+                        setStatusOrder("CANCELED");
+                      }}
+                    >
+                      Đã huỷ
+                    </p>
+                  }
                 ></Tab>
                 <Tab
                   className="col"
                   eventKey="trả hàng"
-                  title={<p className="col text-body fs-5"
-                  onClick={()=>{setStatusOrder("CLOSED")}}
-                  >Trả hàng</p>}
-                  
+                  title={
+                    <p
+                      className="col text-body fs-5"
+                      onClick={() => {
+                        setStatusOrder("CLOSED");
+                      }}
+                    >
+                      Trả hàng
+                    </p>
+                  }
                 ></Tab>
-               
               </Tabs>
             </div>
             <div>
-
-              
-
-              {
-                orderProduct.length === 0 ? (
-                  <div className="info-image">
+              {orderProduct.length === 0 ? (
+                <div className="info-image">
                   <img
                     style={{ width: "100%" }}
                     data-src="//theme.hstatic.net/200000593853/1001115480/14/cart_banner_image.jpg?v=43"
@@ -115,45 +138,42 @@ const PurchaseOrder = () => {
                     Chưa có sản phẩm trong giỏ hàng...
                   </p>
                 </div>
-                ) :
+              ) : (
                 orderProduct.map((products, idx) => (
                   <div className="row background-purchase" key={idx}>
-                    <div className="d-flex col-10">
+                    <div className="d-flex col-10 fw-bold">
                       <div className="text-start">
                         <img
                           src={products.url}
-                          style={{ width: "82px", height: "82px" }}
+                          style={{ width: "100px", height: "100px" }}
                         />
                       </div>
-                      <div className="text-start">
+                      <div
+                        className="text-start"
+                        style={{ paddingLeft: "100px" }}
+                      >
                         <div>
                           <div className="iJlxsT">
-                            <span className="x5GTyN" tabIndex="0">
-                             {products.title}
+                            <span className="x5GTyN fs-5 " tabIndex="0">
+                              {products.title}
                             </span>
                           </div>
                         </div>
                         <div>
-                         
-                          <div className="_3F1-5M" tabIndex="0">
+                          <div className="_3F1-5M fs-6" tabIndex="0">
                             x{products.quantity}
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="col-2 d-flex align-items-center">
-                      
-                      <span className="text-danger">₫{products.price }</span>
+                      <span className="text-danger fs-6">
+                        ₫{products.price}
+                      </span>
                     </div>
                   </div>
                 ))
-               }
-              
-              
-              
-
-
-
+              )}
             </div>
           </div>
         </div>

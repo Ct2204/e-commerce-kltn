@@ -41,7 +41,8 @@ const VerificationCode = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        height: "100vh",
+        paddingTop: "150px",
+        paddingBottom: "150px",
       }}
     >
       <div

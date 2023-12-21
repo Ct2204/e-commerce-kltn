@@ -29,37 +29,34 @@ const Profile = () => {
     "https://inkythuatso.com/uploads/thumbnails/800/2023/03/9-anh-dai-dien-trang-inkythuatso-03-15-27-03.jpg"
   );
 
-
-  const [userProfile,setUserProfile] = useState([])
-
+  const [userProfile, setUserProfile] = useState([]);
 
   useEffect(() => {
-    handleToGetUserProfile()
-  },[])
+    handleToGetUserProfile();
+  }, []);
 
   const handleToGetUserProfile = async () => {
     const responseData = await getProfileOfUser(userId);
-    setUserProfile(responseData.data)
-  }
+    setUserProfile(responseData.data);
+  };
 
   const handleToUploadPicture = async () => {
     const file = fileInputRef.current.click();
-    console.log("hiii",file);
+    console.log("hiii", file);
     // const responseData = await uploadPictureProfile(userId, file);
     // console.log("hello",responseData.message)
-  }
+  };
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
-    
   };
 
   const handleFileChange = async (e) => {
     const selectedFile = e.target.files[0];
-    console.log(selectedFile, "111")
-    
-     const responseData = await uploadPictureProfile(userId, selectedFile);
-    console.log("hello",responseData.message)
+    console.log(selectedFile, "111");
+
+    const responseData = await uploadPictureProfile(userId, selectedFile);
+    console.log("hello", responseData.message);
 
     // Hủy URL cũ nếu có
     if (imageUrl) {
@@ -69,7 +66,6 @@ const Profile = () => {
     // Kiểm tra nếu có tệp tin được chọn
     if (selectedFile) {
       const url = URL.createObjectURL(selectedFile);
-
 
       // console.log("helllo",url)
       setImageUrl(url);
@@ -183,13 +179,9 @@ const Profile = () => {
     <div className="fontSizePageUser">
       <div className="container py-5">
         <div className="row">
-          
-        <div className="col-2">
-            <User/>
-            </div>
-           
-           
-          
+          <div className="col-2">
+            <User />
+          </div>
 
           <div className="col-10 bg-white highlight-container">
             <div class="mx-3 myProfile pb-3">
@@ -201,7 +193,7 @@ const Profile = () => {
             <div className="row px-3">
               <div className="col-8 ">
                 <form onSubmit={handleFormSubmit}>
-                  <div className="mb-3 row " style={{ width: "450px" }}>
+                  <div className="my-3 row " style={{ width: "450px" }}>
                     <label
                       htmlFor="inputPassword"
                       className="col-3 col-form-label"
@@ -364,14 +356,23 @@ const Profile = () => {
                     </div>
                   </div>
                   <button
-                    style={{ widht: "70px", height: "40px" }}
+                    className="mb-3 text-white"
+                    style={{
+                      padding: "0 20px",
+                      backgroundColor: "#216fdb",
+                      border: "none",
+                      borderRadius: "6px",
+                      paddingTop: "5px",
+                      paddingBottom: "5px",
+                      marginLeft: "200px",
+                    }}
                     onClick={handleSave}
                   >
                     Lưu
                   </button>
                 </form>
               </div>
-              
+
               {/* Get and upload image */}
               <div className="col-4 ">
                 <div className="mt-5">
@@ -385,7 +386,9 @@ const Profile = () => {
                       <div className="d-flex">
                         <Button
                           className="bg-white text-body border border-secondary mx-1 mt-2"
-                          onClick={()=>{handleButtonClick()}}
+                          onClick={() => {
+                            handleButtonClick();
+                          }}
                         >
                           Chọn ảnh
                         </Button>

@@ -12,7 +12,7 @@ import Button from "react-bootstrap/Button";
 import Overlay from "react-bootstrap/Overlay";
 import Popover from "react-bootstrap/Popover";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { listCategory } from "../services/product.js";
+import { listCategory, searchProductName } from "../services/product.js";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartItem } from "../services/CartService.js";
 // import { logout } from "../services/UserService.js";
@@ -24,6 +24,30 @@ const Header = () => {
   const [target, setTarget] = useState(null);
   const [target1, setTarget1] = useState(null);
   const [mount, setMount] = useState(false);
+
+  const [searchProduct, setSearchProduct] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  const handleSearchProductName = async (e) => {
+    try {
+      setIsLoading(true);
+      const responseData = await searchProductName(searchValue);
+      if (responseData) {
+        console.log("Thien", responseData.data.listProduct);
+        setSearchProduct(responseData.data.listProduct);
+      } else {
+        setSearchProduct([]);
+      }
+      setIsLoading(false);
+    } catch (err) {
+      console.error("Error in handleUpdateProduct: ", err);
+      setIsLoading(false);
+    }
+  };
 
   const ref = useRef(null);
   const ref1 = useRef(null);
@@ -86,7 +110,12 @@ const Header = () => {
   }
   return (
     <>
-      <div className=" container-fluid bg-secondary text-white top-header pt-2 ">
+      <div
+        className=" container-fluid bg-secondary text-white top-header pt-2"
+        style={{
+          fontFamily: " Tinos, sans-serif",
+        }}
+      >
         <div className="d-inline header-item ">
           Hotline:<strong> 1900.636.000</strong> (8h - 12h, 13h30 - 17h)
         </div>
@@ -140,10 +169,35 @@ const Header = () => {
                 </div>
               </li>
 
-              <li className="cursor list-inline-item mx-3">Giới thiệu </li>
-              <li className="cursor list-inline-item mx-3">Tin tức </li>
-              <li className="cursor list-inline-item mx-3">Trang nội dung </li>
-              <li className="cursor list-inline-item mx-3">Landing page</li>
+              <li className="cursor list-inline-item mx-3">
+                <Link
+                  className="text-decoration-none text-body"
+                  to="/introduce"
+                >
+                  Giới thiệu
+                </Link>{" "}
+              </li>
+              <li className="cursor list-inline-item mx-3">
+                {" "}
+                <Link className="text-decoration-none text-body" to="/news">
+                  Tin tức
+                </Link>{" "}
+              </li>
+              <li className="cursor list-inline-item mx-3">
+                {" "}
+                <Link className="text-decoration-none text-body" to="/content">
+                  Trang nội dung
+                </Link>{" "}
+              </li>
+              <li className="cursor list-inline-item mx-3">
+                {" "}
+                <Link
+                  className="text-decoration-none text-body"
+                  to="/landingpage"
+                >
+                  LandingPage
+                </Link>{" "}
+              </li>
               <li className="cursor list-inline-item mx-3">Live stream</li>
             </ul>
           </div>
@@ -285,6 +339,10 @@ const Header = () => {
                       placement="bottom"
                       container={ref}
                       containerPadding={20}
+                      style={{
+                        maxWidth: "500px", // Điều chỉnh giá trị maxWidth theo ý muốn của bạn
+                        width: "100%", // Đảm bảo chiều rộng là 100%
+                      }}
                     >
                       <Popover
                         id="popover-contained"
@@ -295,15 +353,32 @@ const Header = () => {
                         </Popover.Header>
                         <Popover.Body>
                           <div className="box">
-                            <div className="container-1 ">
+                            <div className="container-1 mt-2 ">
                               <input
-                                className="searchInput"
-                                type="search"
-                                id="search"
-                                placeHolder="Tìm kiếm sản phẩm..."
+                                style={{
+                                  width: "250px",
+                                  height: "40px",
+                                  borderRadius: "5px",
+                                  paddingLeft: "5px",
+                                  fontSize: "14px",
+                                  marginBottom: "10px",
+                                }}
+                                placeHolder="Nhập sản phẩm của bạn"
+                                value={searchValue}
+                                onChange={handleSearchChange}
                               />
-                              <span className="icon">
-                                <BiSearch />
+                              <span
+                                onClick={(e) => handleSearchProductName(e)}
+                                className="input-group-text bg-white"
+                                style={{
+                                  position: "absolute",
+                                  border: "none",
+                                  left: "220px",
+                                  top: "67px",
+                                }}
+                                id="basic-addon1"
+                              >
+                                <i class="fa-solid fa-magnifying-glass"></i>
                               </span>
                             </div>
                           </div>
