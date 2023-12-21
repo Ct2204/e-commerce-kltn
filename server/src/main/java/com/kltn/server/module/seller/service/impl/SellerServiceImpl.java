@@ -1,6 +1,8 @@
 
 package com.kltn.server.module.seller.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.kltn.server.common.entity.*;
 import com.kltn.server.common.exception.AuthorizeException;
 import com.kltn.server.common.exception.InternalServerErrorException;
@@ -105,6 +107,12 @@ public class SellerServiceImpl implements SellerService {
 
     @Autowired
     private ProductDtoConverter productDtoConverter;
+
+    @Autowired
+    private Cloudinary cloudinary; // Inject Cloudinary bean
+
+    @Value("${cloudinary.folder}") // Specify the Cloudinary folder
+    private String cloudinaryFolder;
 
     @Value("${image.dir.product}")
     private String dirImageLocation;
@@ -463,44 +471,56 @@ public class SellerServiceImpl implements SellerService {
             String decode = this.sha256(String.valueOf(System.currentTimeMillis()));
             try {
                 // Generate a unique file name to avoid conflicts
-                int lastDotIndex = file.getOriginalFilename().toString().lastIndexOf(".");
-                String fileNameDecoded = decode + "." + file
-                        .getOriginalFilename()
-                        .toString()
-                        .substring(lastDotIndex + 1);
-                String dirLocation = null;
-                String filePath = null;
-                ProductDescriptionVisualType type = null;
-                // Check if it's an image
-                if (file.getContentType().startsWith("image/")) {
-                    // It's an image
-                    dirLocation = this.dirImageLocation;
-                    filePath = IMAGE_PRODUCT_PATH;
-                    type = ProductDescriptionVisualType.IMAGE;
-                }
-
-                // Check if it's a video
-                if (file.getContentType().startsWith("video/")) {
-                    // It's a video
-                    dirLocation = this.dirVideoLocation;
-                    filePath = VIDEO_PRODUCT_PATH;
-                    type = ProductDescriptionVisualType.VIDEO;
-                }
-
-                // Get the resource folder path
-                Path resourcePath = Paths.get(dirLocation);
-
-                // Formatting the path
-                Path destinationFilePath = resourcePath
-                        .resolve(Paths.get(fileNameDecoded))
-                        .normalize();
-
-                // Save the file to the specified path
-                Files.copy(file.getInputStream(), destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
+//                int lastDotIndex = file.getOriginalFilename().toString().lastIndexOf(".");
+//                String fileNameDecoded = decode + "." + file
+//                        .getOriginalFilename()
+//                        .toString()
+//                        .substring(lastDotIndex + 1);
+//                String dirLocation = null;
+//                String filePath = null;
+//                ProductDescriptionVisualType type = null;
+//                // Check if it's an image
+//                if (file.getContentType().startsWith("image/")) {
+//                    // It's an image
+//                    dirLocation = this.dirImageLocation;
+//                    filePath = IMAGE_PRODUCT_PATH;
+//                    type = ProductDescriptionVisualType.IMAGE;
+//                }
+//
+//                // Check if it's a video
+//                if (file.getContentType().startsWith("video/")) {
+//                    // It's a video
+//                    dirLocation = this.dirVideoLocation;
+//                    filePath = VIDEO_PRODUCT_PATH;
+//                    type = ProductDescriptionVisualType.VIDEO;
+//                }
+//
+//                // Get the resource folder path
+//                Path resourcePath = Paths.get(dirLocation);
+//
+//                // Formatting the path
+//                Path destinationFilePath = resourcePath
+//                        .resolve(Paths.get(fileNameDecoded))
+//                        .normalize();
+//
+//                // Save the file to the specified path
+//                Files.copy(file.getInputStream(), destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
                 ProductDescriptionVisualDto dto = new ProductDescriptionVisualDto();
-                dto.setUrl(domain + filePath + "/" + fileNameDecoded);
-                dto.setType(type);
+//                dto.setUrl(domain + filePath + "/" + fileNameDecoded);
+//                dto.setType(type);
+//                list.add(dto);
+                // Upload the file to Cloudinary
+                Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("folder", cloudinaryFolder));
+
+                // Get the URL of the uploaded image from Cloudinary response
+                String imageUrl = (String) uploadResult.get("secure_url");
+
+                // Set the profile picture URL
+                dto.setUrl(imageUrl);
+                dto.setType(ProductDescriptionVisualType.IMAGE);
                 list.add(dto);
+
+//                this.userProfileRepository.save(userProfile);
             } catch (Exception e) {
                 // Handle file upload failure
                 throw new InternalServerErrorException("Failed to upload the file!");

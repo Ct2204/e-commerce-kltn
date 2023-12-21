@@ -1,5 +1,7 @@
 package com.kltn.server.module.product.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.kltn.server.common.entity.Product;
 import com.kltn.server.common.entity.ProductRating;
 import com.kltn.server.common.entity.ProductRatingVisual;
@@ -26,8 +28,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,6 +63,9 @@ public class ProductRatingServiceImpl implements ProductRatingService {
 
     @Value("${kltn.domain}")
     private String domain;
+
+    @Autowired
+    private Cloudinary cloudinary;
 
     /**
      * Get all ProductRating with paginate by product id
@@ -144,18 +151,40 @@ public class ProductRatingServiceImpl implements ProductRatingService {
                 ProductRatingVisual productRatingVisualEntity = new ProductRatingVisual();
                 productRatingVisualEntity.setProduct(product);
                 productRatingVisualEntity.setRating(saveProductRating);
-                // Check the file type (image or video) and save it to the correct folder
-                if (this.storageService.isImageFile(file)) {
-                    productRatingVisualEntity.setType((short) ProductRatingVisualType.IMAGE.ordinal());
-                    productRatingVisualEntity.setUrl(domain + "/images/rating/"
-                            + this.storageService.storeFile(file, Paths.get(imageDirLocation)));
-                } else {
-                    productRatingVisualEntity.setType((short) ProductRatingVisualType.VIDEO.ordinal());
-                    productRatingVisualEntity.setUrl(domain + "/videos/rating/"
-                            + this.storageService.storeFile(file, Paths.get(videoDirLocation)));
+
+                try {
+                    // Upload file to Cloudinary
+                    Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+
+                    // Get the Cloudinary URL
+                    String cloudinaryUrl = (String) uploadResult.get("url");
+
+                    // Check the file type (image or video) and save it to the correct folder
+                    if (this.storageService.isImageFile(file)) {
+                        productRatingVisualEntity.setType((short) ProductRatingVisualType.IMAGE.ordinal());
+                        productRatingVisualEntity.setUrl(cloudinaryUrl);
+                    } else {
+                        productRatingVisualEntity.setType((short) ProductRatingVisualType.VIDEO.ordinal());
+                        productRatingVisualEntity.setUrl(cloudinaryUrl);
+                    }
+
+                    this.productRatingVisualRepository.save(productRatingVisualEntity);
+                } catch (IOException e) {
+                    e.printStackTrace(); // Handle the exception appropriately
                 }
 
-                this.productRatingVisualRepository.save(productRatingVisualEntity);
+                // Check the file type (image or video) and save it to the correct folder
+//                if (this.storageService.isImageFile(file)) {
+//                    productRatingVisualEntity.setType((short) ProductRatingVisualType.IMAGE.ordinal());
+//                    productRatingVisualEntity.setUrl(domain + "/images/rating/"
+//                            + this.storageService.storeFile(file, Paths.get(imageDirLocation)));
+//                } else {
+//                    productRatingVisualEntity.setType((short) ProductRatingVisualType.VIDEO.ordinal());
+//                    productRatingVisualEntity.setUrl(domain + "/videos/rating/"
+//                            + this.storageService.storeFile(file, Paths.get(videoDirLocation)));
+//                }
+
+                //this.productRatingVisualRepository.save(productRatingVisualEntity);
             }
         }
     }

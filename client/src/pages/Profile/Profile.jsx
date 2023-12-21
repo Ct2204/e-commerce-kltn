@@ -44,22 +44,19 @@ const Profile = () => {
 
   const handleToUploadPicture = async () => {
     const file = fileInputRef.current.click();
-    console.log("hiii",file);
-    // const responseData = await uploadPictureProfile(userId, file);
-    // console.log("hello",responseData.message)
+   
   }
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
-    
   };
 
   const handleFileChange = async (e) => {
     const selectedFile = e.target.files[0];
-    console.log(selectedFile, "111")
+ 
     
      const responseData = await uploadPictureProfile(userId, selectedFile);
-    console.log("hello",responseData.message)
+   
 
     // Hủy URL cũ nếu có
     if (imageUrl) {

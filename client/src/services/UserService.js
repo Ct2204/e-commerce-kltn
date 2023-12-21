@@ -387,3 +387,37 @@ export const changePassword = async (email, newpassword) => {
     return null;
   }
 };
+ 
+
+// Post rating and comment
+export const postCommentAndRating = async (userId,formData) => {
+  try {
+    const token = store.getState().auth.token;
+    if (!token) {
+      console.error("Token is not available.");
+      return null;
+    }
+
+    let url = `${api.url.postCommentAndRating}/${userId}`;
+
+    const response = await httpRequest({
+      url: url,
+      method: "POST",
+      data: formData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": 'multipart/form-data'
+      },
+    });
+
+    if (response.code === 200) {
+      return response;
+    } else {
+      return response;
+    }
+  } catch (err) {
+    const errMessage = "Error in posting comment: ";
+    console.error(errMessage, err);
+    return null;
+  }
+};

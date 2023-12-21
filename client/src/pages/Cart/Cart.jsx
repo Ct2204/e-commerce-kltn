@@ -1,189 +1,183 @@
-import React, { useEffect, useState } from "react";
-import "./Cart.css";
-import { BsSearch } from "react-icons/bs";
-import ProductCart from "../../components/ProductCart";
-import { Link, useNavigate } from "react-router-dom";
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import ProgressBar from "react-bootstrap/ProgressBar";
-import { Form, Collapse, Offcanvas } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react'
+import './Cart.css'
+import { BsSearch } from 'react-icons/bs'
+import ProductCart from '../../components/ProductCart'
+import { Link, useNavigate } from 'react-router-dom'
+import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
+import ProgressBar from 'react-bootstrap/ProgressBar'
+import { Form, Collapse, Offcanvas } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   deleteCartItem,
   getCartItem,
   updateCartItem,
-} from "../../services/CartService.js";
+} from '../../services/CartService.js'
 
-import { createOrder } from "../../services/OrderService.js";
-import { getorderId } from "../../store/reducers/order.js";
-import { getProductsByCategory2 } from "../../services/product.js";
+import { createOrder } from '../../services/OrderService.js'
+import { getorderId } from '../../store/reducers/order.js'
+import { getProductsByCategory2 } from '../../services/product.js'
 
 const Cart = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const userInfor = useSelector((state) => state.auth.userInfo);
-  console.log(userInfor.user_id, "ssssssss");
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const userInfor = useSelector((state) => state.auth.userInfo)
+  console.log(userInfor.user_id, 'ssssssss')
 
+  const isLogin = useSelector((state) => state.auth.isLoggedIn)
+  console.log('có dang nhập', isLogin)
 
-  const isLogin = useSelector((state) => state.auth.isLoggedIn);
-  console.log("có dang nhập", isLogin);
-
-
-  const [carts, setCarts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [cartItemList, setCartItemList] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [productByCategoryNhan, setProductByCategoryNhan] = useState([]);
-  const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
+  const [carts, setCarts] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [message, setMessage] = useState('')
+  const [cartItemList, setCartItemList] = useState([])
+  const [selectedItems, setSelectedItems] = useState([])
+  const [productByCategoryNhan, setProductByCategoryNhan] = useState([])
+  const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([])
 
   const handleCheckboxChange = (cartItemId) => {
     setSelectedItems((prevSelectedItems) => {
       if (prevSelectedItems.includes(cartItemId)) {
         // Nếu mục đã được chọn trước đó, bỏ khỏi mảng
-        return prevSelectedItems.filter((itemId) => itemId !== cartItemId);
+        return prevSelectedItems.filter((itemId) => itemId !== cartItemId)
       } else {
         // Ngược lại, thêm vào mảng
-        return [...prevSelectedItems, cartItemId];
+        return [...prevSelectedItems, cartItemId]
       }
-    });
-  };
+    })
+  }
 
-  console.log("cartItem", selectedItems);
+  console.log('cartItem', selectedItems)
 
   //Remove cart Item
   const handleToRemoveCartItem = async (id) => {
-    const responseData = await deleteCartItem(userInfor.user_id, id);
+    const responseData = await deleteCartItem(userInfor.user_id, id)
 
     if (responseData.code === 200) {
       // Lọc ra các sản phẩm khác nhau với id được chọn và cập nhật trạng thái
       setCarts((prevCarts) =>
         prevCarts.filter((item) => item.cartItemId !== id)
-      );
+      )
     } else {
-      console.error("Failed to delete item:", responseData.message);
+      console.error('Failed to delete item:', responseData.message)
     }
-  };
+  }
 
   // Increase quantity item
   const handleToIncreaseQuantity = async (id, quantityCart) => {
-    const newQuantity = quantityCart + 1;
+    const newQuantity = quantityCart + 1
 
     // Cập nhật trạng thái hiển thị ngay lập tức
     setCarts((prevCarts) =>
       prevCarts.map((item) =>
         item.cartItemId === id ? { ...item, quantity: newQuantity } : item
       )
-    );
+    )
 
     const responseData = await updateCartItem(userInfor.user_id, [
       { cartItemId: id, quantity: newQuantity },
-    ]);
-  };
+    ])
+  }
 
   // Decrease quantiry cartItem
   const handleToDecreaseQuantity = async (id, quantityCart) => {
-    const newQuantity = quantityCart - 1;
+    const newQuantity = quantityCart - 1
 
     // Cập nhật trạng thái hiển thị ngay lập tức
     setCarts((prevCarts) =>
       prevCarts.map((item) =>
         item.cartItemId === id ? { ...item, quantity: newQuantity } : item
       )
-    );
+    )
 
     const responseData = await updateCartItem(userInfor.user_id, [
       { cartItemId: id, quantity: newQuantity },
-    ]);
-  };
+    ])
+  }
 
   useEffect(() => {
-    handleCartItem();
-  }, []);
+    handleCartItem()
+  }, [])
 
   //Get cart item
   const handleCartItem = async () => {
-    setIsLoading(true);
-    const responseData = await getCartItem(userInfor.user_id);
-    setCarts(responseData);
-    setIsLoading(false);
-  };
+    setIsLoading(true)
+    const responseData = await getCartItem(userInfor.user_id)
+    setCarts(responseData)
+    setIsLoading(false)
+  }
 
   //convert price with commas
   const numberWithCommas = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
 
-  const quantityItem = carts.length;
+  const quantityItem = carts.length
 
-  const [cartOrder, setCartOrder] = useState([]);
+  const [cartOrder, setCartOrder] = useState([])
 
   const totalPrice = selectedItems.reduce((acc, selectedItem) => {
     const selectedItemObject = carts.find(
       (item) => item.cartItemId === selectedItem
-    );
+    )
     if (selectedItemObject) {
-      return acc + selectedItemObject.quantity * selectedItemObject.price;
+      return acc + selectedItemObject.quantity * selectedItemObject.price
     } else {
-      return acc;
+      return acc
     }
-  }, 0);
+  }, 0)
 
   useEffect(() => {
     const updatedCartOrder = selectedItems
       .map((selectedItem) =>
         carts.find((item) => item.cartItemId === selectedItem)
       )
-      .filter(Boolean); // Remove falsy values (null or undefined)
+      .filter(Boolean) // Remove falsy values (null or undefined)
 
-    setCartOrder(updatedCartOrder);
+    setCartOrder(updatedCartOrder)
 
     // Save cartOrder to localStorage
-  }, [selectedItems, carts]);
+  }, [selectedItems, carts])
 
-  console.log("helo", cartOrder);
+  console.log('helo', cartOrder)
 
   //Order
   const handleToCreateOrder = async () => {
-    const responseData = await createOrder(selectedItems, userInfor.user_id);
-    console.log("hello", responseData);
+    const responseData = await createOrder(selectedItems, userInfor.user_id)
+    console.log('hello', responseData)
     if (responseData.code === 201) {
-      dispatch(getorderId({ orderId: responseData.data.order_id }));
+      dispatch(getorderId({ orderId: responseData.data.order_id }))
     }
-    localStorage.setItem("cartOrder", JSON.stringify(cartOrder));
+    localStorage.setItem('cartOrder', JSON.stringify(cartOrder))
 
-
-    navigate("/payment");
-    console.log(responseData.message);
-  };
+    navigate('/payment')
+    console.log(responseData.message)
+  }
 
   const handleProductsByCategoryNhan = async () => {
-    setIsLoading(true);
-    const responseData = await getProductsByCategory2(2);
-    setProductByCategoryNhan(responseData.listProducts);
-    setIsLoading(false);
-  };
+    setIsLoading(true)
+    const responseData = await getProductsByCategory2(2)
+    setProductByCategoryNhan(responseData.listProducts)
+    setIsLoading(false)
+  }
   const handleProductsByCategoryDongHo = async () => {
-    setIsLoading(true);
-    const responseData = await getProductsByCategory2(1);
-    setProductByCategoryDongHo(responseData.listProducts);
-    setIsLoading(false);
-  };
-
-
-  useEffect(() => {
-    handleProductsByCategoryDongHo();
-  }, []);
+    setIsLoading(true)
+    const responseData = await getProductsByCategory2(1)
+    setProductByCategoryDongHo(responseData.listProducts)
+    setIsLoading(false)
+  }
 
   useEffect(() => {
-    handleProductsByCategoryNhan();
-  }, []);
+    handleProductsByCategoryDongHo()
+  }, [])
 
+  useEffect(() => {
+    handleProductsByCategoryNhan()
+  }, [])
 
   const changePageHandler = async (e, id) => {
-    navigate(`/productdetail?productId=${id}`);
-    window.scrollTo(0, 0);
-  };
-
+    navigate(`/productdetail?productId=${id}`)
+    window.scrollTo(0, 0)
+  }
 
   return (
     <>
@@ -212,7 +206,7 @@ const Cart = () => {
               <div className="col-8">
                 <div className="d-flex justify-content-between mt-5 cart-title">
                   <div className="d-flex align-items-center justify-content-center">
-                    <h1 className="text-cart" style={{ fontSize: "35px" }}>
+                    <h1 className="text-cart" style={{ fontSize: '35px' }}>
                       Giỏ hàng của bạn
                     </h1>
                   </div>
@@ -220,12 +214,12 @@ const Cart = () => {
 
                 <div className="info-image">
                   <img
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     data-src="//theme.hstatic.net/200000593853/1001115480/14/cart_banner_image.jpg?v=43"
                     src="//theme.hstatic.net/200000593853/1001115480/14/cart_banner_image.jpg?v=43"
                     alt="Giỏ hàng của bạn đang trống"
                   />
-                  <p className="text-center" style={{ fontSize: "30px" }}>
+                  <p className="text-center" style={{ fontSize: '30px' }}>
                     Chưa có sản phẩm trong giỏ hàng...
                   </p>
                 </div>
@@ -233,14 +227,14 @@ const Cart = () => {
                 <div className="info-text">
                   <p
                     className="text-center"
-                    style={{ fontSize: "20px", color: "#637184" }}
+                    style={{ fontSize: '20px', color: '#637184' }}
                   >
-                    Bạn có thể quay về{" "}
+                    Bạn có thể quay về{' '}
                     <strong>
-                      <a href="/" style={{ textDecoration: "none" }}>
+                      <a href="/" style={{ textDecoration: 'none' }}>
                         trang chủ
                       </a>
-                    </strong>{" "}
+                    </strong>{' '}
                     hoặc nhập từ khoá sản phẩm bạn cần tìm ở đây:
                   </p>
                 </div>
@@ -304,18 +298,18 @@ const Cart = () => {
               <div className="col-8">
                 <div className="d-flex justify-content-between mt-5 cart-title">
                   <div className="d-flex align-items-center justify-content-center">
-                    <h1 className="text-cart" style={{ fontSize: "35px" }}>
+                    <h1 className="text-cart" style={{ fontSize: '35px' }}>
                       Giỏ hàng của bạn
                     </h1>
                   </div>
                   <p
                     className="my-2 d-flex align-items-center justify-content-center"
-                    style={{ fontSize: "20px" }}
+                    style={{ fontSize: '20px' }}
                   >
-                    Bạn đang có{" "}
-                    <span className="price" style={{ fontSize: "20px" }}>
+                    Bạn đang có{' '}
+                    <span className="price" style={{ fontSize: '20px' }}>
                       {quantityItem} sản phẩm
-                    </span>{" "}
+                    </span>{' '}
                     trong giỏ hàng
                   </p>
                 </div>
@@ -328,21 +322,21 @@ const Cart = () => {
                   ) : (
                     <div
                       className="border-cart"
-                      style={{ border: "1px solid #ccc", marginTop: "30px" }}
+                      style={{ border: '1px solid #ccc', marginTop: '30px' }}
                     >
                       {carts.map((cartItem, idx) => (
                         <div
                           key={idx}
                           className="item-img d-flex m-4"
-                          style={{ borderBottom: "1px solid #ccc" }}
+                          style={{ borderBottom: '1px solid #ccc' }}
                         >
                           {/* image and remove */}
                           <a className="cart-item">
                             <img
                               style={{
-                                width: "100px",
-                                height: "100px",
-                                marginRight: "10px",
+                                width: '100px',
+                                height: '100px',
+                                marginRight: '10px',
                               }}
                               src={cartItem.url}
                               alt={cartItem.title}
@@ -350,16 +344,16 @@ const Cart = () => {
                             <div className="item-remove">
                               <p
                                 onClick={() => {
-                                  handleToRemoveCartItem(cartItem.cartItemId);
+                                  handleToRemoveCartItem(cartItem.cartItemId)
                                 }}
                                 className=""
                                 style={{
-                                  color: "#fff",
-                                  fontSize: "13px",
-                                  textAlign: "center",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
+                                  color: '#fff',
+                                  fontSize: '13px',
+                                  textAlign: 'center',
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
                                 }}
                               >
                                 Xóa
@@ -369,24 +363,22 @@ const Cart = () => {
                           {/* tittle and price */}
                           <div
                             className="item-info"
-                            style={{ width: "330px", height: "120px" }}
+                            style={{ width: '330px', height: '120px' }}
                           >
                             <h3 className="item--title">
                               <a
                                 className="text-decoration-none  mx-5"
-
                                 style={{
-                                  color: "#000",
-                                  fontSize: "25px",
-                                  verticalAlign: "top",
-                                  display: "inline-block",
+                                  color: '#000',
+                                  fontSize: '25px',
+                                  verticalAlign: 'top',
+                                  display: 'inline-block',
                                 }}
-
                               >
                                 {cartItem.title}
                               </a>
                             </h3>
-                            <p className="mx-5" style={{ fontSize: "18px" }}>
+                            <p className="mx-5" style={{ fontSize: '18px' }}>
                               {numberWithCommas(cartItem.price)}đ
                             </p>
                           </div>
@@ -394,7 +386,7 @@ const Cart = () => {
                             <div className="price">
                               <span
                                 className="line-item-total"
-                                style={{ fontSize: "20px" }}
+                                style={{ fontSize: '20px' }}
                               >
                                 {numberWithCommas(
                                   cartItem.price * cartItem.quantity
@@ -406,10 +398,10 @@ const Cart = () => {
                             {/* price*quanti */}
                             <div
                               className=""
-                              style={{ display: "flex", marginRight: "15px" }}
+                              style={{ display: 'flex', marginRight: '15px' }}
                             >
                               <div
-                                style={{ width: "30px", height: "30px" }}
+                                style={{ width: '30px', height: '30px' }}
                                 className="color-component"
                               >
                                 <AiOutlineMinus
@@ -417,29 +409,29 @@ const Cart = () => {
                                     handleToDecreaseQuantity(
                                       cartItem.cartItemId,
                                       cartItem.quantity
-                                    );
+                                    )
                                   }}
-                                  style={{ width: "20px", height: "20px" }}
+                                  style={{ width: '20px', height: '20px' }}
                                 />
                               </div>
                               <div
                                 className=" text1 d-grid align-items-center text-center"
-                                style={{ width: "30px", height: "30px" }}
+                                style={{ width: '30px', height: '30px' }}
                               >
                                 <div>{cartItem.quantity}</div>
                               </div>
                               <div
                                 className="plus"
-                                style={{ width: "30px", height: "30px" }}
+                                style={{ width: '30px', height: '30px' }}
                               >
                                 <AiOutlinePlus
                                   onClick={() => {
                                     handleToIncreaseQuantity(
                                       cartItem.cartItemId,
                                       cartItem.quantity
-                                    );
+                                    )
                                   }}
-                                  style={{ width: "20px", height: "20px" }}
+                                  style={{ width: '20px', height: '20px' }}
                                 />
                               </div>
                             </div>
@@ -463,23 +455,23 @@ const Cart = () => {
                   )}
                 </div>
 
-                <div className="info-text" style={{ paddingTop: "50px" }}>
+                <div className="info-text" style={{ paddingTop: '50px' }}>
                   <p
                     className="text-center"
-                    style={{ fontSize: "20px", color: "#637184" }}
+                    style={{ fontSize: '20px', color: '#637184' }}
                   >
-                    Bạn có thể quay về{" "}
+                    Bạn có thể quay về{' '}
                     <strong>
-                      <Link to="/" style={{ textDecoration: "none" }}>
+                      <Link to="/" style={{ textDecoration: 'none' }}>
                         trang chủ
                       </Link>
-                    </strong>{" "}
+                    </strong>{' '}
                     hoặc nhập từ khoá sản phẩm bạn cần tìm ở đây:
                   </p>
                 </div>
                 <div
                   className="input-group mb-3"
-                  style={{ paddingTop: "10px" }}
+                  style={{ paddingTop: '10px' }}
                 >
                   <input
                     type="text"
@@ -487,7 +479,7 @@ const Cart = () => {
                     placeHolder="Tìm kiếm sản phẩm..."
                     aria-label="Recipient's username"
                     aria-describedby="button-addon2"
-                    style={{ height: "50px" }}
+                    style={{ height: '50px' }}
                   />
                   <button
                     className="btn btn-outline-secondary"
@@ -503,28 +495,28 @@ const Cart = () => {
               <div className="order-summary-block mt-5">
                 <h2
                   className="summary-title"
-                  style={{ fontSize: "30px", fontStyle: "bold" }}
+                  style={{ fontSize: '30px', fontStyle: 'bold' }}
                 >
                   Thông tin đơn hàng
                 </h2>
 
                 <div
                   className="summary-total d-flex justify-content-between"
-                  style={{ fontSize: "25px", padding: "20px 10px" }}
+                  style={{ fontSize: '25px', padding: '20px 10px' }}
                 >
                   <p>Tổng tiền:</p>
-                  <p style={{ color: "red" }}>{numberWithCommas(totalPrice)}</p>
+                  <p style={{ color: 'red' }}>{numberWithCommas(totalPrice)}</p>
                 </div>
-                <div className="summary-action" style={{ fontSize: "16px" }}>
-                  <p style={{ paddingTop: "10px" }}>
+                <div className="summary-action" style={{ fontSize: '16px' }}>
+                  <p style={{ paddingTop: '10px' }}>
                     Phí vận chuyển sẽ được tính ở trang thanh toán.
                   </p>
-                  <p>Bạn cũng có thể nhập mã giảm giá ở trang thanh toán.</p>{" "}
+                  <p>Bạn cũng có thể nhập mã giảm giá ở trang thanh toán.</p>{' '}
                 </div>
                 <div className="summary-button ">
                   <a
                     onClick={() => {
-                      handleToCreateOrder();
+                      handleToCreateOrder()
                     }}
                     id="btnCart-checkout"
                     className="checkout-btn btnred disabled text-decoration-none text-white "
@@ -532,7 +524,7 @@ const Cart = () => {
                     data-price-total="0"
                     href="#"
                   >
-                    THANH TOÁN{" "}
+                    THANH TOÁN{' '}
                   </a>
                 </div>
               </div>
@@ -540,16 +532,13 @@ const Cart = () => {
                 className="summary-warning alert-order"
                 style={{ opacity: 0.9 }}
               >
-
                 <p className="textmr">
-
-
-                  <strong style={{ padding: "10px 5px" }}>
+                  <strong style={{ padding: '10px 5px' }}>
                     Chính sách mua hàng
                   </strong>
                   :
                 </p>
-                <p style={{ padding: "10px 5px" }}>
+                <p style={{ padding: '10px 5px' }}>
                   Hiện chúng tôi chỉ áp dụng thanh toán với đơn hàng có giá trị
                   tối thiểu <strong>400.000₫ </strong> trở lên.
                 </p>
@@ -559,12 +548,12 @@ const Cart = () => {
         </div>
       </div>
       <div className="mx-5">
-        <div style={{ paddingTop: "50px" }} className="mb-2">
+        <div style={{ paddingTop: '50px' }} className="mb-2">
           <h2 className="collectionCart-title">
             <a
               className="text-decoration-none text-body fs-2 fw-bold"
               href="/collections/trang-suc"
-              style={{ marginLeft: "60px" }}
+              style={{ marginLeft: '60px' }}
             >
               Có thể bạn sẽ thích
             </a>
@@ -575,9 +564,7 @@ const Cart = () => {
             <div
               key={idx}
               className="col-3 product-card"
-
               onClick={(e) => changePageHandler(e, aProducts.id)}
-
             >
               <ProductCart
                 title={aProducts.title}
@@ -595,9 +582,7 @@ const Cart = () => {
             <div
               key={idx}
               className="col-3 product-card"
-
               onClick={(e) => changePageHandler(e, aProducts.id)}
-
             >
               <ProductCart
                 title={aProducts.title}
@@ -612,7 +597,7 @@ const Cart = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Cart;
+export default Cart

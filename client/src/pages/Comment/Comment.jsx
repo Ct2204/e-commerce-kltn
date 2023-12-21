@@ -1,88 +1,104 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
+import { postCommentAndRating } from "../../services/UserService.js";
+import { useSelector } from "react-redux";
 
 const Comment = () => {
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
-  const [reviews, setReviews] = useState([]);
+  // const [rating, setRating] = useState(0);
+  // const [comment, setComment] = useState("");
+  // const [reviews, setReviews] = useState([]);
 
-  const handleRatingChange = (value) => {
-    setRating(value);
+  // const [formData, setFormData] = useState(new FormData());
+
+  // useEffect(() => {
+  //   console.log("formData", formData);
+  // }, [formData]); // This will log whenever formData changes
+
+
+
+
+
+
+  const [productId, setProductId] = useState(''); // State lưu productId
+  const [starRating, setStarRating] = useState(5); // State lưu starRating
+  const [comment, setComment] = useState(''); // State lưu comment
+  const [file, setFile] = useState(null); // State lưu file
+
+  // const [rating, setRating] = useState(5);
+
+  const handleStarClick = (selectedRating) => {
+    // Nếu rating đã được chọn, bỏ chọn nó; ngược lại, set rating mới
+    setStarRating((prevRating) => (prevRating === selectedRating ? 0 : selectedRating));
   };
 
-  const handleCommentChange = (event) => {
-    setComment(event.target.value);
-  };
+  const userId = useSelector((state) => state.auth.userInfo.user_id);
 
-  const handleSubmitReview = () => {
-    // Kiểm tra xem đã nhập đủ thông tin chưa
-    if (rating === 0 || comment.trim() === "") {
-      alert("Vui lòng nhập đủ thông tin đánh giá!");
+  const handleSubmit = async () => {
+    // Kiểm tra xem có đủ thông tin để gửi không
+    if (!productId || !starRating || !comment ) {
+      console.error("Please fill in all fields.");
       return;
     }
 
-    // Tạo một review mới
-    const newReview = {
-      rating,
-      comment,
-      date: new Date().toLocaleDateString(),
-    };
+    // Tạo FormData và thêm dữ liệu vào
+    const formData = new FormData();
+    formData.append('productId', productId);
+    formData.append('starRating', starRating);
+    formData.append('comment', comment);
+    if (file) {
+      formData.append('listMedia', file);
+    }
 
-    // Cập nhật danh sách reviews
-    setReviews([...reviews, newReview]);
+    // Gọi hàm postCommentAndRating
+    const response = await postCommentAndRating(userId,formData);
 
-    // Reset form đánh giá
-    setRating(0);
-    setComment("");
+    // Xử lý kết quả từ API (response)
+    if (response.code === 200) {
+      console.log("Comment and rating posted successfully:", response);
+      // Thêm logic xử lý sau khi gửi thành công ở đây
+    } else {
+      console.log("Failed to post comment and rating.",response);
+      // Thêm logic xử lý sau khi gửi thất bại ở đây
+    }
   };
 
   return (
     <>
-      <div className="container mt-5">
-        <h2>Đánh giá sản phẩm</h2>
-
-        {/* Form đánh giá */}
-        <div className="row mt-3">
-          <div className="col-md-6">
-            <label>Đánh giá:</label>
-            <div className="d-flex align-items-center">
-              {[1, 2, 3, 4, 5].map((value) => (
-                <FaStar
-                  key={value}
-                  className={`star ${value <= rating ? "selected" : ""}`}
-                  onClick={() => handleRatingChange(value)}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="col-md-6">
-            <label>Bình luận:</label>
-            <textarea
-              className="form-control"
-              rows="3"
-              value={comment}
-              onChange={handleCommentChange}
-            />
-          </div>
-        </div>
-        <button className="btn btn-primary mt-3" onClick={handleSubmitReview}>
-          Gửi đánh giá
-        </button>
-
-        {/* Hiển thị reviews */}
-        <div className="mt-5">
-          <h4>Đánh giá khách hàng</h4>
-          {reviews.map((review, index) => (
-            <div key={index} className="border p-3 mt-3">
-              <div className="d-flex justify-content-between">
-                <div>Đánh giá: {review.rating} sao</div>
-                <div>Ngày: {review.date}</div>
-              </div>
-              <p>{review.comment}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+      <div>
+      <label>
+        Product ID:
+        <input type="text" value={productId} onChange={(e) => setProductId(e.target.value)} />
+      </label>
+        <br />
+        
+        <p>Selected Rating: {starRating}</p>
+      {[1, 2, 3, 4, 5].map((star) => (
+        <span
+          key={star}
+          onClick={() => handleStarClick(star)}
+          style={{ cursor: 'pointer', color: star <= starRating ? 'gold' : 'gray' }}
+        >
+          &#9733; {/* Ký tự sao unicode */}
+        </span>
+      ))}
+        
+      {/* <label>
+        Star Rating:
+        <input type="text" value={starRating} onChange={(e) => setStarRating(e.target.value)} />
+      </label> */}
+      <br />
+      <label>
+        Comment:
+        <textarea value={comment} onChange={(e) => setComment(e.target.value)} />
+      </label>
+      <br />
+       <label>
+        File:
+        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+      </label> 
+      <br />
+      <button onClick={handleSubmit}>Submit</button>
+    </div>
     </>
   );
 };

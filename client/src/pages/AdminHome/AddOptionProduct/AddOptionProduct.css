@@ -1,0 +1,57 @@
+/* add option */
+.addOption-container {
+  display: flex;
+  /* justify-content: space-between; */
+}
+
+.option-lable {
+  font-size: 16px;
+  font-weight: 400;
+  padding: 10px;
+}
+
+.option1 {
+  width: 750px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  border-radius: 2px;
+  background-color: hsl(0, 0%, 95%);
+}
+
+/* upload file */
+input[type='file'] {
+  display: none;
+}
+.image-upload-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+}
+.custom-image-upload {
+  /* display: block; */
+  width: 100px;
+  height: 100px;
+  background-color: #e0e0e0;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+}
+
+/* Hiển thị ảnh đã chọn */
+.selected-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Ẩn đi phần văn bản trong nhãn khi có ảnh được chọn */
+.custom-image-upload p {
+  display: none;
+}
+
+/* Hiển thị phần văn bản trong nhãn khi không có ảnh được chọn */
+.custom-image-upload span {
+  display: block;
+  margin-top: 80px; /* Điều chỉnh khoảng cách để trung tâm chữ */
+  font-size: 16px;
+}

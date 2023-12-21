@@ -1,0 +1,46 @@
+/* chung */
+.lable {
+    font-size: 20px;
+    font-weight: 600;
+}
+.form-control {
+    /* width: 500px !important; */
+}
+
+.addProduct-container {
+    padding: 50px;
+    /* background-color: #fff; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.createProduct-container {
+    padding: 50px 100px;
+    background-color: #fff;
+    width: 1120px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+    border-radius: 2px;
+    margin-bottom: 40px;
+}
+
+/* desCription */
+.description-container {
+    padding: 50px 100px;
+    background-color: #fff;
+    width: 1120px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+    border-radius: 2px;
+    margin-bottom: 40px;
+}
+
+/* option */
+.option-container {
+    padding: 50px 100px;
+    background-color: #fff;
+    width: 1120px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+    border-radius: 2px;
+    margin-bottom: 40px;
+}

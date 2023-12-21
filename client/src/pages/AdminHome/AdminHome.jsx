@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import "./AdminHome.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import React, { useEffect, useState } from 'react'
+import './AdminHome.css'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 import {
   getProductDetail,
   getProductsByCategory,
   searchProductName,
-} from "../../services/product";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import { useNavigate } from "react-router-dom";
-import Input from "../../components/Input";
-import { useSelector, useDispatch } from "react-redux";
+} from '../../services/product'
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
+import { useNavigate } from 'react-router-dom'
+import Input from '../../components/Input'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { logout } from "../../store/reducers/auth";
-import { toast } from "react-toastify";
+import { logout } from '../../store/reducers/auth'
+import { toast } from 'react-toastify'
 
 import {
   deleteProductOfSellerById,
@@ -24,58 +24,58 @@ import {
   postFileImage,
   postProductOfSeller,
   updateProductOfSeller,
-} from "../../services/productSeller";
+} from '../../services/productSeller'
 
-import { logoutAsync } from "../../store/reducers/auth.js";
+import { logoutAsync } from '../../store/reducers/auth.js'
 
-import { Accordion, Pagination } from "react-bootstrap";
+import { Accordion, Pagination } from 'react-bootstrap'
 
 const AdminHome = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [product, setProduct] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [searchProduct, setSearchProduct] = useState([]);
-  const [saveProducts, setSaveProducts] = useState([]);
-  const [productId, setProductId] = useState(0);
-  const [show, setShow] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [inputValue, setInputValue] = useState("");
-  const [page, setPage] = useState(1);
-  const [pageLength, setPageLength] = useState(10);
-  const [pagingItems, setPagingItems] = useState(false);
-  const [description, setDescription] = useState("");
-  const [activeKey, setActiveKey] = useState("0");
-  const [descriptionById, setDescriptionById] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
+  const [product, setProduct] = useState([])
+  const [products, setProducts] = useState([])
+  const [searchProduct, setSearchProduct] = useState([])
+  const [saveProducts, setSaveProducts] = useState([])
+  const [productId, setProductId] = useState(0)
+  const [show, setShow] = useState(false)
+  const [selectedFile, setSelectedFile] = useState(null)
+  const [inputValue, setInputValue] = useState('')
+  const [page, setPage] = useState(1)
+  const [pageLength, setPageLength] = useState(10)
+  const [pagingItems, setPagingItems] = useState(false)
+  const [description, setDescription] = useState('')
+  const [activeKey, setActiveKey] = useState('0')
+  const [descriptionById, setDescriptionById] = useState('')
 
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('')
 
   const handleSearchChange = (event) => {
-    setSearchValue(event.target.value);
-  };
+    setSearchValue(event.target.value)
+  }
 
-  console.log(searchValue);
+  console.log(searchValue)
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false)
+  const handleShow = () => setShow(true)
 
   const handleGetListProduct = async () => {
-    setIsLoading(true);
-    const responseData = await getPaging(page, pageLength);
-    setProducts(responseData.data.listProduct);
+    setIsLoading(true)
+    const responseData = await getPaging(page, pageLength)
+    setProducts(responseData.data.listProduct)
     let items = [
       <Pagination.Item key="first" onClick={() => setPage(1)}>
         &laquo;
       </Pagination.Item>,
-    ];
+    ]
     for (let i = 1; i < responseData.data.totalPages + 1; i++) {
       items.push(
         <Pagination.Item key={i} active={i === page} onClick={() => setPage(i)}>
           {i}
         </Pagination.Item>
-      );
+      )
     }
     items.push(
       <Pagination.Item
@@ -84,88 +84,88 @@ const AdminHome = (props) => {
       >
         &raquo;
       </Pagination.Item>
-    );
-    setPagingItems(items);
-    setIsLoading(false);
-  };
+    )
+    setPagingItems(items)
+    setIsLoading(false)
+  }
 
   useEffect(() => {
-    handleGetListProduct();
-  }, [page, pageLength]);
+    handleGetListProduct()
+  }, [page, pageLength])
 
   const showModalHandler = async (e, id) => {
-    if (e) e.preventDefault();
-    setProductId(id);
+    if (e) e.preventDefault()
+    setProductId(id)
     if (id > 0) {
-      const responseData = await getProductOfSellerById(id);
-      setProduct(responseData.data);
-      handleShow();
+      const responseData = await getProductOfSellerById(id)
+      setProduct(responseData.data)
+      handleShow()
     } else {
       let product = {
-        sellerId: "1",
-        sku: "1",
-        categoryId: "1",
-        title: "",
-        price: "",
-        priceSales: "",
-        percentDiscount: "",
-      };
+        sellerId: '1',
+        sku: '1',
+        categoryId: '1',
+        title: '',
+        price: '',
+        priceSales: '',
+        percentDiscount: '',
+      }
       // Kiểm tra nếu id > 0, thêm productId vào đối tượng setProduct
       if (id > 0) {
-        product.productId = id;
+        product.productId = id
       }
 
       // Sử dụng đối tượng setProduct
-      setProduct(product);
-      handleShow();
+      setProduct(product)
+      handleShow()
     }
-  };
+  }
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setProduct((prevProduct) => ({
       ...prevProduct,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
   const handleCategoryChange = (categoryId) => {
     setProduct((prevProduct) => ({
       ...prevProduct,
       categoryId: categoryId,
-    }));
-  };
+    }))
+  }
 
   const handleAddProduct = async (e) => {
     try {
-      setIsLoading(true);
-      const responseData = await postProductOfSeller(product);
+      setIsLoading(true)
+      const responseData = await postProductOfSeller(product)
       if (responseData) {
         const fileImage = {
           productId: responseData.data.productId,
           sellerId: 1,
           options: [
             {
-              name: "Color",
+              name: 'Color',
               images: [
                 [
                   {
                     url: inputValue,
-                    type: "IMAGE",
+                    type: 'IMAGE',
                   },
                 ],
                 [
                   {
                     url: inputValue,
-                    type: "IMAGE",
+                    type: 'IMAGE',
                   },
                 ],
               ],
-              values: ["Red", "Yellow"],
+              values: ['Red', 'Yellow'],
             },
           ],
           productItems: [],
-        };
-        const response = await postFileImage(fileImage);
+        }
+        // const response = await postFileImage(fileImage)
 
         const descriptionData = {
           productId: responseData.data.productId,
@@ -173,154 +173,153 @@ const AdminHome = (props) => {
           description: description,
           images: [
             {
-              url: "description1.jpg",
-              type: "IMAGE",
+              url: 'description1.jpg',
+              type: 'IMAGE',
             },
             {
-              url: "description2.jpg",
-              type: "IMAGE",
+              url: 'description2.jpg',
+              type: 'IMAGE',
             },
             {
-              url: "description3.mp4",
-              type: "VIDEO",
+              url: 'description3.mp4',
+              type: 'VIDEO',
             },
             {
-              url: "description4.mp4",
-              type: "VIDEO",
+              url: 'description4.mp4',
+              type: 'VIDEO',
             },
             {
-              url: "description5.jpg",
-              type: "IMAGE",
+              url: 'description5.jpg',
+              type: 'IMAGE',
             },
             {
-              url: "description6.jpg",
-              type: "IMAGE",
+              url: 'description6.jpg',
+              type: 'IMAGE',
             },
           ],
-        };
+        }
         const responseDescription = await postDescriptionBySeller(
           descriptionData
-        );
-        console.log(responseDescription);
-        handleGetListProduct();
-        handleClose();
-        toast.success("Add sucessful.");
+        )
+        console.log(responseDescription)
+        handleGetListProduct()
+        handleClose()
+        toast.success('Add sucessful.')
       } else {
         // Xử lý khi request thất bại hoặc có lỗi
-        toast.error("Delete failed.");
+        toast.error('Delete failed.')
       }
-      setIsLoading(false);
+      setIsLoading(false)
     } catch (err) {
-      console.error("Error in handleAddProduct: ", err);
-      setIsLoading(false);
+      console.error('Error in handleAddProduct: ', err)
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleUpdateProduct = async (e) => {
     try {
-      setIsLoading(true);
-      console.log(product);
-      const responseData = await updateProductOfSeller(product);
+      setIsLoading(true)
+      console.log(product)
+      const responseData = await updateProductOfSeller(product)
       if (responseData) {
-        handleGetListProduct();
-        handleClose();
-        toast.success("Update Successful.");
+        handleGetListProduct()
+        handleClose()
+        toast.success('Update Successful.')
       } else {
-        toast.error("Update Failed.");
+        toast.error('Update Failed.')
       }
-      setIsLoading(false);
+      setIsLoading(false)
     } catch (err) {
-      console.error("Error in handleUpdateProduct: ", err);
-      setIsLoading(false);
+      console.error('Error in handleUpdateProduct: ', err)
+      setIsLoading(false)
     }
-  };
+  }
   const handleDeleteProduct = async (id) => {
     try {
-      setIsLoading(true);
-      const responseData = await deleteProductOfSellerById(id);
+      setIsLoading(true)
+      const responseData = await deleteProductOfSellerById(id)
       if (responseData) {
-        handleGetListProduct();
-        toast.warn("Delete Successful.");
+        handleGetListProduct()
+        toast.warn('Delete Successful.')
       } else {
-        toast.error("Delete Failed.");
+        toast.error('Delete Failed.')
       }
-      setIsLoading(false);
+      setIsLoading(false)
     } catch (err) {
-      console.error("Error in handleUpdateProduct: ", err);
-      setIsLoading(false);
+      console.error('Error in handleUpdateProduct: ', err)
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleInputChange = (event) => {
     // Lấy giá trị từ thẻ input khi có sự thay đổi
-    const value = event.target.value;
+    const value = event.target.value
     // Cập nhật state với giá trị mới
-    setInputValue(value);
-  };
+    setInputValue(value)
+  }
 
   const handleChangePageLength = (e) => {
-    setPage(1);
-    setPageLength(e.target.value);
-  };
+    setPage(1)
+    setPageLength(e.target.value)
+  }
 
   const handleDescriptionChange = (event) => {
     // Lấy giá trị từ textarea
-    const newDescription = event.target.value;
+    const newDescription = event.target.value
 
     // Lưu giá trị vào state
-    setDescription(newDescription);
-  };
+    setDescription(newDescription)
+  }
 
   const handleAccordionClick = (eventKey) => {
-    setActiveKey(activeKey === eventKey ? null : eventKey);
-  };
+    setActiveKey(activeKey === eventKey ? null : eventKey)
+  }
 
   const handleGetDescription = async (id) => {
     try {
-      setIsLoading(true);
-      const responseData = await getDescriptionBySeller(id);
+      setIsLoading(true)
+      const responseData = await getDescriptionBySeller(id)
       if (responseData) {
-        console.log(responseData);
-        setDescriptionById(responseData.data.description);
+        console.log(responseData)
+        setDescriptionById(responseData.data.description)
       } else {
-        toast.error("Delete Failed.");
+        toast.error('Delete Failed.')
       }
-      setIsLoading(false);
+      setIsLoading(false)
     } catch (err) {
-      console.error("Error in handleUpdateProduct: ", err);
-      setIsLoading(false);
+      console.error('Error in handleUpdateProduct: ', err)
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleSearchProductName = async (e) => {
     try {
-      setIsLoading(true);
-      const responseData = await searchProductName(searchValue);
+      setIsLoading(true)
+      const responseData = await searchProductName(searchValue)
       if (responseData) {
-        console.log(responseData);
-        setSearchProduct(responseData.data.listProduct);
+        console.log(responseData)
+        setSearchProduct(responseData.data.listProduct)
       } else {
-        setSearchProduct([]);
+        setSearchProduct([])
       }
-      setIsLoading(false);
+      setIsLoading(false)
     } catch (err) {
-      console.error("Error in handleUpdateProduct: ", err);
-      setIsLoading(false);
+      console.error('Error in handleUpdateProduct: ', err)
+      setIsLoading(false)
     }
-  };
-  console.log(description);
+  }
+  console.log(description)
 
-  const userInfor = useSelector((state) => state.auth.userInfo);
-  console.log("hello", userInfor.user_id);
-
+  const userInfor = useSelector((state) => state.auth.userInfo)
+  console.log('hello', userInfor.user_id)
 
   const numberWithCommas = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-  console.log(products);
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
+  console.log(products)
   return (
     <div className="d-flex row my-override-class">
-      <div className="navbar-parent col-2 p-0" style={{ height: "100vh" }}>
+      <div className="navbar-parent col-2 p-0" style={{ height: '100vh' }}>
         <ul
           className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
           id="accordionSidebar"
@@ -659,10 +658,7 @@ const AdminHome = (props) => {
                 </span>
                 <img
                   onClick={() => dispatch(logoutAsync())}
-
                   className="img-profile rounded-circle"
-
-                
                   src="#"
                 />
               </a>
@@ -716,7 +712,7 @@ const AdminHome = (props) => {
                     <div className="col-sm-12 col-md-6">
                       <div className="dataTables_length" id="dataTable_length">
                         <label className="">
-                          Show{" "}
+                          Show{' '}
                           <select
                             value={pageLength}
                             onChange={handleChangePageLength}
@@ -728,7 +724,7 @@ const AdminHome = (props) => {
                             <option value="20">20</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
-                          </select>{" "}
+                          </select>{' '}
                           entries
                         </label>
                       </div>
@@ -758,17 +754,17 @@ const AdminHome = (props) => {
                         <button
                           className="text-white"
                           style={{
-                            padding: "6px 15px",
-                            backgroundColor: "#216fdb",
-                            border: "none",
-                            borderRadius: "6px",
-                            paddingTop: "5px",
-                            paddingBottom: "5px",
+                            padding: '6px 15px',
+                            backgroundColor: '#216fdb',
+                            border: 'none',
+                            borderRadius: '6px',
+                            paddingTop: '5px',
+                            paddingBottom: '5px',
                           }}
                           onClick={(e) => showModalHandler(e, 0)}
                         >
                           <i
-                            style={{ color: "white", marginRight: "5px" }}
+                            style={{ color: 'white', marginRight: '5px' }}
                             className="fa-solid fa-plus"
                           ></i>
                           Add
@@ -782,14 +778,14 @@ const AdminHome = (props) => {
                       >
                         <Modal.Header closeButton>
                           <Modal.Title>
-                            {productId > 0 ? "Update" : "New"} Product
+                            {productId > 0 ? 'Update' : 'New'} Product
                           </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <form>
                             <div
                               className="mb-3 row"
-                              style={{ width: "490px" }}
+                              style={{ width: '490px' }}
                             >
                               <label
                                 htmlFor="inputPassword"
@@ -809,7 +805,7 @@ const AdminHome = (props) => {
                             </div>
                             <div
                               className="mb-3 row"
-                              style={{ width: "490px" }}
+                              style={{ width: '490px' }}
                             >
                               <label
                                 htmlFor="inputPassword"
@@ -829,7 +825,7 @@ const AdminHome = (props) => {
                             </div>
                             <div
                               className="mb-3 row"
-                              style={{ width: "490px" }}
+                              style={{ width: '490px' }}
                             >
                               <label
                                 htmlFor="inputPassword"
@@ -849,7 +845,7 @@ const AdminHome = (props) => {
                             </div>
                             <div
                               className="mb-3 row"
-                              style={{ width: "490px" }}
+                              style={{ width: '490px' }}
                             >
                               <label
                                 htmlFor="inputPassword"
@@ -880,8 +876,8 @@ const AdminHome = (props) => {
                                     name="categoryId"
                                     id="radioOption1"
                                     value="1"
-                                    checked={product.categoryId === "1"}
-                                    onChange={() => handleCategoryChange("1")}
+                                    checked={product.categoryId === '1'}
+                                    onChange={() => handleCategoryChange('1')}
                                   />
                                   <label
                                     className="form-check-label"
@@ -897,8 +893,8 @@ const AdminHome = (props) => {
                                     name="categoryId"
                                     id="radioOption2"
                                     value="2"
-                                    checked={product.categoryId === "2"}
-                                    onChange={() => handleCategoryChange("2")}
+                                    checked={product.categoryId === '2'}
+                                    onChange={() => handleCategoryChange('2')}
                                   />
                                   <label
                                     className="form-check-label"
@@ -914,8 +910,8 @@ const AdminHome = (props) => {
                                     name="categoryId"
                                     id="radioOption2"
                                     value="2"
-                                    checked={product.categoryId === "3"}
-                                    onChange={() => handleCategoryChange("3")}
+                                    checked={product.categoryId === '3'}
+                                    onChange={() => handleCategoryChange('3')}
                                   />
                                   <label
                                     className="form-check-label"
@@ -927,7 +923,7 @@ const AdminHome = (props) => {
                               </div>
                               <div
                                 className="mb-3 row"
-                                style={{ width: "490px" }}
+                                style={{ width: '490px' }}
                               >
                                 <label
                                   htmlFor="inputPassword"
@@ -939,8 +935,8 @@ const AdminHome = (props) => {
                                   <textarea
                                     className="form-control mx-2"
                                     style={{
-                                      height: "100px",
-                                      width: "202.66px",
+                                      height: '100px',
+                                      width: '202.66px',
                                     }}
                                     onChange={handleDescriptionChange}
                                   ></textarea>
@@ -951,7 +947,7 @@ const AdminHome = (props) => {
                               ) : (
                                 <div
                                   className="d-flex mt-3"
-                                  style={{ width: "490px" }}
+                                  style={{ width: '490px' }}
                                 >
                                   <label
                                     htmlFor="inputPassword"
@@ -965,7 +961,7 @@ const AdminHome = (props) => {
                                       value={inputValue}
                                       onChange={handleInputChange}
                                       className="form-control mx-2"
-                                      style={{ width: "202.66px" }}
+                                      style={{ width: '202.66px' }}
                                     />
                                   </div>
                                 </div>
@@ -1005,18 +1001,18 @@ const AdminHome = (props) => {
                         cellSpacing="0"
                         role="grid"
                         aria-describedby="dataTable_info"
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                       >
                         <thead>
                           <tr role="row">
-                            <th style={{ width: "50px" }}>Id</th>
+                            <th style={{ width: '50px' }}>Id</th>
                             <th
                               className="sorting"
                               tabIndex="0"
                               aria-controls="dataTable"
                               rowSpan="1"
                               colSpan="1"
-                              style={{ width: "109px" }}
+                              style={{ width: '109px' }}
                               aria-label="Salary: activate to sort column ascending"
                             >
                               Category
@@ -1027,7 +1023,7 @@ const AdminHome = (props) => {
                               aria-controls="dataTable"
                               rowSpan="1"
                               colSpan="1"
-                              style={{ width: "200px" }}
+                              style={{ width: '200px' }}
                               aria-sort="ascending"
                               aria-label="Name: activate to sort column descending"
                             >
@@ -1039,7 +1035,7 @@ const AdminHome = (props) => {
                               aria-controls="dataTable"
                               rowSpan="1"
                               colSpan="1"
-                              style={{ width: "30px" }}
+                              style={{ width: '30px' }}
                               aria-label="Position: activate to sort column ascending"
                             >
                               Image
@@ -1051,7 +1047,7 @@ const AdminHome = (props) => {
                               aria-controls="dataTable"
                               rowSpan="1"
                               colSpan="1"
-                              style={{ width: "129px" }}
+                              style={{ width: '129px' }}
                               aria-label="Office: activate to sort column ascending"
                             >
                               Price
@@ -1062,7 +1058,7 @@ const AdminHome = (props) => {
                               aria-controls="dataTable"
                               rowSpan="1"
                               colSpan="1"
-                              style={{ width: "129px" }}
+                              style={{ width: '129px' }}
                               aria-label="Office: activate to sort column ascending"
                             >
                               Description
@@ -1074,7 +1070,7 @@ const AdminHome = (props) => {
                               aria-controls="dataTable"
                               rowSpan="1"
                               colSpan="1"
-                              style={{ width: "109px" }}
+                              style={{ width: '109px' }}
                               aria-label="Salary: activate to sort column ascending"
                             >
                               Option
@@ -1093,7 +1089,7 @@ const AdminHome = (props) => {
                                   </td>
                                   <td>
                                     <img
-                                      style={{ height: "50px", width: "50px" }}
+                                      style={{ height: '50px', width: '50px' }}
                                       src={aProducts.imageUrl}
                                     />
                                   </td>
@@ -1127,37 +1123,37 @@ const AdminHome = (props) => {
                                     <button
                                       className="mx-2"
                                       style={{
-                                        padding: "0 20px",
-                                        backgroundColor: "#216fdb",
-                                        border: "none",
-                                        borderRadius: "6px",
-                                        paddingTop: "5px",
-                                        paddingBottom: "5px",
+                                        padding: '0 20px',
+                                        backgroundColor: '#216fdb',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        paddingTop: '5px',
+                                        paddingBottom: '5px',
                                       }}
                                       onClick={(e) =>
                                         showModalHandler(e, aProducts.id)
                                       }
                                     >
                                       <i
-                                        style={{ color: "white" }}
+                                        style={{ color: 'white' }}
                                         className="fa-solid fa-pen-to-square"
                                       ></i>
                                     </button>
                                     <button
                                       style={{
-                                        padding: "0 20px",
-                                        backgroundColor: "#216fdb",
-                                        border: "none",
-                                        borderRadius: "6px",
-                                        paddingTop: "5px",
-                                        paddingBottom: "5px",
+                                        padding: '0 20px',
+                                        backgroundColor: '#216fdb',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        paddingTop: '5px',
+                                        paddingBottom: '5px',
                                       }}
                                       onClick={() =>
                                         handleDeleteProduct(aProducts.id)
                                       }
                                     >
                                       <i
-                                        style={{ color: "white" }}
+                                        style={{ color: 'white' }}
                                         className="fa-solid fa-trash-can"
                                       ></i>
                                     </button>
@@ -1175,7 +1171,7 @@ const AdminHome = (props) => {
                                   </td>
                                   <td>
                                     <img
-                                      style={{ height: "50px", width: "50px" }}
+                                      style={{ height: '50px', width: '50px' }}
                                       src={aProducts.url}
                                     />
                                   </td>
@@ -1209,37 +1205,37 @@ const AdminHome = (props) => {
                                     <button
                                       className="mx-2"
                                       style={{
-                                        padding: "0 20px",
-                                        backgroundColor: "#216fdb",
-                                        border: "none",
-                                        borderRadius: "6px",
-                                        paddingTop: "5px",
-                                        paddingBottom: "5px",
+                                        padding: '0 20px',
+                                        backgroundColor: '#216fdb',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        paddingTop: '5px',
+                                        paddingBottom: '5px',
                                       }}
                                       onClick={(e) =>
                                         showModalHandler(e, aProducts.id)
                                       }
                                     >
                                       <i
-                                        style={{ color: "white" }}
+                                        style={{ color: 'white' }}
                                         className="fa-solid fa-pen-to-square"
                                       ></i>
                                     </button>
                                     <button
                                       style={{
-                                        padding: "0 20px",
-                                        backgroundColor: "#216fdb",
-                                        border: "none",
-                                        borderRadius: "6px",
-                                        paddingTop: "5px",
-                                        paddingBottom: "5px",
+                                        padding: '0 20px',
+                                        backgroundColor: '#216fdb',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        paddingTop: '5px',
+                                        paddingBottom: '5px',
                                       }}
                                       onClick={() =>
                                         handleDeleteProduct(aProducts.id)
                                       }
                                     >
                                       <i
-                                        style={{ color: "white" }}
+                                        style={{ color: 'white' }}
                                         className="fa-solid fa-trash-can"
                                       ></i>
                                     </button>
@@ -1264,7 +1260,7 @@ const AdminHome = (props) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AdminHome;
+export default AdminHome

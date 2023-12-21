@@ -1,12 +1,12 @@
 .border-name {
-  border-right: 1px solid #efefef;
-  padding-right: 22px;
+    border-right: 1px solid #efefef;
+    padding-right: 22px;
 }
 
 .border-adrress {
-  border: 1px solid #efefef;
+    border: 1px solid #efefef;
 }
 
 .border-items-address + .border-items-address {
-  border-top: 1px solid #efefef;
+    border-top: 1px solid #efefef;
 }

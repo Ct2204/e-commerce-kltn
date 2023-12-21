@@ -283,9 +283,9 @@ public class ProductRatingController {
                                     }))}
 
     )
-    @PostMapping("/rating")
+    @PostMapping("/rating/{userId}")
     @ResponseBody
-    public ResponseEntity<?> insertProductRating(@RequestHeader Long userId,
+    public ResponseEntity<?> insertProductRating(@PathVariable Long userId,
                                                  @ModelAttribute @Valid ProductRatingReqDto productRating) {
 
         this.productRatingService.saveProductRating(userId, productRating);
