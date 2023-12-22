@@ -1,33 +1,29 @@
 import React, { useEffect, useState } from "react";
 import "./Payment.css";
 import { useSelector } from "react-redux";
-import { checkOutWithPaypal, checkOutWithVnpay } from "../../services/PaymentService.js";
+import {
+  checkOutWithPaypal,
+  checkOutWithVnpay,
+} from "../../services/PaymentService.js";
 import { useNavigate } from "react-router-dom";
 import { getOrderById } from "../../services/OrderService.js";
 
 const Payment = (props) => {
-
-
-
-  const [orderProduct,setOrderProduct] = useState([])
-  const [paymentMethod,setPaymentMethod] = useState("")
-  const navigate = useNavigate()
+  const [orderProduct, setOrderProduct] = useState([]);
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const navigate = useNavigate();
 
   const orderId = useSelector((state) => state.order.orderId);
 
-
-
   useEffect(() => {
     handleToGetProductOrder();
-  },[])
+  }, []);
 
   const handleToGetProductOrder = async () => {
     const responseData = await getOrderById(orderId);
-    setOrderProduct(responseData)
-    console.log("order:",responseData)
-  }
-
- 
+    setOrderProduct(responseData);
+    console.log("order:", responseData);
+  };
 
   const performVnPayCheckout = async () => {
     try {
@@ -44,7 +40,7 @@ const Payment = (props) => {
     try {
       const responseData = await checkOutWithPaypal(orderId);
       if (responseData.code === 200) {
-        window.location.href =responseData.data
+        window.location.href = responseData.data;
       }
     } catch (error) {
       console.error("Error during Papal checkout:", error);
@@ -67,21 +63,16 @@ const Payment = (props) => {
         // Xử lý các trường hợp khác hoặc cung cấp một hành động mặc định
         break;
     }
-  
-  }
+  };
 
-  
-  
   const totalPrice = orderProduct.reduce((acc, product) => {
     return acc + product.price * product.quantity;
   }, 0);
 
-
   const numberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-  console.log(paymentMethod)
-  
+  console.log(paymentMethod);
 
   return (
     <>
@@ -117,10 +108,7 @@ const Payment = (props) => {
               </tr>
             </thead>
             <tbody>
-
-
               {orderProduct.map((product, idx) => (
-
                 <tr key={idx}>
                   <td>
                     <div className="d-flex">
@@ -136,20 +124,16 @@ const Payment = (props) => {
                     </div>
                   </td>
                   <td>
-
-
-                    <div className="mt-3">{numberWithCommas(product.price)}</div>
-
+                    <div className="mt-3">
+                      {numberWithCommas(product.price)}
+                    </div>
                   </td>
                   <td>
                     <div className="mt-3">{product.quantity}</div>
                   </td>
                   <td>
                     <div className="mt-3">
-
-
                       {numberWithCommas(product.price * product.quantity)}
-
                     </div>
                   </td>
                 </tr>
@@ -158,16 +142,12 @@ const Payment = (props) => {
           </table>
         </div>
 
-
         <div class="checkout-payment-method-view__current checkout-payment-setting product-cart mt-5">
-          <div class="checkout-payment-method-view__current-title"
-           >
-
+          <div class="checkout-payment-method-view__current-title">
             Phương thức thanh toán
           </div>
           <div className="checkout-payment-setting__payment-methods-tab">
             <div role="radiogroup">
-
               <span>
                 <button
                   className="product-variation product-variation--disabled"
@@ -176,7 +156,9 @@ const Payment = (props) => {
                   aria-label="Vnpay"
                   aria-disabled="true"
                   aria-checked="false"
-                  onClick={() => { setPaymentMethod("VnPay") } }
+                  onClick={() => {
+                    setPaymentMethod("VnPay");
+                  }}
                 >
                   VnPay
                 </button>
@@ -189,7 +171,9 @@ const Payment = (props) => {
                   aria-label="Paypal"
                   aria-disabled="false"
                   aria-checked="false"
-                  onClick={() => { setPaymentMethod("Paypal") } }
+                  onClick={() => {
+                    setPaymentMethod("Paypal");
+                  }}
                 >
                   Paypal
                 </button>
@@ -202,7 +186,9 @@ const Payment = (props) => {
                   aria-label="Thanh toán khi nhận hàng"
                   aria-disabled="false"
                   aria-checked="false"
-                  onClick={() => { setPaymentMethod("ThanhToanKhiNhanHang") } }
+                  onClick={() => {
+                    setPaymentMethod("ThanhToanKhiNhanHang");
+                  }}
                 >
                   Thanh toán khi nhận hàng
                 </button>
@@ -212,35 +198,49 @@ const Payment = (props) => {
           </div>
         </div>
 
-        <div class="KQyCj0" aria-live="polite" style={{paddingTop:"50px"}}>
+        <div class="KQyCj0" aria-live="polite" style={{ paddingTop: "50px" }}>
           <h2 class="a11y-visually-hidden">Tổng thanh toán:</h2>
-          <h3 class="bwwaGp iL6wsx BcITa9" style={{fontSize:"20px"}}>Tổng tiền hàng:</h3>
-          <div class="bwwaGp R3a05f BcITa9" style={{fontSize:"20px",color:"#ee4d2d"}}>{numberWithCommas(totalPrice)} ₫</div>
-          <h3 class="bwwaGp iL6wsx RY9Grr" style={{fontSize:"20px"}}>Phí vận chuyển:</h3>
-          <div class="bwwaGp R3a05f RY9Grr" style={{fontSize:"20px",color:"#ee4d2d"}}>28.800 ₫</div>
-          
+          <h3 class="bwwaGp iL6wsx BcITa9" style={{ fontSize: "20px" }}>
+            Tổng tiền hàng:
+          </h3>
+          <div
+            class="bwwaGp R3a05f BcITa9"
+            style={{ fontSize: "20px", color: "#ee4d2d" }}
+          >
+            {numberWithCommas(totalPrice)} ₫
+          </div>
+          <h3 class="bwwaGp iL6wsx RY9Grr" style={{ fontSize: "20px" }}>
+            Phí vận chuyển:
+          </h3>
+          <div
+            class="bwwaGp R3a05f RY9Grr"
+            style={{ fontSize: "20px", color: "#ee4d2d" }}
+          >
+            28.800 ₫
+          </div>
+
           <div class="uTFqRt">
             <div class="k4VpYA">
               <div class="C-NSr-">
-
                 Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo{" "}
-                <a
-                  href=""
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href="" target="_blank" rel="noopener noreferrer">
                   Điều khoản của Shop
                 </a>
               </div>
             </div>
             <button
-
-              class="stardust-button stardust-button--primary stardust-button--large apLZEG N7Du4X"
+              style={{
+                padding: "0 20px",
+                backgroundColor: "#216fdb",
+                border: "none",
+                borderRadius: "6px",
+                paddingTop: "5px",
+                paddingBottom: "5px",
+              }}
+              class="text-white"
               onClick={() => {
                 performVnPayCheckout();
               }}
-             
-
             >
               Đặt hàng
             </button>

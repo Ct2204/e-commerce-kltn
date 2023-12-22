@@ -19,7 +19,13 @@ class ProductCart extends React.Component {
           className="card box-hover product-card"
           style={{ width: "100%", height: "100%" }}
         >
-          <span class="discount-percentage">{percentDiscount}%</span>
+          <div
+            className="discount-percentage d-flex align-items-center justify-content-center"
+            style={{ fontFamily: "Tinos, sans-serif" }}
+          >
+            <div className="">{percentDiscount}%</div>
+          </div>
+
           <img src={imageSrc} alt="product" className="style-img-productcart" />
           <img
             src={imageSrc1}

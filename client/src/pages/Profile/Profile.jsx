@@ -1,192 +1,185 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./Profile.css";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import React, { useEffect, useRef, useState } from 'react'
+import './Profile.css'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import {
   getProfileOfUser,
   updateUserProfile,
   uploadPictureProfile,
-} from "../../services/UserService";
-import { toast } from "react-toastify";
-import { Button, Form } from "react-bootstrap";
-import User from "../User/User.jsx";
+} from '../../services/UserService'
+import { toast } from 'react-toastify'
+import { Button, Form } from 'react-bootstrap'
+import User from '../User/User.jsx'
 
 const Profile = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [userInfo, setUserInfo] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
+  const [userInfo, setUserInfo] = useState([])
 
-  const [day, setDay] = useState("");
-  const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
+  const [day, setDay] = useState('')
+  const [month, setMonth] = useState('')
+  const [year, setYear] = useState('')
 
-  const [fullName, setFullName] = useState(userInfo.fullName);
-  const [gender, setGender] = useState(userInfo.gender);
+  const [fullName, setFullName] = useState(userInfo.fullName)
+  const [gender, setGender] = useState(userInfo.gender)
 
-  const userId = useSelector((state) => state.auth.userInfo.user_id);
+  const userId = useSelector((state) => state.auth.userInfo.user_id)
 
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null)
   const [imageUrl, setImageUrl] = useState(
-    "https://inkythuatso.com/uploads/thumbnails/800/2023/03/9-anh-dai-dien-trang-inkythuatso-03-15-27-03.jpg"
-  );
+    'https://inkythuatso.com/uploads/thumbnails/800/2023/03/9-anh-dai-dien-trang-inkythuatso-03-15-27-03.jpg'
+  )
 
-
-  const [userProfile,setUserProfile] = useState([])
-
+  const [userProfile, setUserProfile] = useState([])
 
   useEffect(() => {
     handleToGetUserProfile()
-  },[])
+  }, [])
 
   const handleToGetUserProfile = async () => {
-    const responseData = await getProfileOfUser(userId);
+    const responseData = await getProfileOfUser(userId)
     setUserProfile(responseData.data)
   }
 
   const handleToUploadPicture = async () => {
-    const file = fileInputRef.current.click();
-   
+    const file = fileInputRef.current.click()
   }
 
   const handleButtonClick = () => {
-    fileInputRef.current.click();
-  };
+    fileInputRef.current.click()
+  }
 
   const handleFileChange = async (e) => {
-    const selectedFile = e.target.files[0];
- 
-    
-     const responseData = await uploadPictureProfile(userId, selectedFile);
-   
+    const selectedFile = e.target.files[0]
+
+    console.log(selectedFile, '111')
+
+    const responseData = await uploadPictureProfile(userId, selectedFile)
+    console.log('hello', responseData.message)
 
     // Hủy URL cũ nếu có
     if (imageUrl) {
-      URL.revokeObjectURL(imageUrl);
+      URL.revokeObjectURL(imageUrl)
     }
 
     // Kiểm tra nếu có tệp tin được chọn
     if (selectedFile) {
-      const url = URL.createObjectURL(selectedFile);
-
+      const url = URL.createObjectURL(selectedFile)
 
       // console.log("helllo",url)
-      setImageUrl(url);
+      setImageUrl(url)
     }
-  };
+  }
 
   const handleFullNameChange = (e) => {
-    setFullName(e.target.value);
-  };
+    setFullName(e.target.value)
+  }
 
   const handleGenderChange = (e) => {
-    setGender(e.target.value);
-  };
+    setGender(e.target.value)
+  }
 
   useEffect(() => {
     // Đặt giá trị mặc định từ dữ liệu ngày sinh
-    const birthday = userInfo.birthday;
-    const parsedBirthday = new Date(birthday);
+    const birthday = userInfo.birthday
+    const parsedBirthday = new Date(birthday)
 
-    setDay(parsedBirthday.getUTCDate().toString());
-    setMonth((parsedBirthday.getUTCMonth() + 1).toString());
-    setYear(parsedBirthday.getUTCFullYear().toString());
-  }, []);
+    setDay(parsedBirthday.getUTCDate().toString())
+    setMonth((parsedBirthday.getUTCMonth() + 1).toString())
+    setYear(parsedBirthday.getUTCFullYear().toString())
+  }, [])
   useEffect(() => {
-    setFullName(userInfo.fullName);
-  }, [userInfo.fullName]);
+    setFullName(userInfo.fullName)
+  }, [userInfo.fullName])
 
   useEffect(() => {
-    setGender(userInfo.gender);
-  }, [userInfo.gender]);
+    setGender(userInfo.gender)
+  }, [userInfo.gender])
 
   const handleDayChange = (e) => {
-    e.preventDefault();
-    setDay(e.target.value);
-  };
+    e.preventDefault()
+    setDay(e.target.value)
+  }
 
   const handleMonthChange = (e) => {
-    e.preventDefault();
-    setMonth(e.target.value);
-  };
+    e.preventDefault()
+    setMonth(e.target.value)
+  }
 
   const handleYearChange = (e) => {
-    e.preventDefault();
-    setYear(e.target.value);
-  };
+    e.preventDefault()
+    setYear(e.target.value)
+  }
 
   const handleSave = () => {
     const birthday = `${String(year)}-${String(month).padStart(
       2,
-      "0"
-    )}-${String(day).padStart(2, "0")}`;
+      '0'
+    )}-${String(day).padStart(2, '0')}`
     const dataUpdateProfile = {
       fullName: fullName,
       gender: gender,
       birthday: birthday,
-    };
-    handleUpdateUserProfile(dataUpdateProfile, userId);
+    }
+    handleUpdateUserProfile(dataUpdateProfile, userId)
     // Thực hiện các xử lý khác, ví dụ: gửi dữ liệu lên server
-  };
+  }
 
   const handleUpdateUserProfile = async (data, userId) => {
     try {
-      setIsLoading(true);
-      const responseData = await updateUserProfile(data, userId);
+      setIsLoading(true)
+      const responseData = await updateUserProfile(data, userId)
       if (responseData) {
-        toast.success("Update Successful.");
+        toast.success('Update Successful.')
       } else {
-        console.error("Get failed");
+        console.error('Get failed')
       }
-      setIsLoading(false);
+      setIsLoading(false)
     } catch (err) {
-      console.error("Error in failed get profile of user: ", err);
-      setIsLoading(false);
+      console.error('Error in failed get profile of user: ', err)
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleFormSubmit = (e) => {
-    e.preventDefault(); // Ngăn chặn hành động mặc định của form
-  };
+    e.preventDefault() // Ngăn chặn hành động mặc định của form
+  }
 
   const handleGetProfileOfUser = async (userId) => {
     try {
-      setIsLoading(true);
-      const responseData = await getProfileOfUser(userId);
+      setIsLoading(true)
+      const responseData = await getProfileOfUser(userId)
       if (responseData) {
-        setUserInfo(responseData.data);
-        const birthdayDate = new Date(responseData.data.birthday);
+        setUserInfo(responseData.data)
+        const birthdayDate = new Date(responseData.data.birthday)
 
         // Lấy giá trị năm, tháng, ngày từ đối tượng Date
-        setYear(birthdayDate.getFullYear());
-        setMonth(birthdayDate.getMonth() + 1); // Tháng trong JavaScript bắt đầu từ 0
-        setDay(birthdayDate.getDate());
+        setYear(birthdayDate.getFullYear())
+        setMonth(birthdayDate.getMonth() + 1) // Tháng trong JavaScript bắt đầu từ 0
+        setDay(birthdayDate.getDate())
       } else {
-        console.error("Get failed");
+        console.error('Get failed')
       }
-      setIsLoading(false);
+      setIsLoading(false)
     } catch (err) {
-      console.error("Error in failed get profile of user: ", err);
-      setIsLoading(false);
+      console.error('Error in failed get profile of user: ', err)
+      setIsLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    if (userId) handleGetProfileOfUser(userId);
-  }, [userId]);
+    if (userId) handleGetProfileOfUser(userId)
+  }, [userId])
 
-  console.log(userInfo);
-  console.log(day, month, year);
+  console.log(userInfo)
+  console.log(day, month, year)
 
   return (
     <div className="fontSizePageUser">
       <div className="container py-5">
         <div className="row">
-          
-        <div className="col-2">
-            <User/>
-            </div>
-           
-           
-          
+          <div className="col-2">
+            <User />
+          </div>
 
           <div className="col-10 bg-white highlight-container">
             <div class="mx-3 myProfile pb-3">
@@ -198,7 +191,7 @@ const Profile = () => {
             <div className="row px-3">
               <div className="col-8 ">
                 <form onSubmit={handleFormSubmit}>
-                  <div className="mb-3 row " style={{ width: "450px" }}>
+                  <div className="my-3 row " style={{ width: '450px' }}>
                     <label
                       htmlFor="inputPassword"
                       className="col-3 col-form-label"
@@ -215,7 +208,7 @@ const Profile = () => {
                       />
                     </div>
                   </div>
-                  <div className="mb-3 row" style={{ width: "450px" }}>
+                  <div className="mb-3 row" style={{ width: '450px' }}>
                     <label
                       htmlFor="inputPassword"
                       className="col-3 col-form-label"
@@ -226,7 +219,7 @@ const Profile = () => {
                       <div class="mt-2">{userProfile.email}</div>
                     </div>
                   </div>
-                  <div className="mb-3 row" style={{ width: "450px" }}>
+                  <div className="mb-3 row" style={{ width: '450px' }}>
                     <label
                       htmlFor="inputPassword"
                       className="col-3 col-form-label"
@@ -237,7 +230,7 @@ const Profile = () => {
                       <div class="mt-2">0967064267</div>
                     </div>
                   </div>
-                  <div className="mb-3 row" style={{ width: "450px" }}>
+                  <div className="mb-3 row" style={{ width: '450px' }}>
                     <div className="d-flex mt-3">
                       <div className="col-3">
                         <label
@@ -255,7 +248,7 @@ const Profile = () => {
                             name="gender"
                             id="radioOption1"
                             value="Male"
-                            checked={gender === "Male"}
+                            checked={gender === 'Male'}
                             onChange={handleGenderChange}
                           />
                           <label
@@ -272,7 +265,7 @@ const Profile = () => {
                             name="gender"
                             id="radioOption2"
                             value="Female"
-                            checked={gender === "Female"}
+                            checked={gender === 'Female'}
                             onChange={handleGenderChange}
                           />
                           <label
@@ -289,7 +282,7 @@ const Profile = () => {
                             name="gender"
                             id="radioOption3"
                             value="Khác"
-                            checked={gender === "Khác"}
+                            checked={gender === 'Khác'}
                             onChange={handleGenderChange}
                           />
                           <label
@@ -301,7 +294,7 @@ const Profile = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="mb-3 row" style={{ width: "450px" }}>
+                    <div className="mb-3 row" style={{ width: '450px' }}>
                       <label
                         htmlFor="inputPassword"
                         className="col-3 col-form-label"
@@ -361,35 +354,46 @@ const Profile = () => {
                     </div>
                   </div>
                   <button
-                    style={{ widht: "70px", height: "40px" }}
+                    className="mb-3 text-white"
+                    style={{
+                      padding: '0 20px',
+                      backgroundColor: '#216fdb',
+                      border: 'none',
+                      borderRadius: '6px',
+                      paddingTop: '5px',
+                      paddingBottom: '5px',
+                      marginLeft: '200px',
+                    }}
                     onClick={handleSave}
                   >
                     Lưu
                   </button>
                 </form>
               </div>
-              
+
               {/* Get and upload image */}
               <div className="col-4 ">
                 <div className="mt-5">
                   <div className="d-flex flex-column choose-image">
                     <img
                       src={userProfile.profilePicture}
-                      style={{ width: "100px", height: "100px" }}
+                      style={{ width: '100px', height: '100px' }}
                       className="rounded-circle volume-image"
                     />
                     <Form.Group controlId="formFile" className="mx-4 ">
                       <div className="d-flex">
                         <Button
                           className="bg-white text-body border border-secondary mx-1 mt-2"
-                          onClick={()=>{handleButtonClick()}}
+                          onClick={() => {
+                            handleButtonClick()
+                          }}
                         >
                           Chọn ảnh
                         </Button>
                         <Form.Control
                           type="file"
                           ref={fileInputRef}
-                          style={{ display: "none" }}
+                          style={{ display: 'none' }}
                           onChange={handleFileChange}
                         />
                       </div>
@@ -406,7 +410,7 @@ const Profile = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Profile;
+export default Profile

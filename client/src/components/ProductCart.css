@@ -6,18 +6,17 @@
 .discount-percentage {
   position: absolute;
   z-index: 10;
-  height: 40px;
-  width: 45px;
+  height: 31px;
+  width: 60px;
   text-align: center;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 600;
   top: 0px;
-  left: 5px;
+  left: 0px;
   background-color: #ff0000; /* Màu nền của phần trăm giảm giá */
   color: #ffffff; /* Màu chữ của phần trăm giảm giá */
   padding: 5px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-radius: 5px;
 }
 
 .price {

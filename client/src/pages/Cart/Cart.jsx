@@ -185,9 +185,9 @@ const Cart = () => {
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a className="text-decoration-none text-body" href="#">
+              <Link to="/" className="text-decoration-none text-body" href="#">
                 Trang chủ
-              </a>
+              </Link>
             </li>
             <li className="breadcrumb-item">
               <a className="text-decoration-none text-body" href="#">
@@ -346,7 +346,7 @@ const Cart = () => {
                                 onClick={() => {
                                   handleToRemoveCartItem(cartItem.cartItemId)
                                 }}
-                                className=""
+                                className="mt-1"
                                 style={{
                                   color: '#fff',
                                   fontSize: '13px',
@@ -362,7 +362,7 @@ const Cart = () => {
                           </a>
                           {/* tittle and price */}
                           <div
-                            className="item-info"
+                            className="item-info mt-2"
                             style={{ width: '330px', height: '120px' }}
                           >
                             <h3 className="item--title">
@@ -491,7 +491,7 @@ const Cart = () => {
                 </div>
               </div>
             )}
-            <div className="col-4">
+            <div className="col-4" style={{ marginTop: '107px' }}>
               <div className="order-summary-block mt-5">
                 <h2
                   className="summary-title"

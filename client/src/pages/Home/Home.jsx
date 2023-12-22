@@ -5,7 +5,7 @@ import Carousel from "react-bootstrap/Carousel";
 import ProductCart from "../../components/ProductCart";
 import GuideCart from "../../components/GuideCart";
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   getProductDetail,
   getProductList,
@@ -19,7 +19,6 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [productByCategoryNhan, setProductByCategoryNhan] = useState([]);
   const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
-
 
   const initialItemCount = 8;
   const dataArrayForDongHo = productByCategoryDongHo; // Điền mảng của bạn vào đây
@@ -50,7 +49,6 @@ const Home = () => {
       visibleItemCountForDongHo + additionalItemCountForDongHo
     );
   };
-
 
   const containerRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -192,12 +190,9 @@ const Home = () => {
         <div className="row m-5 ">
           <div className="col ">
             <h4>
-              <a
-                className="title"
-                href="https://the-swan.myharavan.com/collections/dong-ho"
-              >
+              <Link className="title" to="/product/đongho">
                 Đồng hồ
-              </a>
+              </Link>
             </h4>
             <p className="text">
               Cùng với sự phát triển không ngừng của thời trang thế giới, rất
@@ -205,24 +200,24 @@ const Home = () => {
               dạng về phong cách, kiểu dáng, màu sắc, kích cỡ…
             </p>
             <div className="action-home-banner">
-              <a
+              <Link
                 className="btn-home-banner"
-                href="https://the-swan.myharavan.com/collections/dong-ho"
+                to="/product/đongho"
                 aria-label="Mua ngay"
               >
                 Mua ngay
-              </a>
+              </Link>
             </div>
           </div>
           <div className="col">
             <h4>
-              <a
+              <Link
                 className="title"
-                href="https://the-swan.myharavan.com/collections/trang-suc"
+                to="/product/nhancuoi"
                 aria-label="Trang sức"
               >
                 Trang sức
-              </a>
+              </Link>
             </h4>
             <p className="text">
               Ngày nay, thế giới trang sức nam, nữ chính hãng rất đẹp, đa dạng
@@ -256,35 +251,62 @@ const Home = () => {
 
       {/* Category */}
 
-
-      <div className="product-container" ref={containerRef}>
+      <div className="product-container container" ref={containerRef}>
         <div className="product-item">
           <img
+            style={{ width: "310px", height: "235px" }}
             src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_1.jpg?v=41"
             alt="Product 1"
           />
-          <p className="product-title">Đồng hồ nam</p>
+          <Link
+            to="/product/đongho"
+            className="product-title text-decoration-none text-body"
+            style={{ fontSize: "18px", fontFamily: "Tinos, sans-serif" }}
+          >
+            Đồng hồ nam
+          </Link>
         </div>
         <div className="product-item">
           <img
+            style={{ width: "310px", height: "235px" }}
             src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_2.jpg?v=41"
             alt="Product 2"
           />
-          <p className="product-title">Nhẫn</p>
+          <Link
+            to="/product/nhancuoi"
+            className="product-title text-decoration-none text-body"
+            style={{ fontSize: "18px", fontFamily: "Tinos, sans-serif" }}
+          >
+            Nhẫn
+          </Link>
         </div>
         <div className="product-item">
           <img
+            style={{ width: "310px", height: "235px" }}
             src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_3.jpg?v=41"
             alt="Product 3"
           />
-          <p className="product-title">Vòng tay</p>
+          <Link
+            to="/product/nhancuoi"
+            className="product-title text-decoration-none text-body"
+            style={{ fontSize: "18px", fontFamily: "Tinos, sans-serif" }}
+          >
+            Vòng tay
+          </Link>
         </div>
         <div className="product-item">
           <img
+            style={{ width: "310px", height: "235px" }}
             src="https://theme.hstatic.net/200000593853/1001115480/14/img_item_category_5.jpg?v=41"
             alt="Product 4"
           />
-          <p className="product-title">Hoa tai</p>
+          <Link
+            to="/product/kinhmat"
+            className="product-title text-decoration-none text-body"
+            style={{ fontSize: "18px", fontFamily: "Tinos, sans-serif" }}
+          >
+            Hoa tai
+          </Link>
         </div>
 
         {/* <div className="scroll-buttons">
@@ -296,13 +318,10 @@ const Home = () => {
           Right
         </button>
       </div> */}
+      </div>
 
-        </div>
-
-        {/* <button onClick={handleMoveLeft}>Left</button>
+      {/* <button onClick={handleMoveLeft}>Left</button>
         <button onClick={handleMoveRight}>Right</button> */}
-
-      
 
       {/* Sản phẩm của đồng hồ */}
       {isLoading ? (
@@ -339,7 +358,6 @@ const Home = () => {
       )}
 
       <div classname="container-fuild">
-
         {visibleItemCountForDongHo < dataArrayForDongHo.length && (
           <div
             onClick={handleShowMoreForDongHo}
@@ -365,7 +383,6 @@ const Home = () => {
             className="container text-center mt-5"
             style={{ paddingBottom: "40px" }}
           >
-
             <div className="row ">
               <div className="col">
                 <img
@@ -395,13 +412,13 @@ const Home = () => {
                     đính đá), từ vòng tay, hoa tai, dây chuyền cho đến cả nhẫn.
                   </p>
                   <div className="action-banner-bottom">
-                    <a
+                    <Link
                       className="btn-home-banner"
-                      href="/collections/all"
+                      to="/product/kinhmat"
                       aria-label="Đồ trang sức độc quyền"
                     >
                       Xem ngay
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -432,13 +449,13 @@ const Home = () => {
                     kể từ thời điểm ra mắt.
                   </p>
                   <div className="action-banner-bottom">
-                    <a
+                    <Link
                       className="btn-home-banner"
-                      href="/collections/all"
+                      to="/product/đongho"
                       aria-label="Đồ trang sức độc quyền"
                     >
                       Xem ngay
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -465,7 +482,6 @@ const Home = () => {
               <a>Trang sức</a>
             </h3>
             <div className="row  mx-5">
-
               {productByCategoryNhan
                 .slice(0, visibleItemCountForNhan)
                 .map((aProducts, idx) => (
@@ -484,7 +500,6 @@ const Home = () => {
                     />
                   </div>
                 ))}
-
             </div>
           </div>
         )}
@@ -493,7 +508,6 @@ const Home = () => {
             onClick={handleShowMoreForNhan}
             className="wraplist-ctas text-center"
           >
-
             <a className="btn-collection button btnwhite dark mx-2">
               Xem thêm sản phẩm
               <svg
@@ -508,7 +522,6 @@ const Home = () => {
             </a>
           </div>
         )}
-
 
         <div className="container-fuild" style={{ paddingTop: "50px" }}>
           <div className="sectionHeading text-center my-5">
@@ -537,14 +550,14 @@ const Home = () => {
               </div>
               <div className="col">
                 <GuideCart
-                  article="Hướng dẫn cách tạo mục lục bài viết"
+                  article="Hướng Dẫn Cách Tạo Mục Lục Bài Viết Của Website"
                   shortArticle="Trong bài viết này, tôi sẽ hướng dẫn bạn cách tạo mục lục bài viết siêu đơn giản, không phải..."
                   image="https://file.hstatic.net/200000593853/article/blog-img-2_993d9da631724c61b538ba9210cc0b0e_grande.jpeg"
                 />
               </div>
               <div className="col">
                 <GuideCart
-                  article="Hướng dẫn cách tạo mục lục bài viết"
+                  article="Những Loại Đá Quý Đặc Biệt Giúp Thu Hút Và Tăng Cường Tình Yêu"
                   shortArticle="Bạn có biết rằng một số loại đá quý và bán quý đặc biệt có thêm tác dụng hỗ trợ..."
                   image="https://file.hstatic.net/200000593853/article/blog-img-4_297f5b2eed3f4cdc998fd1efec06b708.jpeg"
                 />

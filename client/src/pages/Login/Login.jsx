@@ -3,7 +3,7 @@ import "./Login.css";
 import { FaFacebookF, FaGooglePlusG, FaLinkedinIn } from "react-icons/fa";
 import { login, register } from "../../services/UserService";
 import Input from "../../components/Input";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { log } from "../../store/reducers/auth";
 import { toast } from "react-toastify";
@@ -178,9 +178,9 @@ const Login = (props) => {
                 maxLength="100"
                 placeholder="Password"
               />
-              <a href="#" className="a-login">
-                Forgot your password?
-              </a>
+              <Link to="/login/changepassword" className="a-login fw-bold">
+                Change Password
+              </Link>
               <button type="submit" className="button-login">
                 Sign In
               </button>
