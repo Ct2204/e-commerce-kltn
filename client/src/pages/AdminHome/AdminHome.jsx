@@ -8,7 +8,7 @@ import {
 } from '../../services/product'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Input from '../../components/Input'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -47,6 +47,7 @@ const AdminHome = (props) => {
   const [description, setDescription] = useState('')
   const [activeKey, setActiveKey] = useState('0')
   const [descriptionById, setDescriptionById] = useState('')
+  const [isAddProduct, setIsAddProduct] = useState(false)
 
   const [searchValue, setSearchValue] = useState('')
 
@@ -488,24 +489,25 @@ const AdminHome = (props) => {
                     </div>
                     <div className="col-sm-12 col-md-6 d-flex justify-content-end ">
                       <div className="mx-5 d-flex ">
-                        <button
-                          className="text-white"
-                          style={{
-                            padding: '6px 15px',
-                            backgroundColor: '#216fdb',
-                            border: 'none',
-                            borderRadius: '6px',
-                            paddingTop: '5px',
-                            paddingBottom: '5px',
-                          }}
-                          onClick={(e) => showModalHandler(e, 0)}
-                        >
-                          <i
-                            style={{ color: 'white', marginRight: '5px' }}
-                            className="fa-solid fa-plus"
-                          ></i>
-                          Add
-                        </button>
+                        <Link to="/dashboard/addproduct">
+                          <button
+                            className="text-white"
+                            style={{
+                              padding: '6px 15px',
+                              backgroundColor: '#216fdb',
+                              border: 'none',
+                              borderRadius: '6px',
+                              paddingTop: '5px',
+                              paddingBottom: '5px',
+                            }}
+                          >
+                            <i
+                              style={{ color: 'white', marginRight: '5px' }}
+                              className="fa-solid fa-plus"
+                            ></i>
+                            Add
+                          </button>
+                        </Link>
                       </div>
                       <Modal
                         show={show}

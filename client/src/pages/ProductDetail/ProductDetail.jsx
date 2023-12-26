@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import "./ProductDetail.css";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import './ProductDetail.css'
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import {
   AiOutlineMinus,
   AiOutlinePlus,
   AiFillTwitterCircle,
   AiOutlineInstagram,
-} from "react-icons/ai";
-import { FaStar } from "react-icons/fa";
-import { BsFacebook, BsMessenger } from "react-icons/bs";
-import ProductCart from "../../components/ProductCart";
-import Accordion from "react-bootstrap/Accordion";
-import { useNavigate, useSearchParams } from "react-router-dom";
+} from 'react-icons/ai'
+import { FaStar } from 'react-icons/fa'
+import { BsFacebook, BsMessenger } from 'react-icons/bs'
+import ProductCart from '../../components/ProductCart'
+import Accordion from 'react-bootstrap/Accordion'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
   getProductDescription,
   getProductDetail,
@@ -22,113 +22,109 @@ import {
   getProductOptionDetail,
   getProductsByCategory2,
   getRatingOfProduct,
-} from "../../services/product";
-import { createCart } from "../../services/CartService.js";
-import { log } from "../../store/reducers/auth.js";
-import { Pagination } from "react-bootstrap";
-import { responsivePropType } from "react-bootstrap/esm/createUtilityClasses.js";
+} from '../../services/product'
+import { createCart } from '../../services/CartService.js'
+import { log } from '../../store/reducers/auth.js'
+import { Pagination } from 'react-bootstrap'
+import { responsivePropType } from 'react-bootstrap/esm/createUtilityClasses.js'
 
 const ProductDetail = (props) => {
-  const [message, setMessage] = useState("");
-  const [productDetail, setProductDetail] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchParams] = useSearchParams();
-  const [productDescription, setProductDescription] = useState([]);
+  const [message, setMessage] = useState('')
+  const [productDetail, setProductDetail] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [searchParams] = useSearchParams()
+  const [productDescription, setProductDescription] = useState([])
   const [currentImage, setCurrentImage] = useState(
     productDetail.listMediaProduct?.[0].url
-  );
+  )
 
-  const [productByCategoryNhan, setProductByCategoryNhan] = useState([]);
-  const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([]);
+  const [productByCategoryNhan, setProductByCategoryNhan] = useState([])
+  const [productByCategoryDongHo, setProductByCategoryDongHo] = useState([])
 
-  const [productOption, setProdoductOption] = useState([]);
-  const [productOptionDetail, setProductOptionDetail] = useState();
-  const [productItem, setProductItem] = useState();
-  const [productItems, setProductItems] = useState([]);
+  const [productOption, setProdoductOption] = useState([])
+  const [productOptionDetail, setProductOptionDetail] = useState()
+  const [productItem, setProductItem] = useState()
+  const [productItems, setProductItems] = useState([])
 
-  const [productItemId, setProductItemId] = useState([]);
-  const [quantity, setQuantity] = useState(1);
+  const [productItemId, setProductItemId] = useState([])
+  const [quantity, setQuantity] = useState(1)
 
-  const [selectedItem, setSelectedItem] = useState([]);
+  const [selectedItem, setSelectedItem] = useState([])
 
-  const [rating, setRating] = useState([]);
+  const [rating, setRating] = useState([])
 
-  const [page, setPage] = useState(1);
-  const [pageLength, setPageLength] = useState(5);
-  const [pagingItems, setPagingItems] = useState(false);
-  const [averageOfStars, setAverageOfStars] = useState(0);
+  const [page, setPage] = useState(1)
+  const [pageLength, setPageLength] = useState(5)
+  const [pagingItems, setPagingItems] = useState(false)
+  const [averageOfStars, setAverageOfStars] = useState(0)
 
   // const handleItemClick = (index) => {
   //   setSelectedItem(index);
   // };
 
-  const productId = searchParams.get("productId");
-  const productOptionDetailId = 1002;
+  const productId = searchParams.get('productId')
+  const productOptionDetailId = 1002
 
-  const userInfor = useSelector((state) => state.auth.userInfo);
+  const userInfor = useSelector((state) => state.auth.userInfo)
 
   useEffect(() => {
-    loadData(productId);
-    handleProductDescription(productId);
-    handleProductOption(productId);
-    handleProductItem(productId);
-  }, [productId]);
+    loadData(productId)
+    handleProductDescription(productId)
+    handleProductOption(productId)
+    handleProductItem(productId)
+  }, [productId])
 
   // select index to find index of product item
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [option1, setOption1] = useState(0);
-  const [option2, setOption2] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState([])
+  const [option1, setOption1] = useState(0)
+  const [option2, setOption2] = useState(0)
   // console.log(productOption)
   // const [optionDetailId, setOptionDetailId] = useState(productOption[0].listProductOptionDetail[0].id);
   // console.log("optionDetail",optionDetailId);
 
   const handleIndex = async (productIndex, optionIndex) => {
     if (productIndex === 0) {
-      setOption1(optionIndex);
+      setOption1(optionIndex)
     }
     if (productIndex === 1) {
-      setOption2(optionIndex);
+      setOption2(optionIndex)
     }
     setSelectedItem((prevState) => ({
       ...prevState,
       [productIndex]: optionIndex,
-    }));
-  };
+    }))
+  }
 
   useEffect(() => {
     if (productOption.length === 1) {
-      setSelectedOptions([option1]);
-      handleProductItemId();
+      setSelectedOptions([option1])
+      handleProductItemId()
     } else {
-      setSelectedOptions([option1, option2]);
-      handleProductItemId();
+      setSelectedOptions([option1, option2])
+      handleProductItemId()
     }
-  }, [option1, option2]);
+  }, [option1, option2])
 
   useEffect(() => {
-    handleProductItems(productId);
-  }, []);
+    handleProductItems(productId)
+  }, [])
   useEffect(() => {
-    handleGetRatingOfProduct(productId);
-  }, [page, pageLength]);
+    handleGetRatingOfProduct(productId)
+  }, [page, pageLength])
   //get Rating of products
   const handleGetRatingOfProduct = async (productId) => {
     try {
-      setIsLoading(true);
-      const responseData = await getRatingOfProduct(
-        page,
-        pageLength,
-        productId
-      );
+      setIsLoading(true)
+      const responseData = await getRatingOfProduct(page, pageLength, productId)
       if (responseData) {
-        setRating(responseData.data.listRating);
-        setAverageOfStars(responseData.data.averageOfStars);
-        console.log("Thiên", responseData.data.averageOfStars);
+        setRating(responseData.data.listRating)
+        setAverageOfStars(responseData.data.averageOfStars)
+        console.log('Thiên', responseData.data.averageOfStars)
         let items = [
           <Pagination.Item key="first" onClick={() => setPage(1)}>
             &laquo;
           </Pagination.Item>,
-        ];
+        ]
         for (let i = 1; i < responseData.data.totalPages + 1; i++) {
           items.push(
             <Pagination.Item
@@ -138,7 +134,7 @@ const ProductDetail = (props) => {
             >
               {i}
             </Pagination.Item>
-          );
+          )
         }
         items.push(
           <Pagination.Item
@@ -147,64 +143,64 @@ const ProductDetail = (props) => {
           >
             &raquo;
           </Pagination.Item>
-        );
-        setPagingItems(items);
+        )
+        setPagingItems(items)
       } else {
-        setRating("Chưa có comment");
+        setRating('Chưa có comment')
       }
-      setIsLoading(false);
+      setIsLoading(false)
     } catch (err) {
-      console.error("Error in handleUpdateProduct: ", err);
-      setIsLoading(false);
+      console.error('Error in handleUpdateProduct: ', err)
+      setIsLoading(false)
     }
-  };
+  }
 
   //get product items
   const handleProductItems = async (productId) => {
-    setIsLoading(true);
-    const responseData = await getProductItems(productId);
-    setIsLoading(false);
-    setProductItems(responseData.productItems);
-  };
+    setIsLoading(true)
+    const responseData = await getProductItems(productId)
+    setIsLoading(false)
+    setProductItems(responseData.productItems)
+  }
 
   // get product detail
   const loadData = async (productId) => {
-    setIsLoading(true);
-    const responseData = await getProductDetail(productId);
-    setIsLoading(false);
-    setProductDetail(responseData);
-    console.log("ProductDetail:", responseData);
-    setCurrentImage(responseData.listMediaProduct?.[0].url);
-  };
+    setIsLoading(true)
+    const responseData = await getProductDetail(productId)
+    setIsLoading(false)
+    setProductDetail(responseData)
+    console.log('ProductDetail:', responseData)
+    setCurrentImage(responseData.listMediaProduct?.[0].url)
+  }
 
   //get product description
   const handleProductDescription = async (productId) => {
-    setIsLoading(true);
-    const responseData = await getProductDescription(productId);
-    setIsLoading(false);
-    setProductDescription(responseData);
-  };
+    setIsLoading(true)
+    const responseData = await getProductDescription(productId)
+    setIsLoading(false)
+    setProductDescription(responseData)
+  }
 
   //get product option
   const handleProductOption = async (productId) => {
-    setIsLoading(true);
-    const responseData = await getProductOption(productId);
-    setIsLoading(false);
-    setProdoductOption(responseData);
-  };
+    setIsLoading(true)
+    const responseData = await getProductOption(productId)
+    setIsLoading(false)
+    setProdoductOption(responseData)
+  }
 
   // get product item
   const handleProductItem = async (productId) => {
-    setIsLoading(true);
-    const responseData = await getProductItem(productId);
-    setIsLoading(false);
-    setProductItem(responseData);
-  };
+    setIsLoading(true)
+    const responseData = await getProductItem(productId)
+    setIsLoading(false)
+    setProductItem(responseData)
+  }
 
   //convert integer to float
   const numberWithCommas = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
 
   const handleProductItemId = () => {
     productItems
@@ -214,70 +210,70 @@ const ProductDetail = (props) => {
           JSON.stringify(selectedOptions)
       )
       .map((filteredItem, idx) => {
-        setProductItemId(filteredItem.id);
-      });
-  };
+        setProductItemId(filteredItem.id)
+      })
+  }
   const handleImageHover = (url) => {
-    setCurrentImage(url);
-  };
+    setCurrentImage(url)
+  }
 
-  console.log("productItems", productItem);
+  console.log('productItems', productItem)
 
   // Cart
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleToIncreaseQuantity = () => {
-    const newQuantity = quantity + 1;
-    setQuantity(newQuantity);
-  };
+    const newQuantity = quantity + 1
+    setQuantity(newQuantity)
+  }
   const handleToDecreaseQuantity = () => {
     if (quantity > 1) {
-      const newQuantity = quantity - 1;
-      setQuantity(newQuantity);
+      const newQuantity = quantity - 1
+      setQuantity(newQuantity)
     }
-  };
+  }
 
   const handleAddToCart = async () => {
     const responseData = await createCart(
       userInfor.user_id,
       quantity,
       productItemId
-    );
+    )
 
     if (responseData.code === 200) {
-      setMessage(responseData.message);
+      setMessage(responseData.message)
     } else {
-      setMessage(responseData.message);
+      setMessage(responseData.message)
     }
-  };
+  }
 
   const handleProductsByCategoryNhan = async () => {
-    setIsLoading(true);
-    const responseData = await getProductsByCategory2(2);
-    setProductByCategoryNhan(responseData.listProducts);
-    setIsLoading(false);
-  };
+    setIsLoading(true)
+    const responseData = await getProductsByCategory2(2)
+    setProductByCategoryNhan(responseData.listProducts)
+    setIsLoading(false)
+  }
   const handleProductsByCategoryDongHo = async () => {
-    setIsLoading(true);
-    const responseData = await getProductsByCategory2(1);
-    setProductByCategoryDongHo(responseData.listProducts);
-    setIsLoading(false);
-  };
+    setIsLoading(true)
+    const responseData = await getProductsByCategory2(1)
+    setProductByCategoryDongHo(responseData.listProducts)
+    setIsLoading(false)
+  }
   const changePageHandler = async (e, id) => {
-    navigate(`/productdetail?productId=${id}`);
-    window.scrollTo(0, 0);
-  };
+    navigate(`/productdetail?productId=${id}`)
+    window.scrollTo(0, 0)
+  }
 
   useEffect(() => {
-    handleProductsByCategoryDongHo();
-  }, []);
+    handleProductsByCategoryDongHo()
+  }, [])
 
   useEffect(() => {
-    handleProductsByCategoryNhan();
-  }, []);
+    handleProductsByCategoryNhan()
+  }, [])
 
-  console.log("select option", selectedOptions);
-  console.log("productItemId", productItemId);
+  console.log('select option', selectedOptions)
+  console.log('productItemId', productItemId)
 
   return (
     <>
@@ -308,8 +304,8 @@ const ProductDetail = (props) => {
               <div className="mt-5">
                 <img
                   className="img-feature"
-                  style={{ width: "100%", height: "100%" }}
-                  src={currentImage}
+                  style={{ width: '100%', height: '100%' }}
+                  src={currentImage || ''}
                   atl=""
                 />
               </div>
@@ -322,9 +318,9 @@ const ProductDetail = (props) => {
                         key={index}
                         className="mx-2 active2001"
                         style={{
-                          width: "15%",
-                          height: "15%",
-                          cursor: "pointer",
+                          width: '15%',
+                          height: '15%',
+                          cursor: 'pointer',
                         }}
                         src={listImage.url}
                         atl="Image"
@@ -334,7 +330,7 @@ const ProductDetail = (props) => {
               </div>
             </div>
 
-            <div className="col-8" style={{ paddingLeft: "10px" }}>
+            <div className="col-8" style={{ paddingLeft: '10px' }}>
               <div className="row">
                 <div className="col-8 product-wrapper mt-5">
                   <div className="product-heading">
@@ -354,7 +350,7 @@ const ProductDetail = (props) => {
                           title="Show vendor"
                           href="/collections/vendors?q=citizen"
                         >
-                          {" "}
+                          {' '}
                           Citizen
                         </a>
                       </strong>
@@ -363,7 +359,7 @@ const ProductDetail = (props) => {
 
                   <div
                     className="product-price my-4"
-                    style={{ marginRight: "54px" }}
+                    style={{ marginRight: '54px' }}
                     id="price-preview"
                   >
                     <span className="pro-title">Giá: </span>
@@ -408,14 +404,14 @@ const ProductDetail = (props) => {
                                       handleImageHover(
                                         optiondetail
                                           .listProductOptionDetailVisuals[0].url
-                                      );
+                                      )
                                     }
                                   }}
                                   key={optiondetail.id}
                                   className={`product-detail-item ${
                                     selectedItem[productIndex] === optionIndex
-                                      ? "selected"
-                                      : ""
+                                      ? 'selected'
+                                      : ''
                                   }`}
                                   onClick={() =>
                                     handleIndex(
@@ -437,25 +433,25 @@ const ProductDetail = (props) => {
 
                   <div className="d-flex color my-4">
                     <div className="mt-2">
-                      <strong style={{ fontSize: "18px" }}>Số lượng:</strong>
+                      <strong style={{ fontSize: '18px' }}>Số lượng:</strong>
                     </div>
                     <div className="quantity-container">
                       <div
-                        style={{ width: "50px", height: "50px" }}
+                        style={{ width: '50px', height: '50px' }}
                         className="color-component"
                       >
                         <AiOutlineMinus
                           onClick={handleToDecreaseQuantity}
-                          style={{ width: "20px", height: "20px" }}
+                          style={{ width: '20px', height: '20px' }}
                         />
                       </div>
                       <div
                         className=" text1 d-grid align-items-center"
                         style={{
-                          width: "50px",
-                          height: "50px",
-                          color: "black",
-                          fontSize: "20px",
+                          width: '50px',
+                          height: '50px',
+                          color: 'black',
+                          fontSize: '20px',
                         }}
                       >
                         <div>{quantity}</div>
@@ -464,10 +460,10 @@ const ProductDetail = (props) => {
                       <div
                         className="plus"
                         onClick={handleToIncreaseQuantity}
-                        style={{ width: "50px", height: "50px" }}
+                        style={{ width: '50px', height: '50px' }}
                       >
                         <AiOutlinePlus
-                          style={{ width: "20px", height: "20px" }}
+                          style={{ width: '20px', height: '20px' }}
                         />
                       </div>
                     </div>
@@ -482,20 +478,20 @@ const ProductDetail = (props) => {
                           return (
                             <p
                               key={idx}
-                              style={{ fontSize: "16px", marginTop: "12px" }}
+                              style={{ fontSize: '16px', marginTop: '12px' }}
                             >
                               {filteredItem.quantity} sản phẩm có sẵn
                               {console.log(filteredItem.id)}
                             </p>
-                          );
+                          )
                         })}
                     </div>
                   </div>
                   <div className="row d-flex">
                     <div
                       style={{
-                        height: "45px",
-                        cursor: "pointer",
+                        height: '45px',
+                        cursor: 'pointer',
                       }}
                       className="col-6 d-grid justify-content-center align-items-center "
                     >
@@ -509,11 +505,11 @@ const ProductDetail = (props) => {
                       </div>
                     </div>
                     <div
-                      style={{ height: "45px", cursor: "pointer" }}
+                      style={{ height: '45px', cursor: 'pointer' }}
                       className="col-6 d-grid justify-content-center align-items-center"
                     >
                       <div
-                        onClick={() => navigate("/cart")}
+                        onClick={() => navigate('/cart')}
                         className="border border-danger px-5 py-2 bg-danger text-white rounded"
                       >
                         <strong>MUA NGAY</strong>
@@ -523,9 +519,9 @@ const ProductDetail = (props) => {
                   <div className="my-4">
                     <div
                       style={{
-                        width: "88%",
-                        height: "45px",
-                        cursor: "pointer",
+                        width: '88%',
+                        height: '45px',
+                        cursor: 'pointer',
                       }}
                       className="d-grid justify-content-center align-items-center border border-dark click rounded bg-dark text-light"
                     >
@@ -534,39 +530,39 @@ const ProductDetail = (props) => {
                   </div>
                   <div className="d-flex color">
                     <div className="text-start">
-                      <strong style={{ fontSize: "18px" }}>Chia sẻ:</strong>
+                      <strong style={{ fontSize: '18px' }}>Chia sẻ:</strong>
                     </div>
                     <div>
                       <BsFacebook
                         className="icon-facebook text-primary"
                         style={{
-                          height: "25px",
-                          width: "25px",
-                          cursor: "pointer",
+                          height: '25px',
+                          width: '25px',
+                          cursor: 'pointer',
                         }}
-                      />{" "}
+                      />{' '}
                       <BsMessenger
                         className="mx-3 text-primary"
                         style={{
-                          height: "25px",
-                          width: "25px",
-                          cursor: "pointer",
+                          height: '25px',
+                          width: '25px',
+                          cursor: 'pointer',
                         }}
-                      />{" "}
+                      />{' '}
                       <AiFillTwitterCircle
                         style={{
-                          height: "30px",
-                          width: "30px",
-                          cursor: "pointer",
+                          height: '30px',
+                          width: '30px',
+                          cursor: 'pointer',
                         }}
                         className="text-primary"
-                      />{" "}
+                      />{' '}
                       <AiOutlineInstagram
                         className="mx-3 text-primary"
                         style={{
-                          height: "30px",
-                          width: "30px",
-                          cursor: "pointer",
+                          height: '30px',
+                          width: '30px',
+                          cursor: 'pointer',
                         }}
                       />
                     </div>
@@ -574,12 +570,12 @@ const ProductDetail = (props) => {
                 </div>
 
                 {/*Chính sách  */}
-                <div className="col-4" style={{ paddingRight: "20px" }}>
+                <div className="col-4" style={{ paddingRight: '20px' }}>
                   <div className="d-flex flex-wrap product-deliverly text-start">
                     <div className="col-lg-12 col-md-6 col-12 deliverly-inner">
                       <div className="title-deliverly mt-4">
                         <span>
-                          <strong style={{ fontSize: "18px" }}>
+                          <strong style={{ fontSize: '18px' }}>
                             Chính sách bán hàng
                           </strong>
                         </span>
@@ -588,14 +584,14 @@ const ProductDetail = (props) => {
                       <div className="infoList-deliverly">
                         <div
                           className="deliverly-item"
-                          style={{ fontSize: "16px" }}
+                          style={{ fontSize: '16px' }}
                         >
                           <span>
                             <img
                               style={{
-                                height: "26px",
-                                width: "35px",
-                                paddingRight: "10px",
+                                height: '26px',
+                                width: '35px',
+                                paddingRight: '10px',
                               }}
                               className=" ls-is-cached lazyloaded"
                               data-src="//theme.hstatic.net/200000593853/1001115480/14/product_deliverly_1_ico.png?v=43"
@@ -608,15 +604,15 @@ const ProductDetail = (props) => {
 
                         <div
                           className="deliverly-item "
-                          style={{ fontSize: "16px" }}
+                          style={{ fontSize: '16px' }}
                         >
                           <span>
                             <img
                               style={{
-                                height: "26px",
+                                height: '26px',
 
-                                width: "35px",
-                                paddingRight: "10px",
+                                width: '35px',
+                                paddingRight: '10px',
                               }}
                               className=" ls-is-cached lazyloaded"
                               data-src="//theme.hstatic.net/200000593853/1001115480/14/product_deliverly_1_ico.png?v=43"
@@ -629,14 +625,14 @@ const ProductDetail = (props) => {
 
                         <div
                           className="deliverly-item "
-                          style={{ fontSize: "16px" }}
+                          style={{ fontSize: '16px' }}
                         >
                           <span>
                             <img
                               style={{
-                                height: "26px",
-                                width: "36px",
-                                paddingRight: "10px",
+                                height: '26px',
+                                width: '36px',
+                                paddingRight: '10px',
                               }}
                               className=" ls-is-cached lazyloaded"
                               data-src="//theme.hstatic.net/200000593853/1001115480/14/product_deliverly_2_ico.png?v=43"
@@ -649,14 +645,14 @@ const ProductDetail = (props) => {
 
                         <div
                           className="deliverly-item mb-3"
-                          style={{ fontSize: "16px" }}
+                          style={{ fontSize: '16px' }}
                         >
                           <span>
                             <img
                               style={{
-                                height: "26px",
-                                width: "35px",
-                                paddingRight: "10px",
+                                height: '26px',
+                                width: '35px',
+                                paddingRight: '10px',
                               }}
                               className=" ls-is-cached lazyloaded"
                               data-src="//theme.hstatic.net/200000593853/1001115480/14/product_deliverly_3_ico.png?v=43"
@@ -670,11 +666,11 @@ const ProductDetail = (props) => {
                     </div>
                     <div
                       className="col-lg-12 col-md-6 col-12 deliverly-inner"
-                      style={{ paddingTop: "10px" }}
+                      style={{ paddingTop: '10px' }}
                     >
                       <div className="title-deliverly">
                         <span>
-                          <strong style={{ fontSize: "18px" }}>
+                          <strong style={{ fontSize: '18px' }}>
                             Thông tin thêm
                           </strong>
                         </span>
@@ -682,14 +678,14 @@ const ProductDetail = (props) => {
                       <div className="infoList-deliverly">
                         <div
                           className="deliverly-item"
-                          style={{ fontSize: "16px" }}
+                          style={{ fontSize: '16px' }}
                         >
                           <span>
                             <img
                               style={{
-                                height: "26px",
-                                width: "35px",
-                                paddingRight: "10px",
+                                height: '26px',
+                                width: '35px',
+                                paddingRight: '10px',
                               }}
                               className=" ls-is-cached lazyloaded"
                               data-src="//theme.hstatic.net/200000593853/1001115480/14/product_deliverly_4_ico.png?v=43"
@@ -702,14 +698,14 @@ const ProductDetail = (props) => {
 
                         <div
                           className="deliverly-item"
-                          style={{ fontSize: "16px" }}
+                          style={{ fontSize: '16px' }}
                         >
                           <span>
                             <img
                               style={{
-                                height: "26px",
-                                width: "35px",
-                                paddingRight: "10px",
+                                height: '26px',
+                                width: '35px',
+                                paddingRight: '10px',
                               }}
                               className=" ls-is-cached lazyloaded"
                               data-src="//theme.hstatic.net/200000593853/1001115480/14/product_deliverly_5_ico.png?v=43"
@@ -722,14 +718,14 @@ const ProductDetail = (props) => {
 
                         <div
                           className="deliverly-item mb-4"
-                          style={{ fontSize: "16px" }}
+                          style={{ fontSize: '16px' }}
                         >
                           <span>
                             <img
                               style={{
-                                height: "26px",
-                                width: "35px",
-                                paddingRight: "10px",
+                                height: '26px',
+                                width: '35px',
+                                paddingRight: '10px',
                               }}
                               className=" ls-is-cached lazyloaded"
                               data-src="//theme.hstatic.net/200000593853/1001115480/14/product_deliverly_6_ico.png?v=43"
@@ -748,7 +744,7 @@ const ProductDetail = (props) => {
           </div>
           <div
             className="productDetail--box box-detail-description mg-top text-start my-5"
-            style={{ marginTop: "50px" }}
+            style={{ marginTop: '50px' }}
           >
             <div className="product-description">
               <div className="box-title">
@@ -772,22 +768,22 @@ const ProductDetail = (props) => {
             </div>
           </div>
           <Accordion>
-            <h1 className="text-start" style={{ fontSize: "40px" }}>
+            <h1 className="text-start" style={{ fontSize: '40px' }}>
               CÂU HỎI THƯỜNG GẶP
             </h1>
             <Accordion.Item
               className="border-0"
-              style={{ width: "60%" }}
+              style={{ width: '60%' }}
               eventKey="0"
             >
               <Accordion.Header>
-                <strong style={{ fontSize: "20px", marginTop: "10px" }}>
+                <strong style={{ fontSize: '20px', marginTop: '10px' }}>
                   Làm thế nào để tôi đặt hàng online?
                 </strong>
               </Accordion.Header>
               <Accordion.Body
                 className="text-start"
-                style={{ fontSize: "18px" }}
+                style={{ fontSize: '18px' }}
               >
                 The swan rất vui lòng hỗ trợ khách hàng đặt hàng online bằng một
                 trong những cách đặt hàng sau:
@@ -802,17 +798,17 @@ const ProductDetail = (props) => {
             </Accordion.Item>
             <Accordion.Item
               className="border-0"
-              style={{ width: "60%" }}
+              style={{ width: '60%' }}
               eventKey="1"
             >
               <Accordion.Header>
-                <strong style={{ fontSize: "20px" }}>
+                <strong style={{ fontSize: '20px' }}>
                   Nếu tôi đặt hàng trực tuyến có những rủi ro gì không?
                 </strong>
               </Accordion.Header>
               <Accordion.Body
                 className="text-start"
-                style={{ fontSize: "18px" }}
+                style={{ fontSize: '18px' }}
               >
                 Với The swan, khách hàng không phải lo lắng, vì chúng tôi cam
                 kết cung cấp sản phẩm chất lượng tốt, giá cả phải chăng. Đặc
@@ -822,18 +818,18 @@ const ProductDetail = (props) => {
             </Accordion.Item>
             <Accordion.Item
               className="border-0"
-              style={{ width: "60%" }}
+              style={{ width: '60%' }}
               eventKey="2"
             >
               <Accordion.Header>
-                <strong style={{ fontSize: "20px" }}>
+                <strong style={{ fontSize: '20px' }}>
                   Nếu tôi mua sản phẩm với số lượng nhiều thì giá có được giảm
                   không?
                 </strong>
               </Accordion.Header>
               <Accordion.Body
                 className="text-start"
-                style={{ fontSize: "18px" }}
+                style={{ fontSize: '18px' }}
               >
                 Khi mua hàng với số lượng nhiều khách hàng sẽ được hưởng chế độ
                 ưu đãi, giảm giá ngay tại thời điểm mua hàng. Khách hàng vui
@@ -843,17 +839,17 @@ const ProductDetail = (props) => {
             </Accordion.Item>
             <Accordion.Item
               className="border-0"
-              style={{ width: "60%" }}
+              style={{ width: '60%' }}
               eventKey="3"
             >
               <Accordion.Header>
-                <strong style={{ fontSize: "20px" }}>
+                <strong style={{ fontSize: '20px' }}>
                   Quy đinh hoàn trả và đổi sản phẩm của Mode như thế nào?
                 </strong>
               </Accordion.Header>
               <Accordion.Body
                 className="text-start"
-                style={{ fontSize: "18px" }}
+                style={{ fontSize: '18px' }}
               >
                 Khách hàng vui lòng tham khảo chính sách đổi trả sản phẩm của
                 The swan để được cung cấp thông tin đầy đủ và chi tiết nhất. Lưu
@@ -864,17 +860,17 @@ const ProductDetail = (props) => {
             </Accordion.Item>
             <Accordion.Item
               className="border-0"
-              style={{ width: "60%" }}
+              style={{ width: '60%' }}
               eventKey="4"
             >
               <Accordion.Header>
-                <strong style={{ fontSize: "20px" }}>
-                  Tôi mua hàng rồi, không vừa ý có thể đổi lại hay không?{" "}
+                <strong style={{ fontSize: '20px' }}>
+                  Tôi mua hàng rồi, không vừa ý có thể đổi lại hay không?{' '}
                 </strong>
               </Accordion.Header>
               <Accordion.Body
                 className="text-start"
-                style={{ fontSize: "18px" }}
+                style={{ fontSize: '18px' }}
               >
                 Khi mua hàng nếu khách hàng không vừa ý với sản phẩm, hãy cho
                 The swan được biết, chúng tôi sẽ đổi ngay sản phẩm cho khách
@@ -905,11 +901,11 @@ const ProductDetail = (props) => {
                       <div className="">
                         <div
                           className="shopee-rating-stars__lit"
-                          style={{ width: "26px", height: "26px" }}
+                          style={{ width: '26px', height: '26px' }}
                         >
                           <FaStar
                             className="text-color-rating"
-                            style={{ width: "25px", height: "25px" }}
+                            style={{ width: '25px', height: '25px' }}
                           />
                         </div>
                       </div>
@@ -917,11 +913,11 @@ const ProductDetail = (props) => {
                       <div className="shopee-rating-stars__star-wrapper">
                         <div
                           className="shopee-rating-stars__lit"
-                          style={{ width: "26px", height: "26px" }}
+                          style={{ width: '26px', height: '26px' }}
                         >
                           <FaStar
                             className="text-color-rating"
-                            style={{ width: "25px", height: "25px" }}
+                            style={{ width: '25px', height: '25px' }}
                           />
                         </div>
                       </div>
@@ -929,11 +925,11 @@ const ProductDetail = (props) => {
                       <div className="shopee-rating-stars__star-wrapper">
                         <div
                           className="shopee-rating-stars__lit"
-                          style={{ width: "26px", height: "30px" }}
+                          style={{ width: '26px', height: '30px' }}
                         >
                           <FaStar
                             className="text-color-rating"
-                            style={{ width: "25px", height: "25px" }}
+                            style={{ width: '25px', height: '25px' }}
                           />
                         </div>
                       </div>
@@ -941,11 +937,11 @@ const ProductDetail = (props) => {
                       <div className="shopee-rating-stars__star-wrapper">
                         <div
                           className="shopee-rating-stars__lit"
-                          style={{ width: "26px", height: "26px" }}
+                          style={{ width: '26px', height: '26px' }}
                         >
                           <FaStar
                             className="text-color-rating"
-                            style={{ width: "25px", height: "25px" }}
+                            style={{ width: '25px', height: '25px' }}
                           />
                         </div>
                       </div>
@@ -953,11 +949,11 @@ const ProductDetail = (props) => {
                       <div className="shopee-rating-stars__star-wrapper">
                         <div
                           className="shopee-rating-stars__lit"
-                          style={{ width: "26px", height: "26px" }}
+                          style={{ width: '26px', height: '26px' }}
                         >
                           <FaStar
                             className="text-color-rating"
-                            style={{ width: "25px", height: "25px" }}
+                            style={{ width: '25px', height: '25px' }}
                           />
                         </div>
                       </div>
@@ -974,7 +970,7 @@ const ProductDetail = (props) => {
                       <img
                         className="rounded-circle"
                         src="https://hinhnen4k.com/wp-content/uploads/2023/02/anh-gai-xinh-vn-3.jpg"
-                        style={{ width: "40px", height: "40px" }}
+                        style={{ width: '40px', height: '40px' }}
                       ></img>
                     </a>
                   </div>
@@ -987,7 +983,7 @@ const ProductDetail = (props) => {
                       {aRatings.fullName}
                     </a>
                     <div>
-                      {" "}
+                      {' '}
                       {Array.from({ length: aRatings.starRating }).map(
                         (_, i) => (
                           <span key={i} className="shopee-rating-stars__lit">
@@ -1007,8 +1003,8 @@ const ProductDetail = (props) => {
             </div>
           </div>
 
-          <div classname="container" style={{ paddingTop: "50px" }}>
-            <h3 className="text-start my-5" style={{ fontSize: "40px" }}>
+          <div classname="container" style={{ paddingTop: '50px' }}>
+            <h3 className="text-start my-5" style={{ fontSize: '40px' }}>
               <a>Sản phẩm liên quan</a>
             </h3>
 
@@ -1052,7 +1048,7 @@ const ProductDetail = (props) => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default ProductDetail;
+export default ProductDetail

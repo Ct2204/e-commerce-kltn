@@ -52,22 +52,15 @@ const Profile = () => {
     const selectedFile = e.target.files[0]
 
     console.log(selectedFile, '111')
-
+    setIsLoading(true)
     const responseData = await uploadPictureProfile(userId, selectedFile)
     console.log('hello', responseData.message)
 
-    // Hủy URL cũ nếu có
-    if (imageUrl) {
-      URL.revokeObjectURL(imageUrl)
-    }
-
     // Kiểm tra nếu có tệp tin được chọn
     if (selectedFile) {
-      const url = URL.createObjectURL(selectedFile)
-
-      // console.log("helllo",url)
-      setImageUrl(url)
+      setImageUrl(responseData.data.url)
     }
+    setIsLoading(false)
   }
 
   const handleFullNameChange = (e) => {
@@ -376,7 +369,7 @@ const Profile = () => {
                 <div className="mt-5">
                   <div className="d-flex flex-column choose-image">
                     <img
-                      src={userProfile.profilePicture}
+                      src={userProfile.url}
                       style={{ width: '100px', height: '100px' }}
                       className="rounded-circle volume-image"
                     />

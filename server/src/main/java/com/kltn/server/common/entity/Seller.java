@@ -41,4 +41,8 @@ public class Seller extends BaseAuditEntity {
 
     @OneToMany(mappedBy = "seller")
     private List<Product> products = new ArrayList<>();
+
+    @OneToMany(mappedBy = "seller")
+    private List<Order> orders = new ArrayList<>();
+
 }

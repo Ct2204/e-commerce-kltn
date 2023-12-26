@@ -22,6 +22,10 @@ public class Order extends BaseAuditEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_method")
     private UserPaymentMethod paymentMethod;

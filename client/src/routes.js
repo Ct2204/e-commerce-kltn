@@ -59,6 +59,10 @@ const routes = [
 
 export const routesAdmin = [
   {
+    path: '/addproduct',
+    component: <AddProuct />,
+  },
+  {
     path: '/',
     component: <AdminHome />,
   },

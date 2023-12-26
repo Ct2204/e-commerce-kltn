@@ -8,7 +8,12 @@ import { FaTrash } from 'react-icons/fa'
 import { Form } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import UploadImage from '../../UploadImage/UploadImage.js'
-import { uploadImageProduct } from '../../../services/productSeller.js'
+import {
+  createOptionProduct,
+  createProductOptionAndItem,
+  uploadImageProduct,
+} from '../../../services/productSeller.js'
+import Loader from '../../Loader/Loader.js'
 
 const AddOptionProduct = ({ productId }) => {
   //code add option
@@ -50,32 +55,36 @@ const AddOptionProduct = ({ productId }) => {
   }
 
   const handleFileChange = async (selectedFile, option1Index) => {
-    setIsLoading(true)
     const responseData = await uploadImageProduct(selectedFile)
-    setIsLoading(false)
+
     if (responseData.code === 201) {
-      setImage(responseData.data[0].url)
       console.log('url', responseData.data[0].url)
       toast.success(responseData.message)
       // Assuming you want to update the image for the first color option
       const updatedOptions = [...options]
       const updatedImages = [...options[0].images]
 
-      if (!updatedImages[option1Index]) {
-        updatedImages.push({
-          url: responseData.data[0].url,
-          type: 'IMAGE',
-        })
+      console.log('updateImage', updatedImages)
+
+      if (!updatedImages) {
+        updatedImages.push([
+          {
+            url: responseData.data[0].url,
+            type: 'IMAGE',
+          },
+        ])
       } else {
         // Assuming that each color will have one image for simplicity
-        updatedImages.push({
-          url: responseData.data[0].url,
-          type: 'IMAGE',
-        })
+        updatedImages.push([
+          {
+            url: responseData.data[0].url,
+            type: 'IMAGE',
+          },
+        ])
       }
 
-      updatedOptions[option1Index] = {
-        ...options[option1Index],
+      updatedOptions[0] = {
+        ...options[0],
         images: updatedImages,
       }
       setOptions(updatedOptions)
@@ -88,12 +97,9 @@ const AddOptionProduct = ({ productId }) => {
     const { value } = event.target
     if (productItems === undefined) {
       const newProductItem = {
-        id: null, // You can set the actual product ID if available
-        title: `${options[0].values[colorIndex]} - ${options[0].values[colorIndex]}`, // Adjust the title based on your requirements
+        title: property === 'title' ? value : '', // Adjust the title based on your requirements
         price: property === 'price' ? parseFloat(value) : 0,
         quantity: property === 'quantity' ? parseInt(value) : 0,
-        sku: property === 'sku' ? value : '',
-        images: options[0].images[colorIndex], // Set the image from the corresponding color index
         optionValueIndex: [colorIndex], // Include other relevant information
       }
       updatedProductItems.push(newProductItem)
@@ -128,12 +134,9 @@ const AddOptionProduct = ({ productId }) => {
     // Nếu sản phẩm không được tìm thấy, thêm mới một đối tượng mới
     if (!productFound) {
       const newProductItem = {
-        id: null, // You can set the actual product ID if available
-        title: `${options[0].values[colorIndex]} - ${options[0].values[colorIndex]}`, // Adjust the title based on your requirements
+        title: property === 'title' ? value : 0, // Adjust the title based on your requirements
         price: property === 'price' ? parseFloat(value) : 0,
         quantity: property === 'quantity' ? parseInt(value) : 0,
-        sku: property === 'sku' ? value : '',
-        images: options[0].images[colorIndex], // Set the image from the corresponding color index
         optionValueIndex: [colorIndex], // Include other relevant information
       }
       updatedProductItems.push(newProductItem)
@@ -152,12 +155,9 @@ const AddOptionProduct = ({ productId }) => {
     const { value } = event.target
     if (productItems === undefined) {
       const newProductItem = {
-        id: null, // You can set the actual product ID if available
-        title: `${options[0].values[colorIndex]} - ${options[0].values[colorIndex]}`, // Adjust the title based on your requirements
+        title: property === 'title' ? value : 0, // Adjust the title based on your requirements
         price: property === 'price' ? parseFloat(value) : 0,
         quantity: property === 'quantity' ? parseInt(value) : 0,
-        sku: property === 'sku' ? value : '',
-        images: options[0].images[colorIndex], // Set the image from the corresponding color index
         optionValueIndex: [colorIndex, sizeIndex], // Include other relevant information
       }
       updatedProductItems.push(newProductItem)
@@ -195,12 +195,10 @@ const AddOptionProduct = ({ productId }) => {
     // Nếu sản phẩm không được tìm thấy, thêm mới một đối tượng mới
     if (!productFound) {
       const newProductItem = {
-        id: null, // You can set the actual product ID if available
-        title: `${options[0].values[colorIndex]} - ${options[0].values[colorIndex]}`, // Adjust the title based on your requirements
+        id: colorIndex + 1, // You can set the actual product ID if available
+        title: property === 'title' ? value : 0, // Adjust the title based on your requirements
         price: property === 'price' ? parseFloat(value) : 0,
         quantity: property === 'quantity' ? parseInt(value) : 0,
-        sku: property === 'sku' ? value : '',
-        images: options[0].images[colorIndex], // Set the image from the corresponding color index
         optionValueIndex: [colorIndex, sizeIndex], // Include other relevant information
       }
       updatedProductItems.push(newProductItem)
@@ -214,15 +212,8 @@ const AddOptionProduct = ({ productId }) => {
     handleInputChange(event, colorIndex, sizeIndex, property)
   }
 
-  //code 2 option
-
-  // console.log(options)
-  // console.log('productItems', productItems)
-
-  // const [formData, setFormData] = useState([]);
-
   const formData = {
-    productId: 63,
+    productId: productId,
     sellerId: 1,
     options: options,
     productItems: productItems,
@@ -407,6 +398,15 @@ const AddOptionProduct = ({ productId }) => {
       const newInputValues = [...inputValuesOption2]
       newInputValues.splice(index, 1)
       setInputValuesOption2(newInputValues)
+    }
+  }
+
+  const handleToCreateProductOption = async () => {
+    const responseData = await createProductOptionAndItem(formData)
+    if (responseData.code === 201) {
+      toast.success(responseData.message)
+    } else {
+      toast.error(responseData.message)
     }
   }
 
@@ -652,7 +652,12 @@ const AddOptionProduct = ({ productId }) => {
                         <tr key={idx}>
                           <td>
                             {isLoading ? (
-                              <h1>Đang load</h1>
+                              <Loader
+                                style={{
+                                  width: '50px',
+                                  height: '50px',
+                                }}
+                              />
                             ) : (
                               <div
                                 className="d-flex"
@@ -667,12 +672,14 @@ const AddOptionProduct = ({ productId }) => {
                                 <div>
                                   <p>{product}</p>
                                 </div>
-                                <div className="image-upload-container">
-                                  {image ? (
+                                <div className="image-upload-container ">
+                                  {options[0].images[idx] &&
+                                  options[0].images[idx].length > 0 &&
+                                  options[0].images[idx][0].url ? (
                                     <img
-                                      src={image}
-                                      width={60}
-                                      height={60}
+                                      src={options[0].images[idx][0].url}
+                                      width={80}
+                                      height={80}
                                       alt="hello"
                                     />
                                   ) : (
@@ -689,16 +696,24 @@ const AddOptionProduct = ({ productId }) => {
                           <td>
                             <input
                               type="text"
+                              style={{
+                                padding: '25px 5px',
+                                marginTop: '50px',
+                              }}
                               className="form-control"
                               onChange={(e) =>
-                                handleInputChange(e, idx, 'price')
+                                handleInputChange(e, idx, 'title')
                               }
-                              onBlur={(e) => handleBlur(e, idx, 'price')}
+                              onBlur={(e) => handleBlur(e, idx, 'title')}
                             />
                           </td>
                           <td>
                             <input
                               className="form-control"
+                              style={{
+                                padding: '25px 5px',
+                                marginTop: '50px',
+                              }}
                               type="text"
                               onChange={(e) =>
                                 handleInputChange(e, idx, 'quantity')
@@ -709,9 +724,15 @@ const AddOptionProduct = ({ productId }) => {
                           <td>
                             <input
                               type="text"
+                              style={{
+                                padding: '25px 5px',
+                                marginTop: '50px',
+                              }}
                               className="form-control"
-                              onChange={(e) => handleInputChange(e, idx, 'sku')}
-                              onBlur={(e) => handleBlur(e, idx, 'sku')}
+                              onChange={(e) =>
+                                handleInputChange(e, idx, 'price')
+                              }
+                              onBlur={(e) => handleBlur(e, idx, 'price')}
                             />
                           </td>
                         </tr>
@@ -724,15 +745,53 @@ const AddOptionProduct = ({ productId }) => {
                 <table className="table table-bordered">
                   <thead>
                     <tr className="table-primary">
-                      <th scope="col" className="mx-2">
+                      <th
+                        scope="col"
+                        className="mx-2"
+                        style={{
+                          width: '200px',
+                          textAlign: 'center',
+                        }}
+                      >
                         {options[0].name || ''}
                       </th>
-                      <th scope="col" className="mx-2">
+                      <th
+                        scope="col"
+                        className="mx-2"
+                        style={{
+                          width: '50px',
+                          textAlign: 'center',
+                        }}
+                      >
                         {options[1].name || ''}
                       </th>
-                      <th scope="col">Tên sản phẩm</th>
-                      <th scope="col">Số lượng kho hàng</th>
-                      <th scope="col">Giá sản phẩm</th>
+                      <th
+                        scope="col"
+                        style={{
+                          width: '300px',
+                          textAlign: 'center',
+                        }}
+                      >
+                        Tên sản phẩm
+                      </th>
+                      <th
+                        scope="col"
+                        style={{
+                          width: '100px',
+                          textAlign: 'center',
+                        }}
+                      >
+                        Số lượng kho hàng
+                      </th>
+                      <th
+                        scope="col"
+                        style={{
+                          width: '100px',
+                          textAlign: 'center',
+                        }}
+                      >
+                        Giá sản phẩm
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -746,91 +805,126 @@ const AddOptionProduct = ({ productId }) => {
                                 options[1].values.length + 1
                               }
                             >
-                              <div
-                                className="d-flex"
-                                style={{
-                                  width: '120px',
-                                }}
-                              >
-                                <input
-                                  type="file"
-                                  onChange={(e) => handleImageUpload(e, idx)}
+                              {isLoading ? (
+                                <Loader
+                                  style={{
+                                    width: '50px',
+                                    height: '50px',
+                                  }}
                                 />
-                                <div>
-                                  {options[0].images[idx] && (
-                                    <img
-                                      src={options[0].images[idx].url}
-                                      alt={`Color ${product}`}
-                                      style={{
-                                        width: '50px',
-                                        height: '50px',
-                                        marginLeft: '10px',
-                                      }}
-                                    />
-                                  )}
-                                  <p className="mt-3">{product}</p>
+                              ) : (
+                                <div
+                                  className="d-flex"
+                                  style={{
+                                    width: '200px',
+                                    flexDirection: 'column',
+                                    flexWrap: 'wrap',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                  }}
+                                >
+                                  <div>
+                                    <p>{product}</p>
+                                  </div>
+                                  <div className="image-upload-container ">
+                                    {options[0].images[idx] &&
+                                    options[0].images[idx].length > 0 &&
+                                    options[0].images[idx][0].url ? (
+                                      <img
+                                        src={options[0].images[idx][0].url}
+                                        width={80}
+                                        height={80}
+                                        alt="hello"
+                                      />
+                                    ) : (
+                                      <UploadImage
+                                        onFileChange={(file) =>
+                                          handleFileChange(file, idx)
+                                        }
+                                      />
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
+                              )}
                             </td>
                           </tr>
                           {options[1].values &&
                             options[1].values.map((size, idxS) => (
                               <tr key={idxS}>
                                 <td>
-                                  <div style={{ width: '50px' }}>
-                                    <p className="mt-3">{size}</p>
-                                  </div>
-                                </td>
-                                <td>
                                   <div
                                     style={{
-                                      width: '300px',
+                                      width: '50px',
+                                      textAlign: 'center',
                                     }}
                                   >
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      onChange={(e) =>
-                                        handleInputChangeOption2(
-                                          e,
-                                          idx,
-                                          idxS,
-                                          'price'
-                                        )
-                                      }
-                                      onBlur={(e) =>
-                                        handleBlurOption2(e, idx, idxS, 'price')
-                                      }
-                                    />
+                                    <p
+                                      style={{
+                                        margin: '25px 5px',
+                                      }}
+                                    >
+                                      {size}
+                                    </p>
                                   </div>
                                 </td>
                                 <td>
-                                  <div style={{ width: '50px' }}>
-                                    <input
-                                      className="form-control"
-                                      type="text"
-                                      onChange={(e) =>
-                                        handleInputChangeOption2(
-                                          e,
-                                          idx,
-                                          idxS,
-                                          'quantity'
-                                        )
-                                      }
-                                      onBlur={(e) =>
-                                        handleBlurOption2(
-                                          e,
-                                          idx,
-                                          idxS,
-                                          'quantity'
-                                        )
-                                      }
-                                    />
-                                  </div>
+                                  <input
+                                    style={{
+                                      display: 'flex',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      width: '300px',
+                                      padding: '20px 40px 20px 0',
+                                      margin: '25px 0px 25px 20px',
+                                    }}
+                                    type="text"
+                                    className="form-control"
+                                    onChange={(e) =>
+                                      handleInputChangeOption2(
+                                        e,
+                                        idx,
+                                        idxS,
+                                        'title'
+                                      )
+                                    }
+                                    onBlur={(e) =>
+                                      handleBlurOption2(e, idx, idxS, 'title')
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    style={{
+                                      margin: '25px 10px 25px 0',
+                                      paddingTop: '5 0px',
+                                    }}
+                                    type="text"
+                                    className="form-control"
+                                    onChange={(e) =>
+                                      handleInputChangeOption2(
+                                        e,
+                                        idx,
+                                        idxS,
+                                        'quantity'
+                                      )
+                                    }
+                                    onBlur={(e) =>
+                                      handleBlurOption2(
+                                        e,
+                                        idx,
+                                        idxS,
+                                        'quantity'
+                                      )
+                                    }
+                                  />
                                 </td>
                                 <td>
                                   <div style={{ width: '100px' }}>
                                     <input
+                                      style={{
+                                        margin: '25px 5px',
+                                        paddingTop: '5 0px',
+                                      }}
                                       type="text"
                                       className="form-control"
                                       onChange={(e) =>
@@ -855,6 +949,13 @@ const AddOptionProduct = ({ productId }) => {
                 </table>
               </div>
             )}
+            <button
+              onClick={() => {
+                handleToCreateProductOption()
+              }}
+            >
+              add product option
+            </button>
           </div>
         )}
       </div>

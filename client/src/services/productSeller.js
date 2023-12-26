@@ -177,7 +177,7 @@ export const deleteProductOfSellerById = async (id) => {
   }
 }
 
-export const createOptionProduct = async (data) => {
+export const createProductOptionAndItem = async (data) => {
   try {
     const token = store.getState().auth.token
     if (!token) {
@@ -185,7 +185,7 @@ export const createOptionProduct = async (data) => {
       return null
     }
 
-    let url = api.url.postFileImage
+    let url = api.url.createProductOptionAndItem
     const response = await httpRequest({
       url: url,
       method: 'POST',

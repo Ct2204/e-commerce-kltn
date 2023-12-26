@@ -23,9 +23,12 @@ input[type='file'] {
 }
 .image-upload-container {
   position: relative;
-  width: 200px;
-  height: 200px;
+  /* width: 80px;
+  height: 100px; */
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .custom-image-upload {
   /* display: block; */

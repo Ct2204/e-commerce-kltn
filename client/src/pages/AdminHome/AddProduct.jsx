@@ -10,6 +10,7 @@ import {
 } from '../../services/productSeller'
 
 import AddOptionProduct from './AddOptionProduct/AddOptionProduct.js'
+import { Link } from 'react-router-dom'
 
 const AddProduct = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -95,13 +96,15 @@ const AddProduct = () => {
         }}
       >
         <div className="addProduct-container">
-          <button
-            type="button"
-            class="btn btn-danger"
-            style={{ position: 'absolute', top: '110px', right: '130px' }}
-          >
-            <span>X</span>
-          </button>
+          <Link to="/dashboard">
+            <button
+              type="button"
+              class="btn btn-danger"
+              style={{ position: 'absolute', top: '110px', right: '130px' }}
+            >
+              <span>X</span>
+            </button>
+          </Link>
 
           <div className="createProduct-container">
             <h2 style={{ marginBottom: '10px' }}>Thông tin cơ bản</h2>
