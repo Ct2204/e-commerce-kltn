@@ -12,9 +12,8 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard/*" element={<AdminLayout />} />
-        <Route path="/dashboard/manageorder/*" element={<ManageOrder />} />
-
         <Route path="/*" element={<DefaultLayout />} />
+        <Route path="/dashboard/manageorder/*" element={<ManageOrder />} />
       </Routes>
     </BrowserRouter>
   )
