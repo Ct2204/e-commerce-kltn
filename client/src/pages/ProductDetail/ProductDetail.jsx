@@ -27,6 +27,7 @@ import { createCart } from '../../services/CartService.js'
 import { log } from '../../store/reducers/auth.js'
 import { Pagination } from 'react-bootstrap'
 import { responsivePropType } from 'react-bootstrap/esm/createUtilityClasses.js'
+import Comment from '../Comment/Comment.jsx'
 
 const ProductDetail = (props) => {
   const [message, setMessage] = useState('')
@@ -889,6 +890,7 @@ const ProductDetail = (props) => {
             <div className="mb-3">
               <div className="text-start fs-4 fw-bold">ĐÁNH GIÁ SẢN PHẨM</div>
             </div>
+
             <div>
               <div className="d-flex row background-comment">
                 <div className="col-2">
@@ -992,6 +994,7 @@ const ProductDetail = (props) => {
                         )
                       )}
                     </div>
+
                     <div>{aRatings.createdAt}</div>
                     <div>{aRatings.comment}</div>
                   </div>
@@ -1000,6 +1003,9 @@ const ProductDetail = (props) => {
               <Pagination className="mb-0 justify-content-end">
                 {pagingItems}
               </Pagination>
+            </div>
+            <div>
+              <Comment productId={productId} />
             </div>
           </div>
 

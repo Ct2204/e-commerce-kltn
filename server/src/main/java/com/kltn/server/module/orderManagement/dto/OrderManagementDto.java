@@ -22,4 +22,6 @@ public class OrderManagementDto {
     private Long paymentMethodId;
 
     private BigDecimal totalPrice;
+
+    private String fullName;
 }

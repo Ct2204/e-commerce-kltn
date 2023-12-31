@@ -188,7 +188,7 @@ public class SellerServiceImpl implements SellerService {
         // Handle saving product
         Product product = this.mapperProductDtoToEntity(productDto, seller, category);
         product.setCreatedAt(Instant.now());
-        product.setStatus(ProductStatusType.DRAFT);
+        product.setStatus(ProductStatusType.AVAILABLE);
         product = this.productRepository.save(product);
         return product.getId();
     }

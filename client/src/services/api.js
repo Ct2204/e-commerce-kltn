@@ -70,6 +70,12 @@ const url = {
   //search product name
 
   searchProductName: '/product/search-product-by-text',
+
+  //manage order
+  getOrderBySeller: '/seller/order/by-user',
+  getOrderManageByStatus: '/seller/order/by-status',
+  getAmuntUser: '/seller/order/count-user',
+  changeStatusOrder: '/seller/order/update-order',
 }
 
 const instance = axios.create({

@@ -41,8 +41,8 @@ public class OrderManagementController {
      */
 
 
-    @GetMapping({"/by-user/{id}"})
-    public ResponseEntity<ResponseDataDto> getOrderByUserId(@PathVariable("id") Long id) {
+    @GetMapping({"/by-user/{sellerId}"})
+    public ResponseEntity<ResponseDataDto> getOrderByUserId(@PathVariable("sellerId") Long id) {
         List<OrderManagementDto> items = this.orderService.getAllOrderByUserId(id);
         ResponseDataDto responseDataDto = new ResponseDataDto();
         responseDataDto.setStatus(HttpStatus.OK.series().name());
@@ -127,6 +127,14 @@ public class OrderManagementController {
         responseDto.setCode(201);
         responseDto.setMessage("Change Status order successfully!");
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
+    @GetMapping({"/count-user"})
+    public Long countUser(){
+
+
+        return this.orderService.countUser();
+
     }
 
 
