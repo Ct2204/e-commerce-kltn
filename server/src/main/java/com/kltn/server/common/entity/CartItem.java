@@ -16,6 +16,10 @@ public class CartItem extends BaseAuditEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_item_id")
     ProductItem productItem;

@@ -2,26 +2,21 @@
 package com.kltn.server.module.orderManagement.service.impl;
 
 import com.kltn.server.common.entity.*;
-import com.kltn.server.common.exception.DuplicateResourceException;
 import com.kltn.server.common.exception.ResourceNotFoundException;
-import com.kltn.server.common.vo.CartItemStatusEnum;
 import com.kltn.server.common.vo.OrderStatusE;
-import com.kltn.server.common.vo.ProductStatusType;
 import com.kltn.server.module.cart.repository.CartItemRepository;
-import com.kltn.server.module.orderManagement.dto.CreateOrderRequestManagementDto;
 import com.kltn.server.module.orderManagement.dto.OrderManagementDto;
 import com.kltn.server.module.orderManagement.repository.OrderDetailManagementRepository;
 import com.kltn.server.module.orderManagement.repository.OrderManagementRepository;
 import com.kltn.server.module.orderManagement.service.OrderManagementService;
 import com.kltn.server.module.product.repository.ProductItemRepository;
 import com.kltn.server.module.product.repository.ProductRepository;
+import com.kltn.server.module.seller.repository.SellerRepository;
 import com.kltn.server.module.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +28,9 @@ public class OrderManagementServiceImpl implements OrderManagementService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SellerRepository sellerRepository;
 
     @Autowired
     private OrderDetailManagementRepository orderDetailRepository;
@@ -68,9 +66,11 @@ public class OrderManagementServiceImpl implements OrderManagementService {
      */
 
     public List<OrderManagementDto> getAllOrderByUserId(Long id) {
-        if (this.userRepository.findById(id).isEmpty()) {
-            throw new ResourceNotFoundException("user with id " + id + " not found!");
+
+        if (this.sellerRepository.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException("seller with id" + id +" not found");
         }
+
         List<Order> list = this.orderRepository.getAllOrderByUserId(id);
         return list.stream().map(this::mapperOrderEntityToDto).collect(Collectors.toList());
     }
@@ -115,57 +115,13 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         this.orderRepository.save(order);
     }
 
-    /**
-     * Get all order by userID .
-     *
-     * @param orderInput This is all information need to create order
-     * @throws DuplicateResourceException if the cartitem and user not map.
-     */
-
-    @Transactional
-    public void saveOrder(CreateOrderRequestManagementDto orderInput) {
-        List<CartItem> listCartItem = this.cartItemRepository.GetCartItemSelected(orderInput.getUserId(),
-                orderInput.getCartItemId());
-        System.out.println(listCartItem);
-        if (listCartItem.isEmpty()) {
-            throw new DuplicateResourceException("CartItem And User not map");
-        } else {
-            Order order = new Order();
-            order.setStatus(OrderStatusE.PENDING);
-            order.setUser((listCartItem.get(0).getUser()));
-            order.setCreatedAt(Instant.now());
-            order = this.orderRepository.save(order);
-            for (CartItem item : listCartItem) {
-                if (item.getQuantity() <= item.getProductItem().getQuantity()
-                        && item.getStatus() == CartItemStatusEnum.SELECTED) {
-                    OrderDetail orderDetail = new OrderDetail();
-                    orderDetail.setOrder(order);
-                    orderDetail.setQuantity(item.getQuantity().intValue());
-                    orderDetail.setProductItem(item.getProductItem());
-                    orderDetail = this.orderDetailRepository.save(orderDetail);
-                    ProductItem productItem = item.getProductItem();
-                    int newQuantity = productItem.getQuantity() - orderDetail.getQuantity();
-                    productItem.setQuantity(newQuantity);
-                    this.productItemRepository.save(productItem);
-                    Long productQuantity = this.productItemRepository
-                            .getQuantityProduct(productItem.getProduct().getId());
-                    if (productQuantity == 0) {
-                        Product product = productItem.getProduct();
-                        product.setStatus(ProductStatusType.UNAVAILABLE);
-                        this.productRepository.save(product);
-                    }
-                } else {
-
-                    throw new ResourceNotFoundException("CartItem with " + item.getId() + " invalid please check !");
-                }
-            }
-        }
-    }
 
     public OrderManagementDto mapperOrderEntityToDto(Order order) {
         BigDecimal totalPrice = BigDecimal.valueOf(0);
         OrderManagementDto orderDto = new OrderManagementDto();
         orderDto.setId(order.getId());
+        orderDto.setFullName(order.getUser().getUserProfile().getFullName());
+        //orderDto.setFullName(order.getSeller().getSellerName());
         order.setPaymentMethod(order.getPaymentMethod());
         for (OrderDetail orderDetail : order.getOrderDetails()) {
             BigDecimal total1 = new BigDecimal(orderDetail.getQuantity())
@@ -176,4 +132,12 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         orderDto.setStatus(order.getStatus());
         return orderDto;
     }
+
+    @Override
+    public Long countUser() {
+
+        return  userRepository.count();
+    }
+
+
 }

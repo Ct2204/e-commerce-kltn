@@ -1,9 +1,59 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FcStatistics } from 'react-icons/fc'
 import '@fortawesome/fontawesome-free/css/all.min.css'
+import {
+  changeStatusOrder,
+  getAmuntUser,
+  getOrderBySeller,
+  getOrderManageByStatus,
+} from '../../services/OrderManage.js'
+import { toast } from 'react-toastify'
 
 const ManageOrder = (props) => {
   const [isLoading, setIsLoading] = useState(false)
+
+  const [orderManage, setOrderManage] = useState([])
+  const [amountUser, setAmountUser] = useState(0)
+  const [orderPaid, setOrderPaid] = useState([])
+  const [statusOrder, setStatusOrder] = useState('PAID')
+
+  const handleToGetOrderPaid = async () => {
+    const responseData = await getOrderManageByStatus('PAID')
+    setOrderPaid(responseData)
+  }
+
+  const handleToGetAmountUser = async () => {
+    const responseData = await getAmuntUser()
+    setAmountUser(responseData)
+  }
+
+  const totalAmount = orderManage.reduce(
+    (acc, order) => acc + order.totalPrice,
+    0
+  )
+
+  const totalAmountPaid = orderPaid.reduce(
+    (acc, order) => acc + order.totalPrice,
+    0
+  )
+
+  const handleToGetOrderManage = async () => {
+    const responseData = await getOrderBySeller(1)
+    setOrderManage(responseData)
+  }
+
+  const handleChangeStatusOrder = async (orderId, status) => {
+    const responseData = await changeStatusOrder(orderId, status)
+    console.log(responseData)
+  }
+  useEffect(() => {
+    handleToGetOrderManage()
+    handleToGetAmountUser()
+    handleToGetOrderPaid()
+  }, [])
+  const numberWithCommas = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
 
   return (
     <div className="d-flex row my-override-class">
@@ -64,6 +114,7 @@ const ManageOrder = (props) => {
           <hr className="sidebar-divider d-none d-md-block" />
         </ul>
       </div>
+
       <div className="col-10 bg-light">
         <div className="row text-center mt-5 mx-4">
           <div
@@ -89,9 +140,9 @@ const ManageOrder = (props) => {
             </div>
             <div className="">
               <div style={{ fontSize: '2.5rem' }} className="mb-2">
-                45.8K
+                {amountUser}
               </div>
-              <div className="text-secondary">Tổng tiền </div>
+              <div className="text-secondary">Khách hàng </div>
             </div>
           </div>
 
@@ -118,9 +169,9 @@ const ManageOrder = (props) => {
             </div>
             <div className="">
               <div style={{ fontSize: '2.5rem' }} className="mb-2">
-                45.8K
+                {orderManage.length}
               </div>
-              <div className="text-secondary">Tổng tiền </div>
+              <div className="text-secondary">Đơn hàng </div>
             </div>
           </div>
           <div
@@ -146,9 +197,9 @@ const ManageOrder = (props) => {
             </div>
             <div className="">
               <div style={{ fontSize: '2.5rem' }} className="mb-2">
-                45.8K
+                {numberWithCommas(totalAmountPaid)}đ
               </div>
-              <div className="text-secondary">Tổng tiền </div>
+              <div className="text-secondary">Đã thanh toán </div>
             </div>
           </div>
           <div
@@ -174,9 +225,9 @@ const ManageOrder = (props) => {
             </div>
             <div className="">
               <div style={{ fontSize: '2.5rem' }} className="mb-2">
-                45.8K
+                {numberWithCommas(totalAmount - totalAmountPaid)}đ
               </div>
-              <div className="text-secondary">Tổng tiền </div>
+              <div className="text-secondary">Chưa thanh toán </div>
             </div>
           </div>
         </div>
@@ -193,66 +244,133 @@ const ManageOrder = (props) => {
               borderBottom: '1px solid #eee ',
             }}
           >
-            <div className="mx-3 fw-bold">Active Users</div>
-            <div class="btn-actions-pane-right" style={{ marginLeft: 'auto' }}>
-              <div class=" btn-group text-end  ">
-                <button class=" btn btn-focus bg-dark text-white ">
-                  Last Week
-                </button>
-                <button class="btn btn-focus bg-secondary text-white">
-                  All year
-                </button>
-              </div>
-            </div>
+            <div className="mx-3 fw-bold">Quản lí đơn hàng</div>
           </div>
+
           <div class="table-responsive">
             <table class="align-middle mb-0 table table-borderless table-striped table-hover">
               <thead>
                 <tr>
-                  <th class="text-center">#</th>
-                  <th>Name</th>
-                  <th class="text-center">City</th>
-                  <th class="text-center">Status</th>
-                  <th class="text-center">Sales</th>
-                  <th class="text-center">Actions</th>
+                  <th class="text-center">Id</th>
+                  <th>Tên khách hàng</th>
+                  <th class="text-center">Tổng tiền</th>
+                  <th class="text-center">Trạng thái</th>
+
+                  <th class="text-center">Thay đổi trạng thái</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td class="text-center text-muted">#345</td>
-                  <td>Thien</td>
-                  <td class="text-center">Madrid</td>
-                  <td class="text-center">
-                    <div class="">Pending</div>
-                  </td>
-                  <td class="text-center">
-                    <div class="pie-sparkline"></div>
-                  </td>
-                  <td class="text-center">
-                    <button type="button" class="btn btn-primary btn-sm">
-                      Details
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-center text-muted">#347</td>
-                  <td>Thương</td>
-                  <td class="text-center">Berlin</td>
-                  <td class="text-center">
-                    <div class="">Completed</div>
-                  </td>
-                  <td class="text-center"></td>
-                  <td class="text-center">
-                    <button
-                      type="button"
-                      id="PopoverCustomT-2"
-                      class="btn btn-primary btn-sm"
-                    >
-                      Details SSS
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
+              {orderManage.map((order, index) => (
+                <tbody>
+                  <tr>
+                    <td class="text-center text-muted">{index + 1}</td>
+                    <td>{order.fullName}</td>
+                    <td class="text-center">
+                      {numberWithCommas(order.totalPrice)}đ
+                    </td>
+                    <td class="text-center">
+                      <div class="">{order.status}</div>
+                    </td>
+
+                    <td class="text-center">
+                      {(() => {
+                        switch (order.status) {
+                          case 'PAID':
+                            return (
+                              <button
+                                style={{
+                                  width: '100px',
+                                  height: '50px',
+                                }}
+                                type="button"
+                                className="btn btn-primary btn-sm"
+                                onClick={() =>
+                                  handleChangeStatusOrder(order.id, 'DELIVERED')
+                                }
+                              >
+                                Giao hàng
+                              </button>
+                            )
+                          case 'DELIVERED':
+                            return (
+                              <button
+                                type="button"
+                                style={{
+                                  width: '100px',
+                                  height: '40px',
+                                }}
+                                className="btn btn-primary btn-sm"
+                                onClick={() =>
+                                  handleChangeStatusOrder(order.id, 'SHIPPED')
+                                }
+                              >
+                                Chuyển hàng
+                              </button>
+                            )
+                          case 'PENDING':
+                            return (
+                              <button
+                                type="button"
+                                style={{
+                                  width: '100px',
+                                  height: '40px',
+                                }}
+                                className="btn btn-danger btn-sm"
+                                onClick={() =>
+                                  handleChangeStatusOrder(order.id, 'CANCELED')
+                                }
+                              >
+                                Hủy đơn
+                              </button>
+                            )
+                          case 'SHIPPED':
+                            return (
+                              <button
+                                type="button"
+                                style={{
+                                  width: '100px',
+                                  height: '40px',
+                                }}
+                                className="btn btn-primary btn-sm"
+                                onClick={() =>
+                                  handleChangeStatusOrder(order.id, 'CLOSED')
+                                }
+                              >
+                                Hoàn thành
+                              </button>
+                            )
+
+                          default:
+                            return (
+                              <button
+                                type="button"
+                                style={{
+                                  width: '100px',
+                                  height: '40px',
+                                }}
+                                className="btn btn-primary btn-sm"
+                                onClick={() =>
+                                  handleChangeStatusOrder(order.id)
+                                }
+                              >
+                                Xử lý
+                              </button>
+                            )
+                        }
+                      })()}
+
+                      {/* <button
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        onClick={() => {
+                          handleChangeStatusOrder(order.id)
+                        }}
+                      >
+                        Giao hàng
+                      </button> */}
+                    </td>
+                  </tr>
+                </tbody>
+              ))}
             </table>
           </div>
         </div>

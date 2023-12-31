@@ -15,6 +15,7 @@ import com.kltn.server.module.order.repository.OrderRepository;
 import com.kltn.server.module.order.service.OrderService;
 import com.kltn.server.module.product.repository.ProductItemRepository;
 import com.kltn.server.module.product.repository.ProductRepository;
+import com.kltn.server.module.seller.repository.SellerRepository;
 import com.kltn.server.module.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SellerRepository sellerRepository;
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
@@ -148,11 +152,17 @@ public class OrderServiceImpl implements OrderService {
         List<CartItem> listCartItem = this.cartItemRepository.GetCartItemSelected(orderInput.getUserId(),
                 orderInput.getCartItemId());
         System.out.println(listCartItem);
+
         if (listCartItem.isEmpty()) {
             throw new DuplicateResourceException("CartItem And User not map");
         } else {
             Order order = new Order();
+//            Seller seller = new Seller();
+//            seller.setId(1L);
+//            order.setSeller(seller);
+            Seller seller = sellerRepository.findById(1L).orElse(null);
             order.setStatus(OrderStatusE.PENDING);
+            order.setSeller(seller);
             order.setUser((listCartItem.get(0).getUser()));
             order.setCreatedAt(Instant.now());
             order = this.orderRepository.save(order);
@@ -198,7 +208,6 @@ public class OrderServiceImpl implements OrderService {
                     .multiply(orderDetail.getProductItem().getPrice());
             totalPrice = totalPrice.add(total1);
         }
-
 
         orderDto.setTotalPrice(totalPrice);
         orderDto.setStatus(order.getStatus());

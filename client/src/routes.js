@@ -11,6 +11,7 @@ import NotFound from './pages/ErrorPage/NotFound'
 import Home from './pages/Home/Home'
 import Introduce from './pages/Introduce/Introduce.jsx'
 import LandingPage from './pages/LandingPage/LandingPage.jsx'
+import ManageOrder from './pages/ManageOrder/ManageOrder.jsx'
 import News from './pages/News/News.jsx'
 import Payment from './pages/Payment/Payment'
 import Product from './pages/Product/Product'
@@ -22,6 +23,7 @@ import Profile from './pages/Profile/Profile.jsx'
 import PurchaseOrder from './pages/PurchaseOder/PurchaseOrder'
 
 import SendVerificationCode from './pages/SendVerificationCode/SendVerificationCode'
+import Test from './pages/Test/Test.js'
 import UploadImage from './pages/UploadImage/UploadImage.js'
 
 import User from './pages/User/User'
@@ -55,6 +57,7 @@ const routes = [
   { path: '/news', component: <News /> },
   { path: '/landingpage', component: <LandingPage /> },
   { path: '/content', component: <Content /> },
+  { path: '/order/payment/get/payment/info', component: <Test /> },
 ]
 
 export const routesAdmin = [
@@ -65,6 +68,14 @@ export const routesAdmin = [
   {
     path: '/',
     component: <AdminHome />,
+  },
+  {
+    path: '/order',
+    component: <ManageOrder />,
+  },
+  {
+    path: '/test',
+    component: <Test />,
   },
 ]
 

@@ -1,5 +1,6 @@
 package com.kltn.server.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kltn.server.base.entity.BaseAuditEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -44,5 +46,9 @@ public class Seller extends BaseAuditEntity {
 
     @OneToMany(mappedBy = "seller")
     private List<Order> orders = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "seller")
+    private Set<CartItem> cartItems;
 
 }

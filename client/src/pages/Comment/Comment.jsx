@@ -3,7 +3,7 @@ import { FaStar } from 'react-icons/fa'
 import { postCommentAndRating } from '../../services/UserService.js'
 import { useSelector } from 'react-redux'
 
-const Comment = () => {
+const Comment = ({ productId }) => {
   // const [rating, setRating] = useState(0);
   // const [comment, setComment] = useState("");
   // const [reviews, setReviews] = useState([]);
@@ -14,7 +14,7 @@ const Comment = () => {
   //   console.log("formData", formData);
   // }, [formData]); // This will log whenever formData changes
 
-  const [productId, setProductId] = useState('') // State lưu productId
+  // const [productId, setProductId] = useState('') // State lưu productId
   const [starRating, setStarRating] = useState(5) // State lưu starRating
   const [comment, setComment] = useState('') // State lưu comment
   const [file, setFile] = useState(null) // State lưu file
@@ -62,14 +62,6 @@ const Comment = () => {
   return (
     <div className="d-flex justify-content-center">
       <div className="">
-        <label className="m-2 fw-bold">Product ID:</label>
-        <input
-          type="text"
-          value={productId}
-          onChange={(e) => setProductId(e.target.value)}
-        />
-        <br />
-
         <p className="m-2 fw-bold">Selected Rating: {starRating}</p>
         {[1, 2, 3, 4, 5].map((star) => (
           <span
