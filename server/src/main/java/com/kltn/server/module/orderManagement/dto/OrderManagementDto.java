@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Data
 @AllArgsConstructor
@@ -24,4 +25,6 @@ public class OrderManagementDto {
     private BigDecimal totalPrice;
 
     private String fullName;
+
+    private Instant updatedAt;
 }

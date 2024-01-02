@@ -121,6 +121,7 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         OrderManagementDto orderDto = new OrderManagementDto();
         orderDto.setId(order.getId());
         orderDto.setFullName(order.getUser().getUserProfile().getFullName());
+        orderDto.setUpdatedAt(order.getUpdatedAt());
         //orderDto.setFullName(order.getSeller().getSellerName());
         order.setPaymentMethod(order.getPaymentMethod());
         for (OrderDetail orderDetail : order.getOrderDetails()) {
