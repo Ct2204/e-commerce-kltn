@@ -1,0 +1,44 @@
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+
+  li {
+    margin: 0 5px;
+    display: inline-block;
+
+    a {
+      color: #007bff;
+      cursor: pointer;
+      padding: 8px 12px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+
+      &:hover {
+        background-color: #007bff;
+        color: #fff;
+      }
+    }
+  }
+
+  .previous,
+  .next {
+    a {
+      padding: 8px 12px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+
+      &:hover {
+        background-color: #007bff;
+        color: #fff;
+      }
+    }
+  }
+
+  .active {
+    a {
+      background-color: #007bff;
+      color: #fff;
+    }
+  }
+}

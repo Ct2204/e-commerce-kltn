@@ -108,7 +108,7 @@ const Comment = ({ productId }) => {
           className="mb-2 bg-dark text-white fw-bold py-1 px-2 border-0"
           onClick={handleSubmit}
         >
-          Submit SSS
+          Comment
         </button>
       </div>
     </div>

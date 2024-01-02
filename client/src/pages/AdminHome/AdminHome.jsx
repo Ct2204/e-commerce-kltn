@@ -30,6 +30,7 @@ import { logoutAsync } from '../../store/reducers/auth.js'
 
 import { Accordion, Pagination } from 'react-bootstrap'
 import { FaHome, FaRegBell, FaRegUserCircle } from 'react-icons/fa'
+import DashbarAdmin from '../DashbarAdmin/DashbarAdmin.js'
 
 const AdminHome = (props) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -318,97 +319,7 @@ const AdminHome = (props) => {
   console.log(products)
   return (
     <div className="d-flex row my-override-class">
-      <div className="navbar-parent col-2 p-0" style={{ height: '100vh' }}>
-        <ul
-          className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-          id="accordionSidebar"
-        >
-          <a
-            className="sidebar-brand text-decoration-none d-flex align-items-center justify-content-center"
-            href="index.html"
-          >
-            <div className="sidebar-brand-icon text-white rotate-n-15">
-              <i className="fas fa-laugh-wink"></i>
-            </div>
-          </a>
-
-          <hr className="sidebar-divider my-0" />
-
-          <li className="nav-item">
-            <a className="nav-link text-white" href="index.html">
-              <i className="fas fa-fw fa-tachometer-alt mx-3"></i>
-              <span>Trang chủ</span>
-            </a>
-          </li>
-
-          <hr className="sidebar-divider" />
-
-          <div className="sidebar-heading text-white mx-3">Interface</div>
-
-          <li className="nav-item text-white">
-            <a
-              className="nav-link collapsed"
-              href="#"
-              data-toggle="collapse"
-              data-target="#collapseTwo"
-              aria-expanded="true"
-              aria-controls="collapseTwo"
-            >
-              <i className="fas fa-fw fa-cog mx-3"></i>
-              <span>Components</span>
-            </a>
-          </li>
-
-          <li className="nav-item text-white">
-            <a
-              className="nav-link collapsed"
-              href="#"
-              data-toggle="collapse"
-              data-target="#collapseUtilities"
-              aria-expanded="true"
-              aria-controls="collapseUtilities"
-            >
-              <i className="fas fa-fw fa-wrench mx-3"></i>
-              <span>Utilities</span>
-            </a>
-          </li>
-
-          <hr className="sidebar-divider" />
-
-          <div className="sidebar-heading text-white mx-3">Addons</div>
-
-          <li className="nav-item text-white">
-            <a
-              className="nav-link collapsed"
-              href="#"
-              data-toggle="collapse"
-              data-target="#collapsePages"
-              aria-expanded="true"
-              aria-controls="collapsePages"
-            >
-              <i className="fas fa-fw fa-folder mx-3"></i>
-              <span>Pages</span>
-            </a>
-          </li>
-
-          <li className="nav-item text-white">
-            <a className="nav-link" href="charts.html">
-              <i className="fas fa-fw fa-chart-area mx-3"></i>
-              <span>Charts</span>
-            </a>
-          </li>
-
-          <li className="nav-item text-white">
-            <a className="nav-link" href="tables.html">
-              <i className="fas fa-fw fa-table mx-3"></i>
-              <span>Tables</span>
-            </a>
-          </li>
-
-          <hr className="sidebar-divider d-none d-md-block" />
-        </ul>
-      </div>
-
+      <DashbarAdmin />
       <div className="navbar-child col-10 p-0">
         <div
           className="d-flex justify-content-between mb-2"

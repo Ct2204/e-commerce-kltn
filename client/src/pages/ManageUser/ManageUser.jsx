@@ -16,7 +16,7 @@ import { BsTypeH1 } from 'react-icons/bs/index.js'
 import DashbarAdmin from '../DashbarAdmin/DashbarAdmin.js'
 import Loader from '../Loader/Loader.js'
 
-const ManageOrder = (props) => {
+const ManageUser = (props) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const [orderManage, setOrderManage] = useState([])
@@ -83,121 +83,6 @@ const ManageOrder = (props) => {
         <Loader />
       ) : (
         <div className="navbar-child col-10 p-0">
-          <div className="row text-center mt-5 mx-4">
-            <div
-              className="col-3 bg-white py-5"
-              style={{
-                borderRight: '1px solid #eee',
-                boxShadow:
-                  '0 .46875rem 2.1875rem rgba(4,9,20,.03),0 .9375rem 1.40625rem rgba(4,9,20,.03),0 .25rem .53125rem rgba(4,9,20,.05),0 .125rem .1875rem rgba(4,9,20,.03)',
-              }}
-            >
-              <div className=" d-flex justify-content-center mb-2">
-                <div
-                  className="text-white d-flex justify-content-center align-items-center"
-                  style={{
-                    backgroundColor: '#3f6ad8',
-                    width: '62px',
-                    height: '62px',
-                    borderRadius: '50%',
-                  }}
-                >
-                  <i class="fa-solid fa-chart-bar"></i>
-                </div>
-              </div>
-              <div className="">
-                <div style={{ fontSize: '2.5rem' }} className="mb-2">
-                  {amountUser}
-                </div>
-                <div className="text-secondary">Khách hàng </div>
-              </div>
-            </div>
-
-            <div
-              className="col-3 bg-white py-5"
-              style={{
-                borderRight: '1px solid #eee ',
-                boxShadow:
-                  '0 .46875rem 2.1875rem rgba(4,9,20,.03),0 .9375rem 1.40625rem rgba(4,9,20,.03),0 .25rem .53125rem rgba(4,9,20,.05),0 .125rem .1875rem rgba(4,9,20,.03)',
-              }}
-            >
-              <div className=" d-flex justify-content-center mb-2">
-                <div
-                  className="text-white d-flex justify-content-center align-items-center"
-                  style={{
-                    backgroundColor: '#3f6ad8',
-                    width: '62px',
-                    height: '62px',
-                    borderRadius: '50%',
-                  }}
-                >
-                  <i class="fa-solid fa-chart-bar"></i>
-                </div>
-              </div>
-              <div className="">
-                <div style={{ fontSize: '2.5rem' }} className="mb-2">
-                  {orderManage.length}
-                </div>
-                <div className="text-secondary">Đơn hàng </div>
-              </div>
-            </div>
-            <div
-              className="col-3 bg-white py-5"
-              style={{
-                borderRight: '1px solid #eee ',
-                boxShadow:
-                  '0 .46875rem 2.1875rem rgba(4,9,20,.03),0 .9375rem 1.40625rem rgba(4,9,20,.03),0 .25rem .53125rem rgba(4,9,20,.05),0 .125rem .1875rem rgba(4,9,20,.03)',
-              }}
-            >
-              <div className=" d-flex justify-content-center mb-2">
-                <div
-                  className="text-white d-flex justify-content-center align-items-center"
-                  style={{
-                    backgroundColor: '#3f6ad8',
-                    width: '62px',
-                    height: '62px',
-                    borderRadius: '50%',
-                  }}
-                >
-                  <i class="fa-solid fa-chart-bar"></i>
-                </div>
-              </div>
-              <div className="">
-                <div style={{ fontSize: '2.5rem' }} className="mb-2">
-                  {numberWithCommas(totalAmountPaid)}đ
-                </div>
-                <div className="text-secondary">Đã thanh toán </div>
-              </div>
-            </div>
-            <div
-              className="col-3 bg-white py-5"
-              style={{
-                borderRight: '1px solid #eee ',
-                boxShadow:
-                  '0 .46875rem 2.1875rem rgba(4,9,20,.03),0 .9375rem 1.40625rem rgba(4,9,20,.03),0 .25rem .53125rem rgba(4,9,20,.05),0 .125rem .1875rem rgba(4,9,20,.03)',
-              }}
-            >
-              <div className=" d-flex justify-content-center mb-2">
-                <div
-                  className="text-white d-flex justify-content-center align-items-center"
-                  style={{
-                    backgroundColor: '#3f6ad8',
-                    width: '62px',
-                    height: '62px',
-                    borderRadius: '50%',
-                  }}
-                >
-                  <i class="fa-solid fa-chart-bar"></i>
-                </div>
-              </div>
-              <div className="">
-                <div style={{ fontSize: '2.5rem' }} className="mb-2">
-                  {numberWithCommas(totalAmount - totalAmountPaid)}đ
-                </div>
-                <div className="text-secondary">Chưa thanh toán </div>
-              </div>
-            </div>
-          </div>
           <div
             className="bg-white mt-5 mx-4"
             style={{
@@ -211,7 +96,7 @@ const ManageOrder = (props) => {
                 borderBottom: '1px solid #eee ',
               }}
             >
-              <div className="mx-3 fw-bold">Quản lí đơn hàng</div>
+              <div className="mx-3 fw-bold">Quản lí khách hàng</div>
             </div>
 
             <div class="table-responsive">
@@ -220,7 +105,7 @@ const ManageOrder = (props) => {
                   <tr>
                     <th class="text-center">Id</th>
                     <th>Tên khách hàng</th>
-                    <th class="text-center">Tổng tiền</th>
+                    <th class="text-center">Email</th>
                     <th class="text-center">Trạng thái</th>
 
                     <th class="text-center">Thay đổi trạng thái</th>
@@ -359,4 +244,4 @@ const ManageOrder = (props) => {
   )
 }
 
-export default ManageOrder
+export default ManageUser
