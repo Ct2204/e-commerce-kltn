@@ -99,18 +99,19 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         Order order = (Order) this.orderRepository.findById(id).orElseThrow(() -> {
             return new ResourceNotFoundException("order with id " + id + "not found");
         });
-        if (order.getStatus() == OrderStatusE.PENDING) {
-            order.setStatus(OrderStatusE.CANCELED);
-            List<OrderDetail> listOrderDetail = order.getOrderDetails();
-            for (OrderDetail orderDetail : listOrderDetail) {
-                int backQuantity = orderDetail.getProductItem().getQuantity() + orderDetail.getQuantity();
-                ProductItem productItem = orderDetail.getProductItem();
-                productItem.setQuantity(backQuantity);
-                this.productItemRepository.save(productItem);
-            }
-        } else {
-            order.setStatus(orderStatus);
-        }
+//        if (order.getStatus() == OrderStatusE.PENDING) {
+//            order.setStatus(OrderStatusE.PAID);
+//            List<OrderDetail> listOrderDetail = order.getOrderDetails();
+//            for (OrderDetail orderDetail : listOrderDetail) {
+//                int backQuantity = orderDetail.getProductItem().getQuantity() + orderDetail.getQuantity();
+//                ProductItem productItem = orderDetail.getProductItem();
+//                productItem.setQuantity(backQuantity);
+//                this.productItemRepository.save(productItem);
+//            }
+//        } else {
+//            order.setStatus(orderStatus);
+//        }
+        order.setStatus(orderStatus);
 
         this.orderRepository.save(order);
     }
