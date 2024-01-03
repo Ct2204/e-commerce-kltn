@@ -1,25 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { FaStar } from 'react-icons/fa'
+import React, { useState } from 'react'
+
 import { postCommentAndRating } from '../../services/UserService.js'
 import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const Comment = ({ productId }) => {
-  // const [rating, setRating] = useState(0);
-  // const [comment, setComment] = useState("");
-  // const [reviews, setReviews] = useState([]);
-
-  // const [formData, setFormData] = useState(new FormData());
-
-  // useEffect(() => {
-  //   console.log("formData", formData);
-  // }, [formData]); // This will log whenever formData changes
-
-  // const [productId, setProductId] = useState('') // State lưu productId
   const [starRating, setStarRating] = useState(5) // State lưu starRating
   const [comment, setComment] = useState('') // State lưu comment
   const [file, setFile] = useState(null) // State lưu file
-
-  // const [rating, setRating] = useState(5);
 
   const handleStarClick = (selectedRating) => {
     // Nếu rating đã được chọn, bỏ chọn nó; ngược lại, set rating mới
@@ -33,8 +21,7 @@ const Comment = ({ productId }) => {
   const handleSubmit = async () => {
     // Kiểm tra xem có đủ thông tin để gửi không
     if (!productId || !starRating || !comment) {
-      console.error('Please fill in all fields.')
-      return
+      toast.error('Please fill in all fields.')
     }
 
     // Tạo FormData và thêm dữ liệu vào
@@ -50,19 +37,35 @@ const Comment = ({ productId }) => {
     const response = await postCommentAndRating(userId, formData)
 
     // Xử lý kết quả từ API (response)
-    if (response.code === 200) {
-      console.log('Comment and rating posted successfully:', response)
+    if (response.code === 201) {
+      toast.success(response.message)
+      setComment('')
+
       // Thêm logic xử lý sau khi gửi thành công ở đây
     } else {
-      console.log('Failed to post comment and rating.', response)
+      toast.error(response.message)
       // Thêm logic xử lý sau khi gửi thất bại ở đây
     }
   }
 
   return (
-    <div className="d-flex justify-content-center">
-      <div className="">
-        <p className="m-2 fw-bold">Selected Rating: {starRating}</p>
+    <div
+      className="d-flex "
+      style={{
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <div
+        className="mx-2"
+        style={{
+          fontSize: '40px',
+        }}
+      >
+        Bình luận của bạn:
+      </div>
+      <div style={{ fontSize: '25px' }}>
         {[1, 2, 3, 4, 5].map((star) => (
           <span
             className=""
@@ -77,23 +80,19 @@ const Comment = ({ productId }) => {
           </span>
         ))}
 
-        {/* <label>
-        Star Rating:
-        <input type="text" value={starRating} onChange={(e) => setStarRating(e.target.value)} />
-      </label> */}
-        <br />
-        <div className="d-flex mt-2 ">
-          <div className="mx-2">
-            <label className="fw-bold">Comment:</label>
-          </div>
+        <div className="mt-2 ">
           <textarea
-            className=""
+            style={{
+              width: '300px',
+              height: '200px',
+            }}
+            className="form-control"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
         </div>
-        <br />
-        <div className="mx-2">
+
+        {/* <div className="mt-2">
           <label
             className="bg-dark text-white fw-bold py-1 px-2"
             style={{ borderRadius: '20px' }}
@@ -102,10 +101,14 @@ const Comment = ({ productId }) => {
             <input type="file" onChange={(e) => setFile(e.target.files[0])} />
           </label>
         </div>
-        <br />
+        <br /> */}
         <button
-          style={{ borderRadius: '20px', marginLeft: '150px' }}
-          className="mb-2 bg-dark text-white fw-bold py-1 px-2 border-0"
+          style={{
+            borderRadius: '20px',
+            marginLeft: '150px',
+            marginTop: '20px',
+          }}
+          className="btn btn-outline-primary "
           onClick={handleSubmit}
         >
           Comment

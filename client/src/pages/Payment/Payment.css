@@ -159,7 +159,7 @@
 .checkout-payment-method-view__current {
   display: flex;
   flex-direction: column;
-  
+
   align-items: flex-start;
   min-height: 5.625rem;
   box-sizing: border-box;
@@ -178,7 +178,7 @@
 .checkout-payment-method-view__current-title {
   font-size: 30px;
   font-weight: 600;
- 
+
   color: #222;
 }
 
@@ -375,4 +375,22 @@ h3.bwwaGp.iL6wsx {
 .updateAddress {
   text-decoration: none;
   cursor: pointer;
+}
+
+/* butoon onClick */
+.product-variation {
+  padding: 10px;
+  border: 2px solid black;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.product-variation.selected {
+  border-color: red;
+}
+
+.product-variation.disabled {
+  color: #ccc;
+  border-color: black;
+  cursor: not-allowed;
 }

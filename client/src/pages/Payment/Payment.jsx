@@ -1,78 +1,100 @@
-import React, { useEffect, useState } from "react";
-import "./Payment.css";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react'
+import './Payment.css'
+import { useSelector } from 'react-redux'
 import {
   checkOutWithPaypal,
   checkOutWithVnpay,
-} from "../../services/PaymentService.js";
-import { useNavigate } from "react-router-dom";
-import { getOrderById } from "../../services/OrderService.js";
+} from '../../services/PaymentService.js'
+import { useNavigate } from 'react-router-dom'
+import { getOrderById } from '../../services/OrderService.js'
+import { getAddressOfUserById } from '../../services/UserService.js'
 
 const Payment = (props) => {
-  const [orderProduct, setOrderProduct] = useState([]);
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const navigate = useNavigate();
+  const [orderProduct, setOrderProduct] = useState([])
+  const [paymentMethod, setPaymentMethod] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [address, setAddress] = useState(
+    'Tân hòa, Tân Thủy, Lệ Thủy, Quảng Bình'
+  )
 
-  const orderId = useSelector((state) => state.order.orderId);
+  const orderId = useSelector((state) => state.order.orderId)
+  const userId = useSelector((state) => state.auth.userInfo.user_id)
+
+  const handleGetAddressOfUserById = async () => {
+    try {
+      setIsLoading(true)
+      const responseData = await getAddressOfUserById(userId)
+      if (responseData) {
+        setAddress(responseData.data)
+      } else {
+        console.error('Get failed')
+      }
+      setIsLoading(false)
+    } catch (err) {
+      console.error('Error in failed get profile of user: ', err)
+      setIsLoading(false)
+    }
+  }
 
   useEffect(() => {
-    handleToGetProductOrder();
-  }, []);
+    handleToGetProductOrder()
+    handleGetAddressOfUserById()
+  }, [])
 
   const handleToGetProductOrder = async () => {
-    const responseData = await getOrderById(orderId);
-    setOrderProduct(responseData);
-    console.log("order:", responseData);
-  };
+    const responseData = await getOrderById(orderId)
+    setOrderProduct(responseData)
+    console.log('order:', responseData)
+  }
 
   const performVnPayCheckout = async () => {
     try {
-      const responseData = await checkOutWithVnpay(orderId);
+      const responseData = await checkOutWithVnpay(orderId)
       if (responseData.code === 200) {
-        window.location.href = responseData.data;
+        window.location.href = responseData.data
       }
     } catch (error) {
-      console.error("Error during VnPay checkout:", error);
+      console.error('Error during VnPay checkout:', error)
     }
-  };
+  }
 
   const performPaypalCheckout = async () => {
     try {
-      const responseData = await checkOutWithPaypal(orderId);
+      const responseData = await checkOutWithPaypal(orderId)
       if (responseData.code === 200) {
-        window.location.href = responseData.data;
+        window.location.href = responseData.data
       }
     } catch (error) {
-      console.error("Error during Papal checkout:", error);
+      console.error('Error during Papal checkout:', error)
     }
-  };
+  }
 
   const payment = () => {
     switch (paymentMethod) {
-      case "VnPay":
-        performVnPayCheckout();
-        break;
-      case "Paypal":
-        performPaypalCheckout();
-        break;
-      case "ThanhToanKhiNhanHang":
+      case 'VnPay':
+        performVnPayCheckout()
+        break
+      case 'Paypal':
+        performPaypalCheckout()
+        break
+      case 'ThanhToanKhiNhanHang':
         //handleCashOnDelivery();
-        console.log("nhan hang");
-        break;
+        console.log('nhan hang')
+        break
       default:
         // Xử lý các trường hợp khác hoặc cung cấp một hành động mặc định
-        break;
+        break
     }
-  };
+  }
 
   const totalPrice = orderProduct.reduce((acc, product) => {
-    return acc + product.price * product.quantity;
-  }, 0);
+    return acc + product.price * product.quantity
+  }, 0)
 
   const numberWithCommas = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-  console.log(paymentMethod);
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
+  console.log('jjjjj', address)
 
   return (
     <>
@@ -82,13 +104,16 @@ const Payment = (props) => {
           <div className="payment-title">Địa chỉ nhận hàng</div>
           <div>
             <div className="payment-address-content">
-              <div style={{ display: "flex", fontSize: "17px" }}>
-                <p className="addressName">Lê Công Thương</p>
+              <div style={{ display: 'flex', fontSize: '17px' }}>
+                <p className="addressName">
+                  {address[0].fullName || 'Lê Công Thương'}
+                </p>
                 <p className="addresPhone">(+84) 362002021</p>
               </div>
               <div>
                 <p className="address">
-                  Tân hòa, Tân Thủy, Lệ Thủy, Quảng Bình
+                  {address[0].street},{address[0].ward},{address[0].district},
+                  {address[0].region}
                 </p>
               </div>
               <a className="updateAddress">Thay đổi</a>
@@ -116,7 +141,7 @@ const Payment = (props) => {
                         className="mx-2"
                         alt="product image"
                         src={product.url}
-                        style={{ width: "60px", height: "60px" }}
+                        style={{ width: '60px', height: '60px' }}
                       />
                       <div>
                         <p className="mt-3">{product.title}</p>
@@ -150,14 +175,17 @@ const Payment = (props) => {
             <div role="radiogroup">
               <span>
                 <button
-                  className="product-variation product-variation--disabled"
+                  // className="product-variation product-variation--disabled"
+                  className={`product-variation ${
+                    paymentMethod === 'VnPay' ? 'selected' : ''
+                  }`}
                   tabindex="0"
                   role="radio"
                   aria-label="Vnpay"
                   aria-disabled="true"
                   aria-checked="false"
                   onClick={() => {
-                    setPaymentMethod("VnPay");
+                    setPaymentMethod('VnPay')
                   }}
                 >
                   VnPay
@@ -165,14 +193,16 @@ const Payment = (props) => {
               </span>
               <span>
                 <button
-                  className="product-variation"
+                  className={`product-variation ${
+                    paymentMethod === 'Paypal' ? 'selected' : ''
+                  }`}
                   tabindex="0"
                   role="radio"
                   aria-label="Paypal"
                   aria-disabled="false"
                   aria-checked="false"
                   onClick={() => {
-                    setPaymentMethod("Paypal");
+                    setPaymentMethod('Paypal')
                   }}
                 >
                   Paypal
@@ -180,14 +210,16 @@ const Payment = (props) => {
               </span>
               <span>
                 <button
-                  className="product-variation"
+                  className={`product-variation ${
+                    paymentMethod === 'ThanhToanKhiNhanHang' ? 'selected' : ''
+                  }`}
                   tabindex="0"
                   role="radio"
                   aria-label="Thanh toán khi nhận hàng"
                   aria-disabled="false"
                   aria-checked="false"
                   onClick={() => {
-                    setPaymentMethod("ThanhToanKhiNhanHang");
+                    setPaymentMethod('ThanhToanKhiNhanHang')
                   }}
                 >
                   Thanh toán khi nhận hàng
@@ -198,23 +230,23 @@ const Payment = (props) => {
           </div>
         </div>
 
-        <div class="KQyCj0" aria-live="polite" style={{ paddingTop: "50px" }}>
+        <div class="KQyCj0" aria-live="polite" style={{ paddingTop: '50px' }}>
           <h2 class="a11y-visually-hidden">Tổng thanh toán:</h2>
-          <h3 class="bwwaGp iL6wsx BcITa9" style={{ fontSize: "20px" }}>
+          <h3 class="bwwaGp iL6wsx BcITa9" style={{ fontSize: '20px' }}>
             Tổng tiền hàng:
           </h3>
           <div
             class="bwwaGp R3a05f BcITa9"
-            style={{ fontSize: "20px", color: "#ee4d2d" }}
+            style={{ fontSize: '20px', color: '#ee4d2d' }}
           >
             {numberWithCommas(totalPrice)} ₫
           </div>
-          <h3 class="bwwaGp iL6wsx RY9Grr" style={{ fontSize: "20px" }}>
+          <h3 class="bwwaGp iL6wsx RY9Grr" style={{ fontSize: '20px' }}>
             Phí vận chuyển:
           </h3>
           <div
             class="bwwaGp R3a05f RY9Grr"
-            style={{ fontSize: "20px", color: "#ee4d2d" }}
+            style={{ fontSize: '20px', color: '#ee4d2d' }}
           >
             28.800 ₫
           </div>
@@ -222,7 +254,7 @@ const Payment = (props) => {
           <div class="uTFqRt">
             <div class="k4VpYA">
               <div class="C-NSr-">
-                Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo{" "}
+                Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo{' '}
                 <a href="" target="_blank" rel="noopener noreferrer">
                   Điều khoản của Shop
                 </a>
@@ -230,16 +262,16 @@ const Payment = (props) => {
             </div>
             <button
               style={{
-                padding: "0 20px",
-                backgroundColor: "#216fdb",
-                border: "none",
-                borderRadius: "6px",
-                paddingTop: "5px",
-                paddingBottom: "5px",
+                padding: '0 20px',
+                backgroundColor: '#216fdb',
+                border: 'none',
+                borderRadius: '6px',
+                paddingTop: '5px',
+                paddingBottom: '5px',
               }}
               class="text-white"
               onClick={() => {
-                performVnPayCheckout();
+                payment()
               }}
             >
               Đặt hàng
@@ -248,6 +280,6 @@ const Payment = (props) => {
         </div>
       </div>
     </>
-  );
-};
-export default Payment;
+  )
+}
+export default Payment

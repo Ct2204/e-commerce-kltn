@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import './DashbarAdmin.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 
@@ -7,7 +6,7 @@ import { Link } from 'react-router-dom'
 const DashbarAdmin = (props) => {
   return (
     <div className="d-flex row my-override-class">
-      <div className="navbar-parent col-2 p-0" style={{ height: '100vh' }}>
+      <div className="navbar-parent col-2 p-0" style={{ height: '125vh' }}>
         <ul
           className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
           id="accordionSidebar"
@@ -25,32 +24,38 @@ const DashbarAdmin = (props) => {
 
           <li className="nav-item">
             <Link className="nav-link text-white" to="/dashboard">
-              <i className="fas fa-fw fa-tachometer-alt mx-3"></i>
-              <span>Trang chủ</span>
+              <span
+                style={{
+                  margin: '60px',
+                  fontSize: '20px',
+                }}
+              >
+                {' '}
+                Trang chủ
+              </span>
             </Link>
           </li>
 
           <hr className="sidebar-divider" />
 
-          <div className="sidebar-heading text-white mx-3">Quản lí</div>
+          <div
+            className="sidebar-heading text-white mx-3"
+            style={{
+              margin: '10px',
+              fontSize: '20px',
+            }}
+          >
+            Quản lí
+          </div>
 
           <li className="nav-item text-white">
-            <a
-              className="nav-link collapsed"
-              href="#"
-              data-toggle="collapse"
-              data-target="#collapseTwo"
-              aria-expanded="true"
-              aria-controls="collapseTwo"
+            <i className="fas fa-fw fa-cog mx-3"></i>
+            <Link
+              to="/dashboard/order"
+              style={{ textDecoration: 'none', color: 'inherit' }}
             >
-              <i className="fas fa-fw fa-cog mx-3"></i>
-              <Link
-                to="/dashboard/order"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <span>Đơn hàng</span>
-              </Link>
-            </a>
+              <span>Đơn hàng</span>
+            </Link>
           </li>
 
           <li className="nav-item text-white">
@@ -65,30 +70,15 @@ const DashbarAdmin = (props) => {
           <div className="sidebar-heading text-white mx-3">Thống kê</div>
 
           <li className="nav-item text-white">
-            <a className="nav-link collapsed">
-              <i className="fas fa-fw fa-folder mx-3"></i>
-              <Link
-                to="/dashboard/revenue"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <span>Doanh thu</span>
-              </Link>
-            </a>
+            <i className="fas fa-fw fa-folder mx-3"></i>
+            <Link
+              to="/dashboard/revenue"
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              <span>Doanh thu</span>
+            </Link>
           </li>
 
-          <li className="nav-item text-white">
-            <a className="nav-link" href="charts.html">
-              <i className="fas fa-fw fa-chart-area mx-3"></i>
-              <span>Charts</span>
-            </a>
-          </li>
-
-          <li className="nav-item text-white">
-            <a className="nav-link" href="tables.html">
-              <i className="fas fa-fw fa-table mx-3"></i>
-              <span>Tables</span>
-            </a>
-          </li>
           <hr className="sidebar-divider d-none d-md-block" />
         </ul>
       </div>

@@ -76,6 +76,10 @@ const url = {
   getOrderManageByStatus: '/seller/order/by-status',
   getAmuntUser: '/seller/order/count-user',
   changeStatusOrder: '/seller/order/update-order',
+
+  //manage user
+  getAllUser: '/seller/get-alluser',
+  updateStatusUser: '/seller/update-user',
 }
 
 const instance = axios.create({

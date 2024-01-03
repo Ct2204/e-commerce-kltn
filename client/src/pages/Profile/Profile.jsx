@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './Profile.css'
-import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import {
+  getPictureProfile,
   getProfileOfUser,
   updateUserProfile,
   uploadPictureProfile,
@@ -10,6 +10,7 @@ import {
 import { toast } from 'react-toastify'
 import { Button, Form } from 'react-bootstrap'
 import User from '../User/User.jsx'
+import Loader from '../Loader/Loader.js'
 
 const Profile = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -40,10 +41,6 @@ const Profile = () => {
     setUserProfile(responseData.data)
   }
 
-  const handleToUploadPicture = async () => {
-    const file = fileInputRef.current.click()
-  }
-
   const handleButtonClick = () => {
     fileInputRef.current.click()
   }
@@ -51,17 +48,23 @@ const Profile = () => {
   const handleFileChange = async (e) => {
     const selectedFile = e.target.files[0]
 
-    console.log(selectedFile, '111')
     setIsLoading(true)
     const responseData = await uploadPictureProfile(userId, selectedFile)
-    console.log('hello', responseData.message)
 
-    // Kiểm tra nếu có tệp tin được chọn
-    if (selectedFile) {
-      setImageUrl(responseData.data.url)
-    }
+    toast.success(responseData.message)
+
     setIsLoading(false)
   }
+
+  const handleToGetPictureProfile = async () => {
+    const responseData = await getPictureProfile(userId)
+
+    setImageUrl(responseData.path)
+  }
+
+  useEffect(() => {
+    handleToGetPictureProfile()
+  }, [isLoading])
 
   const handleFullNameChange = (e) => {
     setFullName(e.target.value)
@@ -368,11 +371,17 @@ const Profile = () => {
               <div className="col-4 ">
                 <div className="mt-5">
                   <div className="d-flex flex-column choose-image">
-                    <img
-                      src={userProfile.url}
-                      style={{ width: '100px', height: '100px' }}
-                      className="rounded-circle volume-image"
-                    />
+                    {isLoading ? (
+                      <div>
+                        <Loader />
+                      </div>
+                    ) : (
+                      <img
+                        src={userProfile.url || imageUrl}
+                        style={{ width: '100px', height: '100px' }}
+                        className="rounded-circle volume-image"
+                      />
+                    )}
                     <Form.Group controlId="formFile" className="mx-4 ">
                       <div className="d-flex">
                         <Button

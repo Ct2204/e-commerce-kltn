@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import './AdminHome.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
-import {
-  getProductDetail,
-  getProductsByCategory,
-  searchProductName,
-} from '../../services/product'
+import { searchProductName } from '../../services/product'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
-import { Link, useNavigate } from 'react-router-dom'
-import Input from '../../components/Input'
-import { useSelector, useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 
-import { logout } from '../../store/reducers/auth'
 import { toast } from 'react-toastify'
 
 import {
@@ -20,13 +13,8 @@ import {
   getDescriptionBySeller,
   getPaging,
   getProductOfSellerById,
-  postDescriptionBySeller,
-  postFileImage,
-  postProductOfSeller,
   updateProductOfSeller,
 } from '../../services/productSeller'
-
-import { logoutAsync } from '../../store/reducers/auth.js'
 
 import { Accordion, Pagination } from 'react-bootstrap'
 import { FaHome, FaRegBell, FaRegUserCircle } from 'react-icons/fa'
@@ -37,10 +25,10 @@ const AdminHome = (props) => {
   const [product, setProduct] = useState([])
   const [products, setProducts] = useState([])
   const [searchProduct, setSearchProduct] = useState([])
-  const [saveProducts, setSaveProducts] = useState([])
+
   const [productId, setProductId] = useState(0)
   const [show, setShow] = useState(false)
-  const [selectedFile, setSelectedFile] = useState(null)
+
   const [inputValue, setInputValue] = useState('')
   const [page, setPage] = useState(1)
   const [pageLength, setPageLength] = useState(10)
@@ -48,18 +36,12 @@ const AdminHome = (props) => {
   const [description, setDescription] = useState('')
   const [activeKey, setActiveKey] = useState('0')
   const [descriptionById, setDescriptionById] = useState('')
-  const [isAddProduct, setIsAddProduct] = useState(false)
 
   const [searchValue, setSearchValue] = useState('')
 
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value)
   }
-
-  console.log(searchValue)
-
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
@@ -136,87 +118,6 @@ const AdminHome = (props) => {
       ...prevProduct,
       categoryId: categoryId,
     }))
-  }
-
-  const handleAddProduct = async (e) => {
-    try {
-      setIsLoading(true)
-      const responseData = await postProductOfSeller(product)
-      if (responseData) {
-        const fileImage = {
-          productId: responseData.data.productId,
-          sellerId: 1,
-          options: [
-            {
-              name: 'Color',
-              images: [
-                [
-                  {
-                    url: inputValue,
-                    type: 'IMAGE',
-                  },
-                ],
-                [
-                  {
-                    url: inputValue,
-                    type: 'IMAGE',
-                  },
-                ],
-              ],
-              values: ['Red', 'Yellow'],
-            },
-          ],
-          productItems: [],
-        }
-        // const response = await postFileImage(fileImage)
-
-        const descriptionData = {
-          productId: responseData.data.productId,
-          sellerId: 1,
-          description: description,
-          images: [
-            {
-              url: 'description1.jpg',
-              type: 'IMAGE',
-            },
-            {
-              url: 'description2.jpg',
-              type: 'IMAGE',
-            },
-            {
-              url: 'description3.mp4',
-              type: 'VIDEO',
-            },
-            {
-              url: 'description4.mp4',
-              type: 'VIDEO',
-            },
-            {
-              url: 'description5.jpg',
-              type: 'IMAGE',
-            },
-            {
-              url: 'description6.jpg',
-              type: 'IMAGE',
-            },
-          ],
-        }
-        const responseDescription = await postDescriptionBySeller(
-          descriptionData
-        )
-        console.log(responseDescription)
-        handleGetListProduct()
-        handleClose()
-        toast.success('Add sucessful.')
-      } else {
-        // Xử lý khi request thất bại hoặc có lỗi
-        toast.error('Delete failed.')
-      }
-      setIsLoading(false)
-    } catch (err) {
-      console.error('Error in handleAddProduct: ', err)
-      setIsLoading(false)
-    }
   }
 
   const handleUpdateProduct = async (e) => {
@@ -316,7 +217,7 @@ const AdminHome = (props) => {
   const numberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   }
-  console.log(products)
+
   return (
     <div className="d-flex row my-override-class">
       <DashbarAdmin />
@@ -330,7 +231,7 @@ const AdminHome = (props) => {
               <label className="d-flex fs-4 mx-3">
                 Search:
                 <input
-                  style={{ width: '200px', height: '38px' }}
+                  style={{ width: '200px', height: '38px', marginLeft: '20px' }}
                   type="search"
                   className="form-control form-control-sm"
                   placeHolder=""
@@ -631,12 +532,7 @@ const AdminHome = (props) => {
                               Update
                             </Button>
                           ) : (
-                            <Button
-                              variant="primary"
-                              onClick={(e) => handleAddProduct()}
-                            >
-                              Add
-                            </Button>
+                            <Button variant="primary">Add</Button>
                           )}
                         </Modal.Footer>
                       </Modal>

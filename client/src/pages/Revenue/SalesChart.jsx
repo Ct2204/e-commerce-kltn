@@ -30,7 +30,7 @@ const SalesChart = () => {
   })
 
   const handleToGetOrderPaid = async () => {
-    const responseData = await getOrderManageByStatus('PENDING')
+    const responseData = await getOrderManageByStatus('PAID')
     setOrderPaid(responseData)
   }
   useEffect(() => {
@@ -78,13 +78,15 @@ const SalesChart = () => {
   }, [startDate, endDate, orderPaid])
 
   return (
-    <div>
-      <h2>Biểu đồ Doanh thu Sản phẩm</h2>
-      <DatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
-      />
-      <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
+    <div style={{ margin: '20px', border: '1px solid #ccc' }}>
+      <h2 style={{ margin: '20px' }}>Biểu đồ Doanh thu Sản phẩm</h2>
+      <div style={{ margin: '20px' }}>
+        <DatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+        />
+        <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
+      </div>
       <Bar
         data={salesData}
         options={{

@@ -1,6 +1,6 @@
 .item {
   font-size: 13px;
-  font-family: "Tinos", sans-serif;
+  font-family: 'Tinos', sans-serif;
 }
 
 .main {
@@ -40,7 +40,7 @@
 }
 
 .pro-title {
-  margin-right: 100px;
+  margin-right: 50px;
   font-weight: bold;
   padding-bottom: 20px;
 }

@@ -7,7 +7,7 @@ import ChangePassword from './pages/ChangePassword/ChangePassword'
 
 import Comment from './pages/Comment/Comment'
 import Content from './pages/Content/Content.jsx'
-import DashbarAdmin from './pages/DashbarAdmin/DashbarAdmin.js'
+
 import NotFound from './pages/ErrorPage/NotFound'
 import Home from './pages/Home/Home'
 import Introduce from './pages/Introduce/Introduce.jsx'
@@ -16,6 +16,7 @@ import ManageOrder from './pages/ManageOrder/ManageOrder.jsx'
 import ManageUser from './pages/ManageUser/ManageUser.jsx'
 import News from './pages/News/News.jsx'
 import Payment from './pages/Payment/Payment'
+import PaymentFail from './pages/PaymentFail/PaymentFail.jsx'
 import PaymentSuccessful from './pages/PaymentSuccessful/PaymentSuccessful.js'
 import Product from './pages/Product/Product'
 import ProductKinhMat from './pages/ProductCategory/ProductKinhMat'
@@ -25,11 +26,7 @@ import ProductDetail from './pages/ProductDetail/ProductDetail'
 import Profile from './pages/Profile/Profile.jsx'
 import PurchaseOrder from './pages/PurchaseOder/PurchaseOrder'
 import Revenue from './pages/Revenue/Revenue.jsx'
-
 import SendVerificationCode from './pages/SendVerificationCode/SendVerificationCode'
-
-import UploadImage from './pages/UploadImage/UploadImage.js'
-
 import User from './pages/User/User'
 import VerificationCodeForm from './pages/VerificationCode/VerificationCodeForm'
 
@@ -61,7 +58,8 @@ const routes = [
   { path: '/news', component: <News /> },
   { path: '/landingpage', component: <LandingPage /> },
   { path: '/content', component: <Content /> },
-  { path: '/order/payment/get/payment/info', component: <PaymentSuccessful /> },
+  { path: '/order/payment/success', component: <PaymentSuccessful /> },
+  { path: '/order/payment/cancel', component: <PaymentFail /> },
 ]
 
 export const routesAdmin = [

@@ -1,45 +1,46 @@
 /* .comment-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 8px;
-  }
-  
-  input,
-  textarea,
-  button {
-    margin-bottom: 16px;
-    padding: 8px;
-    width: 100%;
-  }
-  
-  button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
-  .star {
-    cursor: pointer;
-    color: gray;
-    font-size: 24px;
-  }
-  
-  .star.selected {
-    color: gold;
-  }
-   */
+  max-width: 400px;
+  max-height: 400px;
+  background-color: red;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+input,
+textarea,
+button {
+  margin-bottom: 16px;
+  padding: 8px;
+  width: 100%;
+}
+
+button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.star {
+  cursor: pointer;
+  color: gray;
+  font-size: 24px;
+}
+
+.star.selected {
+  color: gold;
+} */

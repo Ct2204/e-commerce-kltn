@@ -20,8 +20,8 @@ public class PayPalConfig {
     private String mode;
 
 
-    public static String sucessUrl ="http://localhost:8080/api/v1/order/payment/success" ;
-    public static String cancelUrl = "http://localhost:8080/api/v1/order/payment/cancel";
+    public static String sucessUrl ="http://localhost:3000/order/payment/success" ;
+    public static String cancelUrl = "http://localhost:3000/order/payment/cancel";
     @Bean
     public Map<String, String> paypalSdkConfig() {
         Map<String, String> configMap = new HashMap<>();

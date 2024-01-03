@@ -2,7 +2,7 @@ import './ManageOrder.css'
 
 import React, { useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate'
-import { FcStatistics } from 'react-icons/fc'
+
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import {
   changeStatusOrder,
@@ -11,8 +11,7 @@ import {
   getOrderManageByStatus,
 } from '../../services/OrderManage.js'
 import { toast } from 'react-toastify'
-import { log } from '../../store/reducers/auth.js'
-import { BsTypeH1 } from 'react-icons/bs/index.js'
+
 import DashbarAdmin from '../DashbarAdmin/DashbarAdmin.js'
 import Loader from '../Loader/Loader.js'
 
@@ -52,14 +51,17 @@ const ManageOrder = (props) => {
   const handleChangeStatusOrder = async (orderId, status) => {
     setIsLoading(true)
     const responseData = await changeStatusOrder(orderId, status)
+    toast.success(responseData.message)
     setIsLoading(false)
-    console.log(responseData)
   }
   useEffect(() => {
-    handleToGetOrderManage()
     handleToGetAmountUser()
+  }, [])
+  useEffect(() => {
+    handleToGetOrderManage()
     handleToGetOrderPaid()
   }, [isLoading])
+
   const numberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   }
@@ -282,9 +284,9 @@ const ManageOrder = (props) => {
                                   type="button"
                                   style={{
                                     width: '100px',
-                                    height: '40px',
+                                    height: '50px',
                                   }}
-                                  className="btn btn-danger btn-sm"
+                                  className="btn btn-primary btn-sm"
                                   onClick={() =>
                                     handleChangeStatusOrder(order.id, 'PAID')
                                   }

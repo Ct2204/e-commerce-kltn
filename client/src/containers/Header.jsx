@@ -387,7 +387,7 @@ const Header = () => {
                                 }}
                                 id="basic-addon1"
                               >
-                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <i class="fa-solid fa-magnifying-glass cursor"></i>
                               </span>
                             </div>
                           </div>
@@ -406,6 +406,7 @@ const Header = () => {
                                   }}
                                 >
                                   <div
+                                    className="cursor"
                                     onClick={(e) =>
                                       changePageHandler(e, result.id)
                                     }
@@ -447,6 +448,7 @@ const Header = () => {
                                   >
                                     <a title="Rodney - Silver Brown">
                                       <img
+                                        className="cursor"
                                         style={{
                                           width: '40px',
                                           height: '40px',

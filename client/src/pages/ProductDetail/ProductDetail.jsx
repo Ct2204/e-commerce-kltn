@@ -19,15 +19,14 @@ import {
   getProductItem,
   getProductItems,
   getProductOption,
-  getProductOptionDetail,
   getProductsByCategory2,
   getRatingOfProduct,
 } from '../../services/product'
 import { createCart } from '../../services/CartService.js'
-import { log } from '../../store/reducers/auth.js'
+
 import { Pagination } from 'react-bootstrap'
-import { responsivePropType } from 'react-bootstrap/esm/createUtilityClasses.js'
 import Comment from '../Comment/Comment.jsx'
+import { toast } from 'react-toastify'
 
 const ProductDetail = (props) => {
   const [message, setMessage] = useState('')
@@ -64,7 +63,6 @@ const ProductDetail = (props) => {
   // };
 
   const productId = searchParams.get('productId')
-  const productOptionDetailId = 1002
 
   const userInfor = useSelector((state) => state.auth.userInfo)
 
@@ -79,9 +77,6 @@ const ProductDetail = (props) => {
   const [selectedOptions, setSelectedOptions] = useState([])
   const [option1, setOption1] = useState(0)
   const [option2, setOption2] = useState(0)
-  // console.log(productOption)
-  // const [optionDetailId, setOptionDetailId] = useState(productOption[0].listProductOptionDetail[0].id);
-  // console.log("optionDetail",optionDetailId);
 
   const handleIndex = async (productIndex, optionIndex) => {
     if (productIndex === 0) {
@@ -120,7 +115,7 @@ const ProductDetail = (props) => {
       if (responseData) {
         setRating(responseData.data.listRating)
         setAverageOfStars(responseData.data.averageOfStars)
-        console.log('Thiên', responseData.data.averageOfStars)
+
         let items = [
           <Pagination.Item key="first" onClick={() => setPage(1)}>
             &laquo;
@@ -242,9 +237,9 @@ const ProductDetail = (props) => {
     )
 
     if (responseData.code === 200) {
-      setMessage(responseData.message)
+      toast.success(responseData.message)
     } else {
-      setMessage(responseData.message)
+      toast.error(responseData.message)
     }
   }
 
@@ -898,6 +893,7 @@ const ProductDetail = (props) => {
                     <span className="fs-2">{averageOfStars}</span>
                     <span className="fs-4"> trên 5 </span>
                   </div>
+
                   <div className="">
                     <div className="d-flex">
                       <div className="">
@@ -965,13 +961,19 @@ const ProductDetail = (props) => {
               </div>
             </div>
             <div className="mt-4 pb-4 ">
+              <div>
+                <Comment productId={productId} />
+              </div>
               {Array.from(rating).map((aRatings, idx) => (
                 <div className="row mb-5 border-commemt-user">
                   <div className="col-1">
                     <a className="className=">
                       <img
                         className="rounded-circle"
-                        src="https://hinhnen4k.com/wp-content/uploads/2023/02/anh-gai-xinh-vn-3.jpg"
+                        src={
+                          aRatings.avatarUrl ||
+                          'https://hinhnen4k.com/wp-content/uploads/2023/02/anh-gai-xinh-vn-3.jpg'
+                        }
                         style={{ width: '40px', height: '40px' }}
                       ></img>
                     </a>
@@ -1003,9 +1005,6 @@ const ProductDetail = (props) => {
               <Pagination className="mb-0 justify-content-end">
                 {pagingItems}
               </Pagination>
-            </div>
-            <div>
-              <Comment productId={productId} />
             </div>
           </div>
 

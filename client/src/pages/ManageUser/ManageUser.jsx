@@ -2,66 +2,34 @@ import './ManageOrder.css'
 
 import React, { useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate'
-import { FcStatistics } from 'react-icons/fc'
 import '@fortawesome/fontawesome-free/css/all.min.css'
-import {
-  changeStatusOrder,
-  getAmuntUser,
-  getOrderBySeller,
-  getOrderManageByStatus,
-} from '../../services/OrderManage.js'
+
 import { toast } from 'react-toastify'
-import { log } from '../../store/reducers/auth.js'
-import { BsTypeH1 } from 'react-icons/bs/index.js'
+
 import DashbarAdmin from '../DashbarAdmin/DashbarAdmin.js'
 import Loader from '../Loader/Loader.js'
+import { getAllUser, updateStatusUser } from '../../services/UserManage.js'
 
 const ManageUser = (props) => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const [orderManage, setOrderManage] = useState([])
-  const [amountUser, setAmountUser] = useState(0)
-  const [orderPaid, setOrderPaid] = useState([])
+  const [userManage, setUserManage] = useState([])
 
-  const handleToGetOrderPaid = async () => {
-    const responseData = await getOrderManageByStatus('PAID')
-    setOrderPaid(responseData)
-  }
-
-  const handleToGetAmountUser = async () => {
-    const responseData = await getAmuntUser()
-    setAmountUser(responseData)
-  }
-
-  const totalAmount = orderManage.reduce(
-    (acc, order) => acc + order.totalPrice,
-    0
-  )
-
-  const totalAmountPaid = orderPaid.reduce(
-    (acc, order) => acc + order.totalPrice,
-    0
-  )
-
-  const handleToGetOrderManage = async () => {
-    const responseData = await getOrderBySeller(1)
-    console.log('res', responseData)
-    setOrderManage(responseData)
-  }
-
-  const handleChangeStatusOrder = async (orderId, status) => {
-    setIsLoading(true)
-    const responseData = await changeStatusOrder(orderId, status)
-    setIsLoading(false)
-    console.log(responseData)
+  const handleGetAllUser = async () => {
+    const responseData = await getAllUser()
+    setUserManage(responseData)
   }
   useEffect(() => {
-    handleToGetOrderManage()
-    handleToGetAmountUser()
-    handleToGetOrderPaid()
+    handleGetAllUser()
   }, [isLoading])
-  const numberWithCommas = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
+  const handleUpdateStatusUser = async (userId) => {
+    setIsLoading(true)
+    const responseData = await updateStatusUser(userId)
+    if (responseData.code === 201) {
+      toast.success('Thành Công')
+      setIsLoading(false)
+    }
   }
 
   const [currentPage, setCurrentPage] = useState(0)
@@ -73,7 +41,7 @@ const ManageUser = (props) => {
 
   const startIndex = currentPage * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-  const visibleOrders = orderManage.slice(startIndex, endIndex)
+  const visibleOrders = userManage.slice(startIndex, endIndex)
 
   return (
     <div className="d-flex row my-override-class">
@@ -116,17 +84,15 @@ const ManageUser = (props) => {
                     <tr>
                       <td class="text-center text-muted">{index + 1}</td>
                       <td>{order.fullName}</td>
+                      <td class="text-center">{order.email}</td>
                       <td class="text-center">
-                        {numberWithCommas(order.totalPrice)}đ
-                      </td>
-                      <td class="text-center">
-                        <div class="">{order.status}</div>
+                        <div class="">{order.userStatusEnum}</div>
                       </td>
 
                       <td class="text-center">
                         {(() => {
-                          switch (order.status) {
-                            case 'PAID':
+                          switch (order.userStatusEnum) {
+                            case 'ACTIVATED':
                               return (
                                 <button
                                   style={{
@@ -134,50 +100,15 @@ const ManageUser = (props) => {
                                     height: '50px',
                                   }}
                                   type="button"
-                                  className="btn btn-primary btn-sm"
-                                  onClick={() =>
-                                    handleChangeStatusOrder(
-                                      order.id,
-                                      'DELIVERED'
-                                    )
-                                  }
-                                >
-                                  Giao hàng
-                                </button>
-                              )
-                            case 'DELIVERED':
-                              return (
-                                <button
-                                  type="button"
-                                  style={{
-                                    width: '100px',
-                                    height: '40px',
-                                  }}
-                                  className="btn btn-primary btn-sm"
-                                  onClick={() =>
-                                    handleChangeStatusOrder(order.id, 'SHIPPED')
-                                  }
-                                >
-                                  Chuyển hàng
-                                </button>
-                              )
-                            case 'PENDING':
-                              return (
-                                <button
-                                  type="button"
-                                  style={{
-                                    width: '100px',
-                                    height: '40px',
-                                  }}
                                   className="btn btn-danger btn-sm"
                                   onClick={() =>
-                                    handleChangeStatusOrder(order.id, 'PAID')
+                                    handleUpdateStatusUser(order.id)
                                   }
                                 >
-                                  Đã thanh toán
+                                  Chặn
                                 </button>
                               )
-                            case 'SHIPPED':
+                            case 'BANNED':
                               return (
                                 <button
                                   type="button"
@@ -187,10 +118,26 @@ const ManageUser = (props) => {
                                   }}
                                   className="btn btn-primary btn-sm"
                                   onClick={() =>
-                                    handleChangeStatusOrder(order.id, 'CLOSED')
+                                    handleUpdateStatusUser(order.id)
                                   }
                                 >
-                                  Hoàn thành
+                                  Kích hoạt
+                                </button>
+                              )
+                            case 'NOT_ACTIVATED':
+                              return (
+                                <button
+                                  type="button"
+                                  style={{
+                                    width: '100px',
+                                    height: '40px',
+                                  }}
+                                  className="btn btn-primary btn-sm"
+                                  onClick={() =>
+                                    handleUpdateStatusUser(order.id)
+                                  }
+                                >
+                                  Kích hoạt
                                 </button>
                               )
 
@@ -204,7 +151,7 @@ const ManageUser = (props) => {
                                   }}
                                   className="btn btn-primary btn-sm"
                                   onClick={() =>
-                                    handleChangeStatusOrder(order.id)
+                                    handleUpdateStatusUser(order.id)
                                   }
                                 >
                                   Xử lý
@@ -228,7 +175,7 @@ const ManageUser = (props) => {
                   previousLabel={'previous'}
                   nextLabel={'next'}
                   breakLabel={'...'}
-                  pageCount={Math.ceil(orderManage.length / itemsPerPage)}
+                  pageCount={Math.ceil(userManage.length / itemsPerPage)}
                   marginPagesDisplayed={2}
                   pageRangeDisplayed={5}
                   onPageChange={handlePageChange}
